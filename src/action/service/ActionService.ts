@@ -2,27 +2,34 @@ import { TranslatableRichText } from '../../common/model/TranslatableRichText';
 import { GameState } from '../../game/model/GameState';
 import { ActionContextDescription } from '../model/ActionConctextDescription';
 import { ActionContext } from '../model/ActionContext';
-import { ActionContextProvider } from '../model/ActionContextProvider';
 import { ActionTrigger } from '../model/ActionTrigger';
-import { MapBuildingActionContextProvider } from './MapBuildingActionContextProvider';
-import { MapFieldActionContextProvider } from './MapFieldActionContextProvider';
+import { ActionContextProvider, ActionContextProviderWithData } from './action-context-providers/ActionContextProvider';
+import { MapBuildingActionContextProvider } from './action-context-providers/MapBuildingActionContextProvider';
+import { MapFieldActionContextProvider } from './action-context-providers/MapFieldActionContextProvider';
 
-const actionContextProviders: Array<ActionContextProvider> = [new MapFieldActionContextProvider(), new MapBuildingActionContextProvider()];
+const actionContextProviders: Array<ActionContextProvider<any>> = [
+  new MapFieldActionContextProvider(),
+  new MapBuildingActionContextProvider()
+];
 
 export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, gameState: GameState): ActionContext => {
-  const supportedActionContextProviders = actionContextProviders.filter((actionContextProvider) =>
-    actionContextProvider.isActionTriggerSupported(actionTrigger)
+  const actionContextProvidersWithData: Array<ActionContextProviderWithData<any>> = actionContextProviders.flatMap(
+    (actionContextProvider) => {
+      const actionContextProviderWithData =
+        actionContextProvider.getActionContextProviderWithDataFromActionTriggerIfSupported(actionTrigger);
+      return actionContextProviderWithData ? [actionContextProviderWithData] : [];
+    }
   );
-  const title = supportedActionContextProviders
-    .map((actionContextProvider) => actionContextProvider.getTitle(actionTrigger))
+  const title = actionContextProvidersWithData
+    .map((actionContextProviderWithData) => actionContextProviderWithData.getTitle())
     .sort((a, b) => a.order - b.order)[0].title;
-  const descriptions = supportedActionContextProviders
-    .map((actionContextProvider) => actionContextProvider.getDescription(actionTrigger))
+  const descriptions = actionContextProvidersWithData
+    .map((actionContextProviderWithData) => actionContextProviderWithData.getDescription())
     .sort((a, b) => a.order - b.order)
-    .map((actionContextDecription) => actionContextDecription.description);
+    .map((actionContextDecriptionWithData) => actionContextDecriptionWithData.description);
   const description = TranslatableRichText.fromArray(descriptions);
-  const actions = supportedActionContextProviders.flatMap((actionContextProvider) =>
-    actionContextProvider.getActions(actionTrigger, gameState)
+  const actions = actionContextProvidersWithData.flatMap((actionContextProviderWithData) =>
+    actionContextProviderWithData.getActions(gameState)
   );
 
   return new ActionContext(title, new ActionContextDescription(description), false, actions);
