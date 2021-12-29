@@ -12,8 +12,8 @@ const resources = {
       'MAP.FIELD.EMPTY.DESCRIPTION': 'There is nothing here.',
       'MAP.FIELD.GRASS': 'Grass',
       'MAP.FIELD.GRASS.DESCRIPTION': 'The land is covered with grass.',
-      'BUILDING.CHARACTER_PLACEMENT_ON_FIELD_WITH_BUILDING.OUTSIDE.CHARACTER_DESCRIPTION': `<character/> is outside of the building.`,
-      'BUILDING.CHARACTER_PLACEMENT_ON_FIELD_WITH_BUILDING.INSIDE.CHARACTER_DESCRIPTION': `<character/> is inside the building.`
+      'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `<character/> is outside of the building.`,
+      'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `<character/> is inside the building.`
     }
   },
   pl: {
@@ -26,8 +26,8 @@ const resources = {
       'MAP.FIELD.EMPTY.DESCRIPTION': 'Nic tutaj nie ma.',
       'MAP.FIELD.GRASS': 'Trawa',
       'MAP.FIELD.GRASS.DESCRIPTION': 'Teren porośnięty trawą.',
-      'BUILDING.CHARACTER_PLACEMENT_ON_FIELD_WITH_BUILDING.OUTSIDE.CHARACTER_DESCRIPTION': `<character/> jest na zewnątrz budynku.`,
-      'BUILDING.CHARACTER_PLACEMENT_ON_FIELD_WITH_BUILDING.INSIDE.CHARACTER_DESCRIPTION': `<character/> jest wewnątrz budynku.`
+      'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `<character/> jest na zewnątrz budynku.`,
+      'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `<character/> jest wewnątrz budynku.`
     }
   }
 };

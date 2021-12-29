@@ -1,8 +1,8 @@
-import { Building } from '../../../building/model/Building';
 import { getMostImportantCharacterActivelyGuardingBuilding } from '../../../building/service/BuildingService';
 import { TranslatableRichText } from '../../../common/model/TranslatableRichText';
 import { GameState } from '../../../game/model/GameState';
 import { MapField } from '../../../map/model/MapField';
+import { TerrainObject } from '../../../map/terrain-object/TerrainObject';
 import { Action } from '../../model/Action';
 import { ActionContextDescription } from '../../model/ActionConctextDescription';
 import { ActionContext } from '../../model/ActionContext';
@@ -12,27 +12,30 @@ import { ActionContextProvider } from './ActionContextProvider';
 
 interface Data {
   field: MapField;
-  building: Building;
+  terrainObject: TerrainObject;
 }
 
-export class BuildingActionContextProvider extends ActionContextProvider<Data> {
+export class TerrainObjectActionContextProvider extends ActionContextProvider<Data> {
   override getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): Data | undefined {
     const field = actionTrigger instanceof MapFieldActionTrigger && actionTrigger.field;
-    const building = field && field.object instanceof Building && field.object;
-    if (building) {
+    const terrainObject = field && field.terrainObject instanceof TerrainObject && field.terrainObject;
+    if (terrainObject) {
       return {
-        field: field,
-        building: building
+        field,
+        terrainObject
       };
     }
     return undefined;
   }
 
-  override getTitle({ building }: Data): { title: TranslatableRichText; order: number } {
+  override getTitle({ terrainObject: building }: Data): { title: TranslatableRichText; order: number } {
     return { title: building.type.name, order: 100 };
   }
 
-  override getDescription({ field, building }: Data, gameState: GameState): Array<{ description: TranslatableRichText; order: number }> {
+  override getDescription(
+    { field, terrainObject: building }: Data,
+    gameState: GameState
+  ): Array<{ description: TranslatableRichText; order: number }> {
     const descriptions = [{ description: building.type.description, order: 100 }];
     field.characters
       .filter((character) => character !== gameState.player.character)
@@ -45,7 +48,7 @@ export class BuildingActionContextProvider extends ActionContextProvider<Data> {
     return descriptions;
   }
 
-  override getActions({ field, building }: Data, gameState: GameState): Array<Action> {
+  override getActions({ field, terrainObject: building }: Data, gameState: GameState): Array<Action> {
     if (gameState.player.character.field !== field) {
       return [];
     }
@@ -66,7 +69,7 @@ export class BuildingActionContextProvider extends ActionContextProvider<Data> {
         } else {
           const newActionContext = new ActionContext(
             building.type.name,
-            new ActionContextDescription(building.type.descriptionOfInside),
+            new ActionContextDescription(building.type.description),
             false,
             []
           );

@@ -1,46 +1,53 @@
-import { Building } from '../../building/model/Building';
-import { BuildingType } from '../../building/model/BuildingType';
 import { Character } from '../../character/model/Character';
+import { TerrainObject } from '../terrain-object/TerrainObject';
+import { TerrainObjectType } from '../terrain-object/TerrainObjectType';
 import { MapFieldType } from './MapFieldType';
-import { MapObject } from './MapObject';
 
 export class MapField {
   readonly fieldType: MapFieldType;
   readonly subLocation?: Location;
-  private _object?: MapObject;
+  private _terrainObject?: TerrainObject;
   private _characters: Array<Character> = [];
 
-  constructor({ fieldType, subLocation, object }: { fieldType: MapFieldType; subLocation?: Location; object?: MapObject }) {
+  constructor({
+    fieldType,
+    subLocation,
+    terrainObject: object
+  }: {
+    fieldType: MapFieldType;
+    subLocation?: Location;
+    terrainObject?: TerrainObject;
+  }) {
     this.fieldType = fieldType;
     this.subLocation = subLocation;
-    this.object = object;
+    this.terrainObject = object;
   }
 
-  get object(): MapObject | undefined {
-    return this._object;
+  get terrainObject(): TerrainObject | undefined {
+    return this._terrainObject;
   }
 
-  set object(newObject: MapObject | undefined) {
-    if (this._object === newObject) {
+  set terrainObject(newTerrainObject: TerrainObject | undefined) {
+    if (this._terrainObject === newTerrainObject) {
       return;
     }
-    const oldObject = this._object;
-    this._object = newObject;
-    if (oldObject && oldObject.field === this) {
-      oldObject.field = undefined;
+    const oldTerrainObject = this._terrainObject;
+    this._terrainObject = newTerrainObject;
+    if (oldTerrainObject && oldTerrainObject.field === this) {
+      oldTerrainObject.field = undefined;
     }
-    if (newObject) {
-      newObject.field = this;
+    if (newTerrainObject) {
+      newTerrainObject.field = this;
     }
-    this.characters.forEach((character) => character.setPlacementOnFieldWithBuildingToDefaultValue());
+    this.characters.forEach((character) => character.setTerrainObjectPlacementToDefaultValue());
   }
 
-  get buildingType(): BuildingType | undefined {
+  get buildingType(): TerrainObjectType | undefined {
     return this.building?.type;
   }
 
-  get building(): Building | undefined {
-    return this.object instanceof Building ? this.object : undefined;
+  get building(): TerrainObject | undefined {
+    return this.terrainObject instanceof TerrainObject ? this.terrainObject : undefined;
   }
 
   get characters(): readonly Character[] {

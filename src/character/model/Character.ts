@@ -71,7 +71,7 @@ export class Character {
     newField?.addCharacter(this);
   }
 
-  setPlacementOnFieldWithBuildingToDefaultValue() {
+  setTerrainObjectPlacementToDefaultValue() {
     if (this._position) {
       const defaultPlacementOnFieldWithBuildingType = this._position.field.buildingType?.defaultCharacterPlacement;
       this._position = this._position.withPlacementOnFieldWithBuildingType(defaultPlacementOnFieldWithBuildingType);

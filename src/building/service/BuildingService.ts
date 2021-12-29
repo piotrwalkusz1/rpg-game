@@ -1,6 +1,6 @@
 import { Character } from '../../character/model/Character';
-import { Building } from '../model/Building';
+import { TerrainObject } from '../../map/terrain-object/TerrainObject';
 
-export const getMostImportantCharacterActivelyGuardingBuilding = (building: Building): Character | undefined => {
+export const getMostImportantCharacterActivelyGuardingBuilding = (building: TerrainObject): Character | undefined => {
   return building.guards.filter((guard) => guard.field === building.field)[0];
 };

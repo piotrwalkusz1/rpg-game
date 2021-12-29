@@ -6,9 +6,6 @@ import { ActionExecutionContext } from './action/model/ActionExecutionContext';
 import { MapFieldActionTrigger } from './action/model/MapFieldActionTrigger';
 import { getActionContextByActionTrigger } from './action/service/ActionService';
 import './App.css';
-import { Building } from './building/model/Building';
-import { BuildingType } from './building/model/BuildingType';
-import { CharacterPlacementOnFieldWithBuildingType } from './building/model/CharacterPlacementOnFieldWithBuildingType';
 import { CharacterProfileView } from './character/component/CharacterProfileView';
 import { Character } from './character/model/Character';
 import { CharacterPosition } from './character/model/CharacterPosition';
@@ -19,6 +16,9 @@ import { LocationView } from './map/component/LocationVIiew';
 import { MapField } from './map/model/MapField';
 import { MapFieldType } from './map/model/MapFieldType';
 import { MapLocation } from './map/model/MapLocation';
+import { TerrainObject } from './map/terrain-object/TerrainObject';
+import { TerrainObjectPlacementType } from './map/terrain-object/TerrainObjectPlacementType';
+import { TerrainObjectType } from './map/terrain-object/TerrainObjectType';
 
 const humanRace = new Race('HUMAN');
 const world = new MapLocation(10, 10, MapFieldType.GRASS);
@@ -35,15 +35,15 @@ const character_002 = new Character({
   field: world.fields[3][4]
 });
 const player = new Player(character);
-const buildingType = new BuildingType({
+const buildingType = new TerrainObjectType({
   id: 'HOUSE',
   imageUrl: 'images/house.png',
-  allowedCharacterPlacements: [CharacterPlacementOnFieldWithBuildingType.OUTSIDE, CharacterPlacementOnFieldWithBuildingType.INSIDE],
-  defaultCharacterPlacement: CharacterPlacementOnFieldWithBuildingType.OUTSIDE
+  placements: [TerrainObjectPlacementType.OUTSIDE, TerrainObjectPlacementType.INSIDE],
+  defaultCharacterPlacement: TerrainObjectPlacementType.OUTSIDE
 });
-const building = new Building({ type: buildingType });
+const building = new TerrainObject({ type: buildingType });
 building.guards.push(character_002);
-world.fields[3][4].object = building;
+world.fields[3][4].terrainObject = building;
 
 const gameState = new GameState(player, world, [character]);
 
@@ -51,15 +51,13 @@ function App() {
   useEffect(() => {
     i18next.addResourceBundle('en', 'translation', {
       'CHARACTER.RACE.HUMAN': 'Human',
-      'BUILDING.BUILDING_TYPE.HOUSE': 'House',
-      'BUILDING.BUILDING_TYPE.HOUSE.DESCRIPTION': 'The house seems normal.',
-      'BUILDING.BUILDING_TYPE.HOUSE.INSIDE.DESCRIPTION': 'The design of the house is average.'
+      'MAP.TERRAIN_OBJECT.HOUSE': 'House',
+      'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'The house seems normal.'
     });
     i18next.addResourceBundle('pl', 'translation', {
       'CHARACTER.RACE.HUMAN': 'Człowiek',
-      'BUILDING.BUILDING_TYPE.HOUSE': 'Dom',
-      'BUILDING.BUILDING_TYPE.HOUSE.DESCRIPTION': 'Do wygląda normalnie.',
-      'BUILDING.BUILDING_TYPE.HOUSE.INSIDE.DESCRIPTION': 'Wystruj domu jest przeciętny.'
+      'MAP.TERRAIN_OBJECT.HOUSE': 'Dom',
+      'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'Do wygląda normalnie.'
     });
   }, []);
 
