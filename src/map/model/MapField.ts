@@ -23,6 +23,10 @@ export class MapField {
     this.terrainObject = object;
   }
 
+  get terrainObjectType(): TerrainObjectType | undefined {
+    return this._terrainObject?.type;
+  }
+
   get terrainObject(): TerrainObject | undefined {
     return this._terrainObject;
   }
@@ -40,14 +44,6 @@ export class MapField {
       newTerrainObject.field = this;
     }
     this.characters.forEach((character) => character.setTerrainObjectPlacementToDefaultValue());
-  }
-
-  get buildingType(): TerrainObjectType | undefined {
-    return this.building?.type;
-  }
-
-  get building(): TerrainObject | undefined {
-    return this.terrainObject instanceof TerrainObject ? this.terrainObject : undefined;
   }
 
   get characters(): readonly Character[] {

@@ -1,49 +1,49 @@
+import { MapField } from '../../map/model/MapField';
 import { TerrainObjectPlacement } from '../../map/terrain-object/TerrainObjectPlacement';
 import { TerrainObjectPlacementType } from '../../map/terrain-object/TerrainObjectPlacementType';
-import { MapField } from '../../map/model/MapField';
 
 export class CharacterPosition {
   readonly field: MapField;
-  readonly placementOnFieldWithBuilding?: TerrainObjectPlacement;
+  readonly terrainObjectPlacement?: TerrainObjectPlacement;
 
   constructor({
     field,
-    placementOnFieldWithBuilding,
-    placementOnFieldWithBuildingType
+    terrainObjectPlacement,
+    terrainObjectPlacementType
   }: {
     field: MapField;
-    placementOnFieldWithBuilding?: TerrainObjectPlacement;
-    placementOnFieldWithBuildingType?: TerrainObjectPlacementType;
+    terrainObjectPlacement?: TerrainObjectPlacement;
+    terrainObjectPlacementType?: TerrainObjectPlacementType;
   }) {
-    if (placementOnFieldWithBuilding) {
-      if (placementOnFieldWithBuildingType && placementOnFieldWithBuildingType !== placementOnFieldWithBuilding.type) {
-        throw new Error('"placementOnFieldWithBuildingType" and "placementOnFieldWithBuilding.type" must be equal');
+    if (terrainObjectPlacement) {
+      if (terrainObjectPlacementType && terrainObjectPlacementType !== terrainObjectPlacement.type) {
+        throw new Error('"terrainObjectPlacementType" and "terrainObjectPlacement.type" must be equal');
       }
-      placementOnFieldWithBuildingType = placementOnFieldWithBuilding.type;
+      terrainObjectPlacementType = terrainObjectPlacement.type;
     }
-    if (placementOnFieldWithBuildingType) {
-      if (!field.buildingType) {
-        throw new Error(`Cannot set character placement ${placementOnFieldWithBuildingType.id} on field without buliding`);
+    if (terrainObjectPlacementType) {
+      if (!field.terrainObjectType) {
+        throw new Error(`Cannot set placement ${terrainObjectPlacementType.id} on field without terrain object`);
       }
-      if (!field.buildingType.placements.includes(placementOnFieldWithBuildingType)) {
+      if (!field.terrainObjectType.placements.includes(terrainObjectPlacementType)) {
         throw new Error(
-          `Character placement ${placementOnFieldWithBuildingType.id} is not allowed on field with building ${field.buildingType.id}`
+          `Terrain object placement ${terrainObjectPlacementType.id} is not allowed on field with terrain object ${field.terrainObjectType.id}`
         );
       }
     }
 
-    placementOnFieldWithBuildingType = placementOnFieldWithBuildingType || field.buildingType?.defaultCharacterPlacement;
+    terrainObjectPlacementType = terrainObjectPlacementType || field.terrainObjectType?.defaultCharacterPlacement;
 
     this.field = field;
-    this.placementOnFieldWithBuilding =
-      placementOnFieldWithBuilding || (placementOnFieldWithBuildingType && new TerrainObjectPlacement(placementOnFieldWithBuildingType));
+    this.terrainObjectPlacement =
+      terrainObjectPlacement || (terrainObjectPlacementType && new TerrainObjectPlacement(terrainObjectPlacementType));
   }
 
-  withPlacementOnFieldWithBuilding(placementOnFieldWithBuilding?: TerrainObjectPlacement): CharacterPosition {
-    return new CharacterPosition({ field: this.field, placementOnFieldWithBuilding });
+  withTerrainObjectPlacement(terrainObjectPlacement?: TerrainObjectPlacement): CharacterPosition {
+    return new CharacterPosition({ field: this.field, terrainObjectPlacement: terrainObjectPlacement });
   }
 
-  withPlacementOnFieldWithBuildingType(placementOnFieldWithBuildingType?: TerrainObjectPlacementType): CharacterPosition {
-    return new CharacterPosition({ field: this.field, placementOnFieldWithBuildingType });
+  withTerrainObjectPlacementType(terrainObjectPlacementType?: TerrainObjectPlacementType): CharacterPosition {
+    return new CharacterPosition({ field: this.field, terrainObjectPlacementType: terrainObjectPlacementType });
   }
 }

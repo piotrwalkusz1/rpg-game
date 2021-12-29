@@ -40,7 +40,7 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
     field.characters
       .filter((character) => character !== gameState.player.character)
       .forEach((character) => {
-        const descriptionOfCharacter = character.position?.placementOnFieldWithBuilding!.type.getCharacterDescription(character);
+        const descriptionOfCharacter = character.position?.terrainObjectPlacement!.type.getCharacterDescription(character);
         if (descriptionOfCharacter) {
           descriptions.push({ description: descriptionOfCharacter, order: 50 });
         }
