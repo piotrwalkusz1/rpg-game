@@ -13,7 +13,7 @@ export abstract class ActionContextProvider<T extends {}> {
 
   abstract getTitle(data: T): { title: TranslatableRichText; order: number };
 
-  abstract getDescription(data: T): { description: TranslatableRichText; order: number };
+  abstract getDescription(data: T, gameState: GameState): Array<{ description: TranslatableRichText; order: number }>;
 
   abstract getActions(data: T, gameState: GameState): Array<Action>;
 }
@@ -25,8 +25,8 @@ export class ActionContextProviderWithData<T> {
     return this.actionContextProvider.getTitle(this.data);
   }
 
-  getDescription(): { description: TranslatableRichText; order: number } {
-    return this.actionContextProvider.getDescription(this.data);
+  getDescription(gameState: GameState): Array<{ description: TranslatableRichText; order: number }> {
+    return this.actionContextProvider.getDescription(this.data, gameState);
   }
 
   getActions(gameState: GameState): Array<Action> {

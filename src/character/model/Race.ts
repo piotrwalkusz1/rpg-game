@@ -1,3 +1,4 @@
+import { TranslatableRichText } from '../../common/model/TranslatableRichText';
 export class Race {
   id: string;
 
@@ -5,7 +6,7 @@ export class Race {
     this.id = id;
   }
 
-  getTranslationKey(): string {
-    return 'CHARACTER.RACE.' + this.id;
+  get name(): TranslatableRichText {
+    return TranslatableRichText.fromTranslationKey('CHARACTER.RACE.' + this.id);
   }
 }

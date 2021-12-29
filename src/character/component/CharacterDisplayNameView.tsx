@@ -3,5 +3,5 @@ import { Character } from '../model/Character';
 
 export const CharacterDisplayNameView = ({ character }: { character: Character }) => {
   const { t } = useTranslation();
-  return <span className="font-bold">{character.name || t(character.race.getTranslationKey())}</span>;
+  return <span className="font-bold">{character.displayName.getReactElement({ t })}</span>;
 };

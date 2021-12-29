@@ -1,4 +1,3 @@
-import { Character } from '../../character/model/Character';
 import { BuildingType } from './BuildingType';
 
 export class Building {

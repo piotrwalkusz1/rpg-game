@@ -33,11 +33,20 @@ export class MapBuildingActionContextProvider extends ActionContextProvider<Data
   }
 
   override getTitle({ building }: Data): { title: TranslatableRichText; order: number } {
-    return { title: building.type.getName(), order: 100 };
+    return { title: building.type.name, order: 100 };
   }
 
-  override getDescription({ building }: Data): { description: TranslatableRichText; order: number } {
-    return { description: building.type.getDescription(), order: 100 };
+  override getDescription({ field, building }: Data, gameState: GameState): Array<{ description: TranslatableRichText; order: number }> {
+    const descriptions = [{ description: building.type.description, order: 100 }];
+    field.characters
+      .filter((character) => character !== gameState.player.character)
+      .forEach((character) => {
+        const descriptionOfCharacter = character.position?.placementOnFieldWithBuilding!.type.getCharacterDescription(character);
+        if (descriptionOfCharacter) {
+          descriptions.push({ description: descriptionOfCharacter, order: 50 });
+        }
+      });
+    return descriptions;
   }
 
   override getActions({ field, buildingOnMap, building }: Data, gameState: GameState): Array<Action> {
@@ -49,7 +58,7 @@ export class MapBuildingActionContextProvider extends ActionContextProvider<Data
         const guard = getMostImportantCharacterActivelyGuardingBuilding(buildingOnMap);
         if (guard) {
           const newActionContext = new ActionContext(
-            building.type.getName(),
+            building.type.name,
             new ActionContextDescription(
               TranslatableRichText.fromTranslationKey('ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER'),
               guard
@@ -60,8 +69,8 @@ export class MapBuildingActionContextProvider extends ActionContextProvider<Data
           actionExecutionContext.changeActionContext(newActionContext);
         } else {
           const newActionContext = new ActionContext(
-            building.type.getName(),
-            new ActionContextDescription(building.type.getDescriptionOfInside()),
+            building.type.name,
+            new ActionContextDescription(building.type.descriptionOfInside),
             false,
             []
           );

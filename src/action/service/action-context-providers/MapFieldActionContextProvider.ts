@@ -21,8 +21,8 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
     return { title: field.fieldType.getName(), order: 200 };
   }
 
-  override getDescription({ field }: Data): { description: TranslatableRichText; order: number } {
-    return { description: field.fieldType.getDescription(), order: 200 };
+  override getDescription({ field }: Data): Array<{ description: TranslatableRichText; order: number }> {
+    return [{ description: field.fieldType.getDescription(), order: 200 }];
   }
 
   override getActions({ field }: Data, gameState: GameState): Array<Action> {
