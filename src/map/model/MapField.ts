@@ -1,7 +1,6 @@
 import { Building } from '../../building/model/Building';
 import { BuildingType } from '../../building/model/BuildingType';
 import { Character } from '../../character/model/Character';
-import { MapBuilding } from './MapBuilding';
 import { MapFieldType } from './MapFieldType';
 import { MapObject } from './MapObject';
 
@@ -41,11 +40,7 @@ export class MapField {
   }
 
   get building(): Building | undefined {
-    return this.buildingOnMap?.building;
-  }
-
-  get buildingOnMap(): MapBuilding | undefined {
-    return this.object instanceof MapBuilding ? this.object : undefined;
+    return this.object instanceof Building ? this.object : undefined;
   }
 
   get characters(): readonly Character[] {

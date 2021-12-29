@@ -2,7 +2,6 @@ import { Building } from '../../../building/model/Building';
 import { getMostImportantCharacterActivelyGuardingBuilding } from '../../../building/service/BuildingService';
 import { TranslatableRichText } from '../../../common/model/TranslatableRichText';
 import { GameState } from '../../../game/model/GameState';
-import { MapBuilding } from '../../../map/model/MapBuilding';
 import { MapField } from '../../../map/model/MapField';
 import { Action } from '../../model/Action';
 import { ActionContextDescription } from '../../model/ActionConctextDescription';
@@ -13,19 +12,16 @@ import { ActionContextProvider } from './ActionContextProvider';
 
 interface Data {
   field: MapField;
-  buildingOnMap: MapBuilding;
   building: Building;
 }
 
-export class MapBuildingActionContextProvider extends ActionContextProvider<Data> {
+export class BuildingActionContextProvider extends ActionContextProvider<Data> {
   override getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): Data | undefined {
     const field = actionTrigger instanceof MapFieldActionTrigger && actionTrigger.field;
-    const buildingOnMap = field && field.object instanceof MapBuilding && field.object;
-    const building = buildingOnMap && buildingOnMap.building;
+    const building = field && field.object instanceof Building && field.object;
     if (building) {
       return {
         field: field,
-        buildingOnMap: buildingOnMap,
         building: building
       };
     }
@@ -49,13 +45,13 @@ export class MapBuildingActionContextProvider extends ActionContextProvider<Data
     return descriptions;
   }
 
-  override getActions({ field, buildingOnMap, building }: Data, gameState: GameState): Array<Action> {
+  override getActions({ field, building }: Data, gameState: GameState): Array<Action> {
     if (gameState.player.character.field !== field) {
       return [];
     }
     return [
       new Action('ENTER_BUILDING', 200, (actionExecutionContext) => {
-        const guard = getMostImportantCharacterActivelyGuardingBuilding(buildingOnMap);
+        const guard = getMostImportantCharacterActivelyGuardingBuilding(building);
         if (guard) {
           const newActionContext = new ActionContext(
             building.type.name,

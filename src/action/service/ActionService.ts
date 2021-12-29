@@ -4,12 +4,12 @@ import { ActionContextDescription } from '../model/ActionConctextDescription';
 import { ActionContext } from '../model/ActionContext';
 import { ActionTrigger } from '../model/ActionTrigger';
 import { ActionContextProvider, ActionContextProviderWithData } from './action-context-providers/ActionContextProvider';
-import { MapBuildingActionContextProvider } from './action-context-providers/MapBuildingActionContextProvider';
+import { BuildingActionContextProvider } from './action-context-providers/BuildingActionContextProvider';
 import { MapFieldActionContextProvider } from './action-context-providers/MapFieldActionContextProvider';
 
 const actionContextProviders: Array<ActionContextProvider<any>> = [
   new MapFieldActionContextProvider(),
-  new MapBuildingActionContextProvider()
+  new BuildingActionContextProvider()
 ];
 
 export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, gameState: GameState): ActionContext => {

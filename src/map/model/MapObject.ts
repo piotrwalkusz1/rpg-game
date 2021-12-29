@@ -1,8 +1,13 @@
 import { MapField } from './MapField';
+
 export abstract class MapObject {
   private _field?: MapField;
 
-  abstract getImageUrl(): string;
+  constructor({ field }: { field?: MapField }) {
+    this.field = field;
+  }
+
+  abstract get imageUrl(): string;
 
   get field(): MapField | undefined {
     return this._field;

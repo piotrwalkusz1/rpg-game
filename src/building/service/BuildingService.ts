@@ -1,6 +1,6 @@
-import { MapBuilding } from '../../map/model/MapBuilding';
 import { Character } from '../../character/model/Character';
+import { Building } from '../model/Building';
 
-export const getMostImportantCharacterActivelyGuardingBuilding = (buildingOnMap: MapBuilding): Character | undefined => {
-  return buildingOnMap.guards.filter((guard) => guard.field === buildingOnMap.field)[0];
+export const getMostImportantCharacterActivelyGuardingBuilding = (building: Building): Character | undefined => {
+  return building.guards.filter((guard) => guard.field === building.field)[0];
 };

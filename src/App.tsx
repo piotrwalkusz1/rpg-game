@@ -16,7 +16,6 @@ import { Race } from './character/model/Race';
 import { GameState } from './game/model/GameState';
 import { Player } from './game/model/Player';
 import { LocationView } from './map/component/LocationVIiew';
-import { MapBuilding } from './map/model/MapBuilding';
 import { MapField } from './map/model/MapField';
 import { MapFieldType } from './map/model/MapFieldType';
 import { MapLocation } from './map/model/MapLocation';
@@ -42,10 +41,9 @@ const buildingType = new BuildingType({
   allowedCharacterPlacements: [CharacterPlacementOnFieldWithBuildingType.OUTSIDE, CharacterPlacementOnFieldWithBuildingType.INSIDE],
   defaultCharacterPlacement: CharacterPlacementOnFieldWithBuildingType.OUTSIDE
 });
-const building = new Building(buildingType);
-const mapBuilding = new MapBuilding(building);
-mapBuilding.guards.push(character_002);
-world.fields[3][4].object = mapBuilding;
+const building = new Building({ type: buildingType });
+building.guards.push(character_002);
+world.fields[3][4].object = building;
 
 const gameState = new GameState(player, world, [character]);
 
