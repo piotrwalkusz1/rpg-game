@@ -1,7 +1,7 @@
 import { Character } from '../../character/model/Character';
 
 export class Player {
-  character: Character;
+  readonly character: Character;
 
   constructor(character: Character) {
     this.character = character;

@@ -1,19 +1,10 @@
-import { Player } from '../../game/model/Player';
+import { GameState } from '../../game/model/GameState';
 import { MapField } from '../model/MapField';
-import { MapLocation } from '../model/MapLocation';
 import { FieldView } from './FieldView';
 
-export const TerrainView = ({
-  location,
-  player,
-  onFieldClick
-}: {
-  location: MapLocation;
-  player: Player;
-  onFieldClick?: ({}: { field: MapField }) => void;
-}) => {
+export const TerrainView = ({ gameState, onFieldClick }: { gameState: GameState; onFieldClick?: ({}: { field: MapField }) => void }) => {
   const getFieldStyle = (field: MapField) => {
-    if (player.character.field === field) {
+    if (gameState.player.character.isOnField(field)) {
       return 'w-[64px] h-[64px] outline outline-[2px] outline-offset-[-2px] outline-blue-500 hover:outline-white';
     } else {
       return 'w-[64px] h-[64px] hover:outline outline-[2px] outline-offset-[-2px] outline-white';
@@ -22,7 +13,7 @@ export const TerrainView = ({
 
   return (
     <div>
-      {location.fields.map((row, rowIndex) => {
+      {gameState.currentLocationView.fields.map((row, rowIndex) => {
         return (
           <div key={rowIndex} className="flex flex-row">
             {row.map((field, fieldIndex) => {

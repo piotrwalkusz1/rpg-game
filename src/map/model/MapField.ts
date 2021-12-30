@@ -6,22 +6,37 @@ import { MapLocation } from './MapLocation';
 
 export class MapField {
   readonly fieldType: MapFieldType;
-  readonly subLocation?: MapLocation;
+  readonly location: MapLocation;
+  private _subLocations: Array<MapLocation> = [];
   private _terrainObject?: TerrainObject;
   private _characters: Array<Character> = [];
 
-  constructor({
-    fieldType,
-    subLocation,
-    terrainObject: object
-  }: {
-    fieldType: MapFieldType;
-    subLocation?: MapLocation;
-    terrainObject?: TerrainObject;
-  }) {
+  constructor({ fieldType, location, terrainObject }: { fieldType: MapFieldType; location: MapLocation; terrainObject?: TerrainObject }) {
     this.fieldType = fieldType;
-    this.subLocation = subLocation;
-    this.terrainObject = object;
+    this.location = location;
+    this.terrainObject = terrainObject;
+  }
+
+  get subLocations(): readonly MapLocation[] {
+    return this._subLocations;
+  }
+
+  addSubLocation(subLocation: MapLocation) {
+    if (this._subLocations.includes(subLocation)) {
+      return;
+    }
+    this._subLocations.push(subLocation);
+    subLocation.parentField = this;
+  }
+
+  removeSubLocation(subLocation: MapLocation) {
+    if (!this._subLocations.includes(subLocation)) {
+      return;
+    }
+    this._subLocations = this._subLocations.filter((otherSubLocation) => otherSubLocation !== subLocation);
+    if (subLocation.parentField === this) {
+      subLocation.parentField = undefined;
+    }
   }
 
   get terrainObjectType(): TerrainObjectType | undefined {
@@ -77,5 +92,9 @@ export class MapField {
     }
     this._characters = this._characters.filter((otherCharacter) => otherCharacter !== character);
     character.field = undefined;
+  }
+
+  isOnField(otherField: MapField): boolean {
+    return otherField === this || (this.location.parentField ? this.location.parentField.isOnField(otherField) : false);
   }
 }

@@ -4,12 +4,13 @@ import { TerrainObjectType } from './TerrainObjectType';
 
 export class TerrainObject {
   readonly type: TerrainObjectType;
-  guards: Array<Character> = [];
+  guards: Array<Character>;
   private _field?: MapField;
 
-  constructor({ type, field }: { type: TerrainObjectType; field?: MapField }) {
-    this.field = field;
+  constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
+    this.guards = guards || [];
+    this.field = field;
   }
 
   get imageUrl(): string {

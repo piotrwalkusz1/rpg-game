@@ -77,4 +77,8 @@ export class Character {
       this._position = this._position.withTerrainObjectPlacementType(defaultPlacementOnFieldWithBuildingType);
     }
   }
+
+  isOnField(field: MapField): boolean {
+    return this.field ? this.field.isOnField(field) : false;
+  }
 }

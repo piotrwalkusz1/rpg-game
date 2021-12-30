@@ -7,47 +7,13 @@ import { MapFieldActionTrigger } from './action/model/MapFieldActionTrigger';
 import { getActionContextByActionTrigger } from './action/service/ActionService';
 import './App.css';
 import { CharacterProfileView } from './character/component/CharacterProfileView';
-import { Character } from './character/model/Character';
 import { CharacterPosition } from './character/model/CharacterPosition';
-import { Race } from './character/model/Race';
-import { GameState } from './game/model/GameState';
-import { Player } from './game/model/Player';
+import * as MockedGame from './game/mock/MockedGame';
 import { LocationView } from './map/component/LocationVIiew';
 import { MapField } from './map/model/MapField';
-import { MapFieldType } from './map/model/MapFieldType';
-import { MapLocation } from './map/model/MapLocation';
-import { TerrainObject } from './map/terrain-object/TerrainObject';
-import { TerrainObjectPlacementType } from './map/terrain-object/TerrainObjectPlacementType';
-import { TerrainObjectType } from './map/terrain-object/TerrainObjectType';
-
-const humanRace = new Race('HUMAN');
-const world = new MapLocation({ name: "Alice's parcel", width: 3, height: 3, fieldType: MapFieldType.GRASS });
-const character = new Character({
-  name: 'Piotr',
-  race: humanRace,
-  avatarUrl: 'images/character_001_avatar.png',
-  field: world.fields[1][1]
-});
-const character_002 = new Character({
-  name: 'Alice',
-  race: humanRace,
-  avatarUrl: 'images/character_002_avatar.png',
-  field: world.fields[1][1]
-});
-const player = new Player(character);
-const buildingType = new TerrainObjectType({
-  id: 'HOUSE',
-  imageUrl: 'images/house.png',
-  placements: [TerrainObjectPlacementType.OUTSIDE, TerrainObjectPlacementType.INSIDE],
-  defaultCharacterPlacement: TerrainObjectPlacementType.OUTSIDE
-});
-const building = new TerrainObject({ type: buildingType });
-building.guards.push(character_002);
-world.fields[1][1].terrainObject = building;
-
-const gameState = new GameState(player, world, [character]);
 
 function App() {
+  const [gameState, setGameState] = useState(MockedGame.gameState);
   useEffect(() => {
     i18next.addResourceBundle('en', 'translation', {
       'CHARACTER.RACE.HUMAN': 'Human',
@@ -66,7 +32,7 @@ function App() {
     () => setActionContext(undefined),
     (actionContext) => setActionContext(actionContext),
     (field) => {
-      character.position = new CharacterPosition({ field: field });
+      gameState.player.character.position = new CharacterPosition({ field: field });
       setActionContext(undefined);
     }
   );
@@ -79,9 +45,13 @@ function App() {
 
   return (
     <div className="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
-      <CharacterProfileView character={character}></CharacterProfileView>
+      <CharacterProfileView character={gameState.player.character}></CharacterProfileView>
       <div className="grow overflow-hidden">
-        <LocationView location={world} player={player} onFieldClick={({ field }) => displayActionPanelForField(field)} />
+        <LocationView
+          gameState={gameState}
+          onGameStateChange={setGameState}
+          onFieldClick={({ field }) => displayActionPanelForField(field)}
+        />
       </div>
       {actionContext && <ActionPanel actionContext={actionContext} actionExecutionContext={actionExecutionContext}></ActionPanel>}
     </div>
