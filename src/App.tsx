@@ -21,18 +21,18 @@ import { TerrainObjectPlacementType } from './map/terrain-object/TerrainObjectPl
 import { TerrainObjectType } from './map/terrain-object/TerrainObjectType';
 
 const humanRace = new Race('HUMAN');
-const world = new MapLocation(10, 10, MapFieldType.GRASS);
+const world = new MapLocation({ name: "Alice's parcel", width: 3, height: 3, fieldType: MapFieldType.GRASS });
 const character = new Character({
   name: 'Piotr',
   race: humanRace,
   avatarUrl: 'images/character_001_avatar.png',
-  field: world.fields[1][3]
+  field: world.fields[1][1]
 });
 const character_002 = new Character({
   name: 'Alice',
   race: humanRace,
   avatarUrl: 'images/character_002_avatar.png',
-  field: world.fields[3][4]
+  field: world.fields[1][1]
 });
 const player = new Player(character);
 const buildingType = new TerrainObjectType({
@@ -43,7 +43,7 @@ const buildingType = new TerrainObjectType({
 });
 const building = new TerrainObject({ type: buildingType });
 building.guards.push(character_002);
-world.fields[3][4].terrainObject = building;
+world.fields[1][1].terrainObject = building;
 
 const gameState = new GameState(player, world, [character]);
 
@@ -78,9 +78,11 @@ function App() {
   };
 
   return (
-    <div className="border-2 border-black divide-y-[2px] divide-black h-full">
+    <div className="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
       <CharacterProfileView character={character}></CharacterProfileView>
-      <LocationView location={world} player={player} onFieldClick={({ field }) => displayActionPanelForField(field)} />
+      <div className="grow overflow-hidden">
+        <LocationView location={world} player={player} onFieldClick={({ field }) => displayActionPanelForField(field)} />
+      </div>
       {actionContext && <ActionPanel actionContext={actionContext} actionExecutionContext={actionExecutionContext}></ActionPanel>}
     </div>
   );

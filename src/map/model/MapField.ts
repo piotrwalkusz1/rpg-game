@@ -2,10 +2,11 @@ import { Character } from '../../character/model/Character';
 import { TerrainObject } from '../terrain-object/TerrainObject';
 import { TerrainObjectType } from '../terrain-object/TerrainObjectType';
 import { MapFieldType } from './MapFieldType';
+import { MapLocation } from './MapLocation';
 
 export class MapField {
   readonly fieldType: MapFieldType;
-  readonly subLocation?: Location;
+  readonly subLocation?: MapLocation;
   private _terrainObject?: TerrainObject;
   private _characters: Array<Character> = [];
 
@@ -15,7 +16,7 @@ export class MapField {
     terrainObject: object
   }: {
     fieldType: MapFieldType;
-    subLocation?: Location;
+    subLocation?: MapLocation;
     terrainObject?: TerrainObject;
   }) {
     this.fieldType = fieldType;
