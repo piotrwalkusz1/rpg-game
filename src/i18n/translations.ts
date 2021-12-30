@@ -1,0 +1,32 @@
+export default {
+  en: {
+    common: {
+      'ACTION.ACTION_TYPE.ENTER_BUILDING': 'Enter the building',
+      'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'You cannot enter!',
+      'ACTION.ACTION_TYPE.GO': 'Go',
+      'ACTION.CHOOSE_ACTION': 'Choose action',
+      'MAP.FIELD.EMPTY': 'Empty field',
+      'MAP.FIELD.EMPTY.DESCRIPTION': 'There is nothing here.',
+      'MAP.FIELD.GRASS': 'Grass',
+      'MAP.FIELD.GRASS.DESCRIPTION': 'The land is covered with grass.',
+      'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `{{characterName}} is outside of the building.`,
+      'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} is inside the building.`,
+      'CHARACTER.RACE.HUMAN': 'Human'
+    }
+  },
+  pl: {
+    common: {
+      'ACTION.ACTION_TYPE.ENTER_BUILDING': 'Wejdź do budynku',
+      'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'Nie możesz wejść!',
+      'ACTION.ACTION_TYPE.GO': 'Idź',
+      'ACTION.CHOOSE_ACTION': 'Wybierz akcję',
+      'MAP.FIELD.EMPTY': 'Puste pole',
+      'MAP.FIELD.EMPTY.DESCRIPTION': 'Nic tutaj nie ma.',
+      'MAP.FIELD.GRASS': 'Trawa',
+      'MAP.FIELD.GRASS.DESCRIPTION': 'Teren porośnięty trawą.',
+      'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `{{characterName}} jest na zewnątrz budynku.`,
+      'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} jest wewnątrz budynku.`,
+      'CHARACTER.RACE.HUMAN': 'Człowiek'
+    }
+  }
+};
