@@ -7,12 +7,11 @@
   import TerrainView from './terrain-view.svelte';
 
   export let gameState: GameState;
-  export let onGameStateChange: (gameState: GameState) => void;
   export let onFieldClick: (field: MapField) => void;
 
   function zoomOut() {
     if (gameState.currentLocationView.parentField) {
-      onGameStateChange({ ...gameState, currentLocationView: gameState.currentLocationView.parentField.location });
+      gameState.currentLocationView = gameState.currentLocationView.parentField.location;
     }
   }
 </script>

@@ -45,7 +45,7 @@
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
   <CharacterProfileView character={gameState.player.character} />
   <div class="grow overflow-hidden">
-    <LocationView {gameState} onGameStateChange={(newGameState) => (gameState = newGameState)} onFieldClick={displayActionPanelForField} />
+    <LocationView {gameState} onFieldClick={displayActionPanelForField} />
   </div>
 </div>
 
