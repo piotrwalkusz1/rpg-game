@@ -1,7 +1,6 @@
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
-import { MapFieldType } from '../../../map/model/map-field-type';
 import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
 import { MapFieldActionTrigger } from '../../model/map-field-action-trigger';
@@ -26,7 +25,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   override getActions({ field }: Data, gameState: GameState): Array<Action> {
-    if (field.fieldType === MapFieldType.EMPTY || gameState.player.character.field === field) {
+    if (gameState.player.character.field === field) {
       return [];
     }
     return [

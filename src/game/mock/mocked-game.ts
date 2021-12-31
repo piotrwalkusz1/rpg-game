@@ -51,9 +51,7 @@ const buildingTypes = {
   })
 };
 
-const buildings = {
-  ALICE_HOUSE: new TerrainObject({ type: buildingTypes.HOUSE, field: locations.ALICE_PARCEL.fields[1][1], guards: [characters.ALICE] })
-};
+new TerrainObject({ type: buildingTypes.HOUSE, field: locations.ALICE_PARCEL.fields[1][1], guards: [characters.ALICE] });
 
 const player = new Player(characters.PIOTR);
 
