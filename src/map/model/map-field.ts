@@ -1,6 +1,7 @@
 import type { Character } from '../../character/model/character';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { TerrainObjectType } from '../terrain-object/model/terrain-object-type';
+import type { MapFieldKind } from './map-field-kind';
 import type { MapFieldType } from './map-field-type';
 import type { MapLocation } from './map-location';
 
@@ -15,6 +16,10 @@ export class MapField {
     this.fieldType = fieldType;
     this.location = location;
     this.terrainObject = terrainObject;
+  }
+
+  get kind(): MapFieldKind {
+    return this.fieldType.kind;
   }
 
   get subLocations(): readonly MapLocation[] {

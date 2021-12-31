@@ -54,24 +54,28 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
       return [];
     }
     return [
-      new Action('ENTER_BUILDING', 200, (actionExecutionContext) => {
-        const guard = getMostImportantCharacterActivelyGuardingTerrainObject(building);
-        if (guard) {
-          const newActionContext = new ActionContext(
-            building.type.name,
-            new ActionContextDescription({ translationKey: 'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER' }, guard),
-            false,
-            []
-          );
-          actionExecutionContext.changeActionContext(newActionContext);
-        } else {
-          const newActionContext = new ActionContext(
-            building.type.name,
-            new ActionContextDescription(building.type.description),
-            false,
-            []
-          );
-          actionExecutionContext.changeActionContext(newActionContext);
+      new Action({
+        id: 'ENTER_BUILDING',
+        order: 200,
+        executeAction: (actionExecutionContext) => {
+          const guard = getMostImportantCharacterActivelyGuardingTerrainObject(building);
+          if (guard) {
+            const newActionContext = new ActionContext(
+              building.type.name,
+              new ActionContextDescription({ translationKey: 'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER' }, guard),
+              false,
+              []
+            );
+            actionExecutionContext.changeActionContext(newActionContext);
+          } else {
+            const newActionContext = new ActionContext(
+              building.type.name,
+              new ActionContextDescription(building.type.description),
+              false,
+              []
+            );
+            actionExecutionContext.changeActionContext(newActionContext);
+          }
         }
       })
     ];

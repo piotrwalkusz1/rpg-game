@@ -25,16 +25,14 @@
   let actionContext: ActionContext | undefined = undefined;
   let gameState: GameState = MockedGame.gameState;
 
-  const actionExecutionContext = new ActionExecutionContext(
-    () => (actionContext = undefined),
-    (newActionContext) => (actionContext = newActionContext),
-    (field) => {
-      gameState.player.character.position = new CharacterPosition({
+  const actionExecutionContext = new ActionExecutionContext({
+    changeActionContext: (newActionContext) => (actionContext = newActionContext),
+    go: (field) =>
+      (gameState.player.character.position = new CharacterPosition({
         field: field
-      });
-      actionContext = undefined;
-    }
-  );
+      })),
+    changeCurrentLocationView: (newLocation) => (gameState.currentLocationView = newLocation)
+  });
 
   function displayActionPanelForField(field: MapField) {
     const actionTrigger = new MapFieldActionTrigger(field);
