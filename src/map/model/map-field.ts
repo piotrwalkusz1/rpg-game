@@ -1,4 +1,4 @@
-import { CharactersContainer } from '../../character/model/characters-container';
+import { CharactersCollection } from '../../character/model/characters-container';
 import { createOneToManyRelationship } from '../../common/cache-relationship-utils';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { MapFieldKind } from './map-field-kind';
@@ -24,7 +24,7 @@ export class MapField {
   readonly location: MapLocation;
   private _subLocations: MapLocation[] = [];
   private _terrainObjects: TerrainObject[] = [];
-  readonly characters: CharactersContainer = new CharactersContainer(new FieldPosition(this));
+  readonly characters: CharactersCollection = new CharactersCollection(new FieldPosition(this));
 
   constructor({ fieldType, location }: { fieldType: MapFieldType; location: MapLocation }) {
     this.fieldType = fieldType;

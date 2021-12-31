@@ -1,5 +1,5 @@
 import type { Character } from '../../../character/model/character';
-import { CharactersContainer } from '../../../character/model/characters-container';
+import { CharactersCollection } from '../../../character/model/characters-container';
 import { createManyToOneRelationship } from '../../../common/cache-relationship-utils';
 import type { MapField } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
@@ -18,13 +18,13 @@ export class TerrainObject {
   readonly type: TerrainObjectType;
   guards: Array<Character>;
   private _field?: MapField;
-  characters: CharactersContainer;
+  characters: CharactersCollection;
 
   constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
     this.guards = guards || [];
     this.field = field;
-    this.characters = new CharactersContainer(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
+    this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
   }
 
   get imageUrl(): string {

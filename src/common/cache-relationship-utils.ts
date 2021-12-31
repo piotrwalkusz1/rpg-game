@@ -72,37 +72,58 @@ export const createManyToOneRelationship = <Child, Parent, FK>({
   };
 };
 
-export abstract class OneToManyCollection<Item> {
-  abstract add(item: Item): void;
+export abstract class OneToManyCollection<Item, FK> {
+  private readonly items: Item[] = [];
 
-  abstract remove(item: Item): void;
+  add(item: Item) {
+    if (this.items.includes(item)) {
+      return;
+    }
+    this.items.push(item);
+    if (this.getCollectionByItem(item) !== this) {
+      const foreignKey = this.prepareForeignKey();
+      this.setForeignKey(item, foreignKey);
+    }
+  }
+  remove(item: Item) {
+    const itemIndex = this.items.findIndex((otherItem) => otherItem === item);
+    if (itemIndex === -1) {
+      return;
+    }
+    this.items.splice(itemIndex, 1);
+    if (this.getCollectionByItem(item) === this) {
+      this.setForeignKey(item, undefined);
+    }
+  }
+
+  abstract getCollectionByItem(item: Item): OneToManyCollection<Item, FK> | undefined;
+
+  abstract prepareForeignKey(): FK;
+
+  abstract setForeignKey(item: Item, foreignKey: FK | undefined): void;
 }
 
-export abstract class OneToManyForeignKey<Item, Collection extends OneToManyCollection<Item>, FK> {
+export abstract class OneToManyForeignKey<Item, Collection extends OneToManyCollection<Item, FK>, FK> {
   setForeignKey(newForeignKey: FK | undefined) {
     const oldForeignKey = this._value;
     if (this.areForeignKeysEqual(oldForeignKey, newForeignKey)) {
       return;
     }
     this._value = newForeignKey;
-    const oldParent = this.getCollectionByForeignKey(oldForeignKey);
-    const newParent = this.getCollectionByForeignKey(newForeignKey);
-    if (oldParent == newParent) {
+    const oldCollection = this.getCollectionByForeignKey(oldForeignKey);
+    const newCollection = this.getCollectionByForeignKey(newForeignKey);
+    if (oldCollection == newCollection) {
       return;
     }
-    if (oldParent) {
-      oldParent.remove(this.child);
-    }
-    if (newParent) {
-      newParent.add(this.child);
-    }
+    oldCollection?.remove(this.item);
+    newCollection?.add(this.item);
   }
 
-  private child: Item;
+  private item: Item;
   protected _value: FK | undefined;
 
   constructor(child: Item) {
-    this.child = child;
+    this.item = child;
   }
 
   get value(): FK | undefined {

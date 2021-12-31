@@ -1,16 +1,8 @@
-import { createOneToManyRelationship, OneToManyCollection } from '../../common/cache-relationship-utils';
+import { OneToManyCollection } from '../../common/cache-relationship-utils';
 import type { Position } from '../../map/model/position';
 import type { Character } from './character';
 
-export class CharactersContainer extends OneToManyCollection<Character> {
-  private static readonly CHARACTERS_RELATIONSHIP = createOneToManyRelationship<CharactersContainer, Character, Position>({
-    getChildren: (charactersContainer) => charactersContainer._characters,
-    getParent: (character) => character.position?.characters,
-    setForeignKey: (character, newPosition) => (character.position = newPosition),
-    prepareForeignKey: (characterContainer) => characterContainer.defaultPosition
-  });
-
-  private readonly _characters: Character[] = [];
+export class CharactersCollection extends OneToManyCollection<Character, Position> {
   private readonly defaultPosition: Position;
 
   constructor(defaultPosition: Position) {
@@ -18,11 +10,15 @@ export class CharactersContainer extends OneToManyCollection<Character> {
     this.defaultPosition = defaultPosition;
   }
 
-  add(character: Character) {
-    CharactersContainer.CHARACTERS_RELATIONSHIP.addChild(this, character);
+  override getCollectionByItem(character: Character): OneToManyCollection<Character, Position> | undefined {
+    return character.position?.characters;
   }
 
-  remove(character: Character) {
-    CharactersContainer.CHARACTERS_RELATIONSHIP.removeChild(this, character);
+  override prepareForeignKey(): Position {
+    return this.defaultPosition;
+  }
+
+  override setForeignKey(character: Character, position: Position | undefined): void {
+    character.position = position;
   }
 }

@@ -1,18 +1,14 @@
 import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
-import type { Position } from '../../map/model/position';
+import { Position } from '../../map/model/position';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
-import type { CharactersContainer } from './characters-container';
+import type { CharactersCollection } from './characters-container';
 import type { Race } from './race';
 
-class PositionFK extends OneToManyForeignKey<Character, CharactersContainer, Position> {
-  override areForeignKeysEqual(firstForeignKey: Position | undefined, secondForeignKey: Position | undefined): boolean {
-    return firstForeignKey === secondForeignKey;
-  }
-  override getCollectionByForeignKey(foreignKey: Position | undefined): CharactersContainer | undefined {
-    return foreignKey?.characters;
-  }
+class PositionFK extends OneToManyForeignKey<Character, CharactersCollection, Position> {
+  override getCollectionByForeignKey = (position: Position | undefined) => position?.characters;
+  override areForeignKeysEqual = Position.areEqual;
 }
 
 export class Character {
