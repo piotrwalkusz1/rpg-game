@@ -1,12 +1,24 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
-import type { TerrainObjectPlacement } from './terrain-object-placement';
-import type { TerrainObjectPlacementType } from './terrain-object-placement-type';
+import { TerrainObjectPlacement } from './terrain-object-placement';
 
 export class TerrainObjectType {
+  static readonly HOUSE = new TerrainObjectType({
+    id: 'HOUSE',
+    imageUrl: 'images/house.png',
+    placements: [TerrainObjectPlacement.OUTSIDE, TerrainObjectPlacement.INSIDE],
+    defaultCharacterPlacement: TerrainObjectPlacement.OUTSIDE
+  });
+  static readonly CAVE = new TerrainObjectType({
+    id: 'CAVE',
+    imageUrl: 'images/terrain-objects/natural/cave.svg',
+    placements: [TerrainObjectPlacement.INSIDE],
+    defaultCharacterPlacement: TerrainObjectPlacement.INSIDE
+  });
+
   readonly id: string;
   readonly imageUrl: string;
-  readonly placements: Array<TerrainObjectPlacementType>;
-  readonly defaultCharacterPlacement: TerrainObjectPlacementType;
+  readonly placements: Array<TerrainObjectPlacement>;
+  readonly defaultCharacterPlacement: TerrainObjectPlacement;
 
   constructor({
     id,
@@ -16,8 +28,8 @@ export class TerrainObjectType {
   }: {
     id: string;
     imageUrl: string;
-    placements: Array<TerrainObjectPlacementType>;
-    defaultCharacterPlacement: TerrainObjectPlacementType;
+    placements: Array<TerrainObjectPlacement>;
+    defaultCharacterPlacement: TerrainObjectPlacement;
   }) {
     if (placements.length === 0) {
       throw new Error('At least one placement required');
@@ -41,6 +53,6 @@ export class TerrainObjectType {
   }
 
   getDescriptionForPlacement(placement: TerrainObjectPlacement): TranslatableText {
-    return { translationKey: 'MAP.TERRAIN_OBJECT.' + this.id + '.PLACEMENT.' + placement.type.id + '.DESCRIPTION' };
+    return { translationKey: 'MAP.TERRAIN_OBJECT.' + this.id + '.PLACEMENT.' + placement.id + '.DESCRIPTION' };
   }
 }

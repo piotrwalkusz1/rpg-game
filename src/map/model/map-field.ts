@@ -1,21 +1,34 @@
-import type { Character } from '../../character/model/character';
+import { CharactersContainer } from '../../character/model/characters-container';
+import { createOneToManyRelationship } from '../../common/cache-relationship-utils';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
-import type { TerrainObjectType } from '../terrain-object/model/terrain-object-type';
 import type { MapFieldKind } from './map-field-kind';
 import type { MapFieldType } from './map-field-type';
 import type { MapLocation } from './map-location';
+import { FieldPosition } from './position';
 
 export class MapField {
+  private static readonly SUB_LOCATIONS_RELATIONSHIP = createOneToManyRelationship<MapField, MapLocation, MapField>({
+    getChildren: (field) => field._subLocations,
+    getParent: (subLocation) => subLocation.parentField,
+    setForeignKey: (subLocation, field) => (subLocation.parentField = field),
+    prepareForeignKey: (field) => field
+  });
+  private static readonly TERRAIN_OBJECTS_RELATIONSHIP = createOneToManyRelationship<MapField, TerrainObject, MapField>({
+    getChildren: (field) => field._terrainObjects,
+    getParent: (terrainObject) => terrainObject.field,
+    setForeignKey: (terrainObject, field) => (terrainObject.field = field),
+    prepareForeignKey: (field) => field
+  });
+
   readonly fieldType: MapFieldType;
   readonly location: MapLocation;
-  private _subLocations: Array<MapLocation> = [];
-  private _terrainObject?: TerrainObject;
-  private _characters: Array<Character> = [];
+  private _subLocations: MapLocation[] = [];
+  private _terrainObjects: TerrainObject[] = [];
+  readonly characters: CharactersContainer = new CharactersContainer(new FieldPosition(this));
 
-  constructor({ fieldType, location, terrainObject }: { fieldType: MapFieldType; location: MapLocation; terrainObject?: TerrainObject }) {
+  constructor({ fieldType, location }: { fieldType: MapFieldType; location: MapLocation }) {
     this.fieldType = fieldType;
     this.location = location;
-    this.terrainObject = terrainObject;
   }
 
   get kind(): MapFieldKind {
@@ -27,76 +40,23 @@ export class MapField {
   }
 
   addSubLocation(subLocation: MapLocation) {
-    if (this._subLocations.includes(subLocation)) {
-      return;
-    }
-    this._subLocations.push(subLocation);
-    subLocation.parentField = this;
+    MapField.SUB_LOCATIONS_RELATIONSHIP.addChild(this, subLocation);
   }
 
   removeSubLocation(subLocation: MapLocation) {
-    if (!this._subLocations.includes(subLocation)) {
-      return;
-    }
-    this._subLocations = this._subLocations.filter((otherSubLocation) => otherSubLocation !== subLocation);
-    if (subLocation.parentField === this) {
-      subLocation.parentField = undefined;
-    }
+    MapField.SUB_LOCATIONS_RELATIONSHIP.removeChild(this, subLocation);
   }
 
-  get terrainObjectType(): TerrainObjectType | undefined {
-    return this._terrainObject?.type;
+  get terrainObjects(): readonly TerrainObject[] {
+    return this._terrainObjects;
   }
 
-  get terrainObject(): TerrainObject | undefined {
-    return this._terrainObject;
+  addTerrainObject(terrainObject: TerrainObject) {
+    MapField.TERRAIN_OBJECTS_RELATIONSHIP.addChild(this, terrainObject);
   }
 
-  set terrainObject(newTerrainObject: TerrainObject | undefined) {
-    if (this._terrainObject === newTerrainObject) {
-      return;
-    }
-    const oldTerrainObject = this._terrainObject;
-    this._terrainObject = newTerrainObject;
-    if (oldTerrainObject && oldTerrainObject.field === this) {
-      oldTerrainObject.field = undefined;
-    }
-    if (newTerrainObject) {
-      newTerrainObject.field = this;
-    }
-    this.characters.forEach((character) => character.setTerrainObjectPlacementToDefaultValue());
-  }
-
-  get characters(): readonly Character[] {
-    return this._characters.slice();
-  }
-
-  containsAnyCharacter(): boolean {
-    return this._characters.length !== 0;
-  }
-
-  containsCharacter(character: Character): boolean {
-    return this._characters.includes(character);
-  }
-
-  addCharacter(character: Character) {
-    if (this._characters.includes(character)) {
-      return;
-    }
-    const oldField = character.field;
-    this._characters.push(character);
-    if (oldField && oldField !== this) {
-      oldField.removeCharacter(character);
-    }
-    character.field = this;
-  }
-
-  removeCharacter(character: Character) {
-    if (!this._characters.includes(character)) {
-      return;
-    }
-    this._characters = this._characters.filter((otherCharacter) => otherCharacter !== character);
-    character.field = undefined;
+  removeTerrainObject(terrainObject: TerrainObject) {
+    MapField.TERRAIN_OBJECTS_RELATIONSHIP.removeChild(this, terrainObject);
   }
 
   isOnField(otherField: MapField): boolean {

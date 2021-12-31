@@ -16,6 +16,8 @@ export default {
       'MAP.FIELD.LOWLANDS.DESCRIPTION': 'Lowlands.',
       'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `{{characterName}} is outside of the building.`,
       'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} is inside the building.`,
+      'MAP.TERRAIN_OBJECT.HOUSE': 'House',
+      'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'The house seems normal.',
       'CHARACTER.RACE.HUMAN': 'Human'
     }
   },
@@ -36,6 +38,8 @@ export default {
       'MAP.FIELD.LOWLANDS.DESCRIPTION': 'Niziny.',
       'MAP.TERRAIN_OBJECT_PLACEMENT.OUTSIDE.CHARACTER_DESCRIPTION': `{{characterName}} jest na zewnątrz budynku.`,
       'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} jest wewnątrz budynku.`,
+      'MAP.TERRAIN_OBJECT.HOUSE': 'Dom',
+      'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'Dom wygląda normalnie.',
       'CHARACTER.RACE.HUMAN': 'Człowiek'
     }
   }

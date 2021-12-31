@@ -6,6 +6,7 @@ import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
 import { MapFieldActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
+import { FieldPosition, Position } from '../../../map/model/position';
 
 interface Data {
   field: MapField;
@@ -46,12 +47,13 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   private getGoAction(field: MapField, gameState: GameState): Action | undefined {
-    if ((field.kind === MapFieldKind.FIELD || field.kind === MapFieldKind.AREA) && gameState.player.character.field !== field) {
+    const newPostion = new FieldPosition(field);
+    if (field.kind === MapFieldKind.FIELD && !Position.areEqual(gameState.player.character.position, newPostion)) {
       return new Action({
         id: 'GO',
         order: 100,
         executeAction: (actionExecutionContext) => {
-          actionExecutionContext.go(field);
+          actionExecutionContext.go(newPostion);
         }
       });
     }

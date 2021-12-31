@@ -1,10 +1,10 @@
-import type { MapField } from '../../map/model/map-field';
-import type { ActionContext } from './action-context';
 import type { MapLocation } from '../../map/model/map-location';
+import type { Position } from '../../map/model/position';
+import type { ActionContext } from './action-context';
 
 export class ActionExecutionContext {
   readonly changeActionContext: (actionContext: ActionContext | undefined) => void;
-  readonly go: (field: MapField) => void;
+  readonly go: (position: Position) => void;
   readonly changeCurrentLocationView: (location: MapLocation) => void;
 
   constructor({
@@ -13,7 +13,7 @@ export class ActionExecutionContext {
     changeCurrentLocationView
   }: {
     changeActionContext: (actionContext: ActionContext | undefined) => void;
-    go: (field: MapField) => void;
+    go: (position: Position) => void;
     changeCurrentLocationView: (location: MapLocation) => void;
   }) {
     this.changeActionContext = changeActionContext;

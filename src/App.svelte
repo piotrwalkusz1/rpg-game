@@ -5,7 +5,6 @@
   import { MapFieldActionTrigger } from './action/model/map-field-action-trigger';
   import { getActionContextByActionTrigger } from './action/service/action-service';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
-  import { CharacterPosition } from './character/model/character-position';
   import * as MockedGame from './game/mock/mocked-game';
   import type { GameState } from './game/model/game-state';
   import { initLocalizationContext } from './i18n/translation-service';
@@ -13,24 +12,15 @@
   import type { MapField } from './map/model/map-field';
 
   const { i18n } = initLocalizationContext();
-  i18n.addResourceBundle('en', 'common', {
-    'MAP.TERRAIN_OBJECT.HOUSE': 'House',
-    'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'The house seems normal.'
-  });
-  i18n.addResourceBundle('pl', 'common', {
-    'MAP.TERRAIN_OBJECT.HOUSE': 'Dom',
-    'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'Dom wygląda normalnie.'
-  });
+  i18n.addResourceBundle('en', 'common', {});
+  i18n.addResourceBundle('pl', 'common', {});
 
   let actionContext: ActionContext | undefined = undefined;
   let gameState: GameState = MockedGame.gameState;
 
   const actionExecutionContext = new ActionExecutionContext({
     changeActionContext: (newActionContext) => (actionContext = newActionContext),
-    go: (field) =>
-      (gameState.player.character.position = new CharacterPosition({
-        field: field
-      })),
+    go: (newPosition) => (gameState.player.character.position = newPosition),
     changeCurrentLocationView: (newLocation) => (gameState.currentLocationView = newLocation)
   });
 

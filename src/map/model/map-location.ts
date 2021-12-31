@@ -1,8 +1,21 @@
 import { MapField } from './map-field';
 import type { MapFieldType } from './map-field-type';
 import type { TranslatableText } from '../../i18n/translatable-text';
+import { createManyToOneRelationship } from '../../common/cache-relationship-utils';
 
 export class MapLocation {
+  private static readonly PARENT_FIELD_RELATIONSHIP = createManyToOneRelationship<MapLocation, MapField, MapField>({
+    getForeignKey: (location) => location._parentField,
+    setForeignKeyInternally: (location, newParentField) => (location._parentField = newParentField),
+    areForeignKeysEqual: (firstField, secondField) => firstField === secondField,
+    getParent: (field) => field,
+    addChild: (field, subLocation) => field.addSubLocation(subLocation),
+    removeChild: (field, subLocation) => field.removeSubLocation(subLocation)
+  });
+  static readonly INTERNAL = {
+    setParentField: (location: MapLocation, newParentField: MapField) => (location._parentField = newParentField)
+  };
+
   name: TranslatableText;
   readonly width: number;
   readonly height: number;
@@ -46,9 +59,8 @@ export class MapLocation {
       for (let x = 0; x < width; x++) {
         fields[y][x] = new MapField({ fieldType, location: this });
       }
-      Object.freeze(fields[y]);
     }
-    return Object.freeze(fields);
+    return fields;
   }
 
   get parentField(): MapField | undefined {
@@ -56,16 +68,6 @@ export class MapLocation {
   }
 
   set parentField(newParentField: MapField | undefined) {
-    if (this._parentField === newParentField) {
-      return;
-    }
-    const oldParentField = this._parentField;
-    this._parentField = newParentField;
-    if (oldParentField) {
-      oldParentField.removeSubLocation(this);
-    }
-    if (newParentField) {
-      newParentField.addSubLocation(this);
-    }
+    MapLocation.PARENT_FIELD_RELATIONSHIP.setForeignKey(this, newParentField);
   }
 }

@@ -1,16 +1,30 @@
 import type { Character } from '../../../character/model/character';
+import { CharactersContainer } from '../../../character/model/characters-container';
+import { createManyToOneRelationship } from '../../../common/cache-relationship-utils';
 import type { MapField } from '../../model/map-field';
+import { TerrainObjectPosition } from '../../model/position';
 import type { TerrainObjectType } from './terrain-object-type';
 
 export class TerrainObject {
+  private static readonly FIELD_RELATIONSHIP = createManyToOneRelationship<TerrainObject, MapField, MapField>({
+    getForeignKey: (terrainObject) => terrainObject._field,
+    setForeignKeyInternally: (terrainObject, newField) => (terrainObject._field = newField),
+    areForeignKeysEqual: (firstField, secondField) => firstField === secondField,
+    getParent: (field) => field,
+    addChild: (field, terrainObject) => field.addTerrainObject(terrainObject),
+    removeChild: (field, terrainObject) => field.removeTerrainObject(terrainObject)
+  });
+
   readonly type: TerrainObjectType;
   guards: Array<Character>;
   private _field?: MapField;
+  characters: CharactersContainer;
 
   constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
     this.guards = guards || [];
     this.field = field;
+    this.characters = new CharactersContainer(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
   }
 
   get imageUrl(): string {
@@ -22,16 +36,6 @@ export class TerrainObject {
   }
 
   set field(newField: MapField | undefined) {
-    if (this._field === newField) {
-      return;
-    }
-    const oldField = this._field;
-    this._field = newField;
-    if (oldField && oldField.terrainObject === this) {
-      oldField.terrainObject = undefined;
-    }
-    if (newField) {
-      newField.terrainObject = this;
-    }
+    TerrainObject.FIELD_RELATIONSHIP.setForeignKey(this, newField);
   }
 }

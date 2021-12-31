@@ -3,7 +3,7 @@ import { MapFieldKind } from './map-field-kind';
 
 export class MapFieldType {
   static LOWLANDS = new MapFieldType('LOWLANDS', 'images/grass.jpg', MapFieldKind.REGION);
-  static MEADOW = new MapFieldType('MEADOW', 'images/grass.jpg', MapFieldKind.AREA);
+  static MEADOW = new MapFieldType('MEADOW', 'images/grass.jpg', MapFieldKind.FIELD);
   static GRASS = new MapFieldType('GRASS', 'images/grass.jpg', MapFieldKind.FIELD);
 
   readonly id: string;
