@@ -2,12 +2,11 @@ import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
+import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
 import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
-import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
-import { TerrainObjectPlacement } from '../../map/terrain-object/model/terrain-object-placement';
 
 const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 20, height: 20, fieldType: MapFieldType.MEADOW });
 const createWorld = (): MapLocation => {

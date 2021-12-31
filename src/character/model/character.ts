@@ -1,31 +1,31 @@
-import { createManyToOneRelationship } from '../../common/cache-relationship-utils';
+import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import type { Position } from '../../map/model/position';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
-import type { Race } from './race';
 import type { CharactersContainer } from './characters-container';
+import type { Race } from './race';
+
+class PositionFK extends OneToManyForeignKey<Character, CharactersContainer, Position> {
+  override areForeignKeysEqual(firstForeignKey: Position | undefined, secondForeignKey: Position | undefined): boolean {
+    return firstForeignKey === secondForeignKey;
+  }
+  override getCollectionByForeignKey(foreignKey: Position | undefined): CharactersContainer | undefined {
+    return foreignKey?.characters;
+  }
+}
 
 export class Character {
-  private static readonly POSITION_RELATIONSHIP = createManyToOneRelationship<Character, CharactersContainer, Position>({
-    getForeignKey: (character) => character._position,
-    setForeignKeyInternally: (character, newPosition) => (character._position = newPosition),
-    areForeignKeysEqual: (firstPosition, secondPosition) => firstPosition === secondPosition,
-    getParent: (position) => position?.characters,
-    addChild: (charactersContainer, character) => charactersContainer.add(character),
-    removeChild: (charactersContainer, character) => charactersContainer.remove(character)
-  });
-
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
-  private _position?: Position;
+  readonly positionFK: PositionFK = new PositionFK(this);
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;
     this.race = race;
     this.avatarUrl = avatarUrl;
-    this.position = position;
+    this.positionFK.value = position;
   }
 
   get displayName(): TranslatableText {
@@ -33,22 +33,22 @@ export class Character {
   }
 
   get field(): MapField | undefined {
-    return this._position?.field;
+    return this.position?.field;
   }
 
   get position(): Position | undefined {
-    return this._position;
+    return this.positionFK.value;
   }
 
   set position(newPosition: Position | undefined) {
-    Character.POSITION_RELATIONSHIP.setForeignKey(this, newPosition);
+    this.positionFK.value = newPosition;
   }
 
   isOnField(field: MapField): boolean {
-    return this.position?.isOnField(field) || false;
+    return this.positionFK.value?.isOnField(field) || false;
   }
 
   isNearTerrainObject(terrainObject: TerrainObject): boolean {
-    return this.position?.isNearTerrainObject(terrainObject) || false;
+    return this.positionFK.value?.isNearTerrainObject(terrainObject) || false;
   }
 }

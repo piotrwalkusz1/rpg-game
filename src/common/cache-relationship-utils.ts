@@ -71,3 +71,49 @@ export const createManyToOneRelationship = <Child, Parent, FK>({
     }
   };
 };
+
+export abstract class OneToManyCollection<Item> {
+  abstract add(item: Item): void;
+
+  abstract remove(item: Item): void;
+}
+
+export abstract class OneToManyForeignKey<Item, Collection extends OneToManyCollection<Item>, FK> {
+  setForeignKey(newForeignKey: FK | undefined) {
+    const oldForeignKey = this._value;
+    if (this.areForeignKeysEqual(oldForeignKey, newForeignKey)) {
+      return;
+    }
+    this._value = newForeignKey;
+    const oldParent = this.getCollectionByForeignKey(oldForeignKey);
+    const newParent = this.getCollectionByForeignKey(newForeignKey);
+    if (oldParent == newParent) {
+      return;
+    }
+    if (oldParent) {
+      oldParent.remove(this.child);
+    }
+    if (newParent) {
+      newParent.add(this.child);
+    }
+  }
+
+  private child: Item;
+  protected _value: FK | undefined;
+
+  constructor(child: Item) {
+    this.child = child;
+  }
+
+  get value(): FK | undefined {
+    return this._value;
+  }
+
+  set value(newValue: FK | undefined) {
+    this.setForeignKey(newValue);
+  }
+
+  abstract areForeignKeysEqual(firstForeignKey: FK | undefined, secondForeignKey: FK | undefined): boolean;
+
+  abstract getCollectionByForeignKey(foreignKey: FK | undefined): Collection | undefined;
+}

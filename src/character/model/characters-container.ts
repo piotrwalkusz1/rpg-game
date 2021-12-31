@@ -1,8 +1,8 @@
-import { createOneToManyRelationship } from '../../common/cache-relationship-utils';
+import { createOneToManyRelationship, OneToManyCollection } from '../../common/cache-relationship-utils';
 import type { Position } from '../../map/model/position';
 import type { Character } from './character';
 
-export class CharactersContainer {
+export class CharactersContainer extends OneToManyCollection<Character> {
   private static readonly CHARACTERS_RELATIONSHIP = createOneToManyRelationship<CharactersContainer, Character, Position>({
     getChildren: (charactersContainer) => charactersContainer._characters,
     getParent: (character) => character.position?.characters,
@@ -14,6 +14,7 @@ export class CharactersContainer {
   private readonly defaultPosition: Position;
 
   constructor(defaultPosition: Position) {
+    super();
     this.defaultPosition = defaultPosition;
   }
 
