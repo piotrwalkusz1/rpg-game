@@ -11,17 +11,28 @@ export class Action {
   constructor({
     id,
     nameTranslationProperties,
+    nameContext,
     order,
     executeAction
   }: {
     id: string;
-    nameTranslationProperties?: { [key: string]: any };
+    nameTranslationProperties?: Record<string, TranslatableText>;
+    nameContext?: TranslatableText;
     order: number;
     executeAction: (actionExecutionContext: ActionExecutionContext) => ActionContext | undefined;
   }) {
     this.id = id;
-    this.name = { translationKey: 'ACTION.ACTION_TYPE.' + this.id, properties: nameTranslationProperties };
+    this.name = Action.prepareName(id, nameTranslationProperties, nameContext);
     this.order = order;
     this.executeAction = executeAction;
+  }
+
+  private static prepareName(
+    id: string,
+    nameTranslationProperties?: Record<string, TranslatableText>,
+    nameContext?: TranslatableText
+  ): TranslatableText {
+    const name = { translationKey: 'ACTION.ACTION_TYPE.' + id, properties: nameTranslationProperties };
+    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', name]) : name;
   }
 }

@@ -2,7 +2,7 @@ import { getContext, setContext } from 'svelte';
 import { derived, Readable, Writable, writable } from 'svelte/store';
 import { I18nService } from './i18n-service';
 
-export type TType = (text: string, replacements?: Record<string, unknown>) => string;
+export type TType = (text: string, replacements?: Record<string, string>) => string;
 
 export interface TranslationService {
   locale: Writable<string>;

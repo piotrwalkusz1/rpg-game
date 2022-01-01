@@ -2,11 +2,11 @@ import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { MapFieldKind } from '../../../map/model/map-field-kind';
+import { FieldPosition, Position } from '../../../map/model/position';
 import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
 import { MapFieldActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
-import { FieldPosition, Position } from '../../../map/model/position';
 
 interface Data {
   field: MapField;
@@ -35,9 +35,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
       (subLocation) =>
         new Action({
           id: 'SEE_LOCATION',
-          nameTranslationProperties: {
-            locationName: subLocation.name
-          },
+          nameContext: subLocation.name,
           order: 50,
           executeAction: (actionExecutionContext) => {
             actionExecutionContext.changeCurrentLocationView(subLocation);

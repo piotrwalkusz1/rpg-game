@@ -1,5 +1,5 @@
 import type { Character } from '../../../character/model/character';
-import { convertTranslatableTextToString, TranslatableText } from '../../../i18n/translatable-text';
+import type { TranslatableText } from '../../../i18n/translatable-text';
 
 export class TerrainObjectPlacement {
   static readonly OUTSIDE = new TerrainObjectPlacement('OUTSIDE');
@@ -12,11 +12,11 @@ export class TerrainObjectPlacement {
   }
 
   getCharacterDescription(character: Character): TranslatableText {
-    return (t) => {
-      const characterName = convertTranslatableTextToString(t, character.displayName);
-      return t('MAP.TERRAIN_OBJECT_PLACEMENT.' + this.id + '.CHARACTER_DESCRIPTION', {
-        characterName: characterName
-      });
+    return {
+      translationKey: 'MAP.TERRAIN_OBJECT_PLACEMENT.' + this.id + '.CHARACTER_DESCRIPTION',
+      properties: {
+        characterName: character.displayName
+      }
     };
   }
 }

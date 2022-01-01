@@ -23,7 +23,7 @@ export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, ga
     .flatMap((actionContextProviderWithData) => actionContextProviderWithData.getDescription(gameState))
     .sort((a, b) => a.order - b.order)
     .map((actionContextDecriptionWithData) => actionContextDecriptionWithData.description);
-  const description = createTranslatableTextFromArray(descriptions);
+  const description = createTranslatableTextFromArray(descriptions, ' ');
   const actions = actionContextProvidersWithData.flatMap((actionContextProviderWithData) =>
     actionContextProviderWithData.getActions(gameState)
   );
