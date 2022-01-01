@@ -1,6 +1,8 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { TerrainObjectPlacement } from './terrain-object-placement';
 
+export type TerrainObjectTypeId = 'HOUSE' | 'CAVE';
+
 export class TerrainObjectType {
   static readonly HOUSE = new TerrainObjectType({
     id: 'HOUSE',
@@ -15,7 +17,7 @@ export class TerrainObjectType {
     defaultCharacterPlacement: TerrainObjectPlacement.INSIDE
   });
 
-  readonly id: string;
+  readonly id: TerrainObjectTypeId;
   readonly imageUrl: string;
   readonly placements: Array<TerrainObjectPlacement>;
   readonly defaultCharacterPlacement: TerrainObjectPlacement;
@@ -26,7 +28,7 @@ export class TerrainObjectType {
     placements,
     defaultCharacterPlacement
   }: {
-    id: string;
+    id: TerrainObjectTypeId;
     imageUrl: string;
     placements: Array<TerrainObjectPlacement>;
     defaultCharacterPlacement: TerrainObjectPlacement;
@@ -45,14 +47,10 @@ export class TerrainObjectType {
   }
 
   get name(): TranslatableText {
-    return { translationKey: 'MAP.TERRAIN_OBJECT.' + this.id };
+    return { translationKey: `MAP.TERRAIN_OBJECT.${this.id}` };
   }
 
   get description(): TranslatableText {
-    return { translationKey: 'MAP.TERRAIN_OBJECT.' + this.id + '.DESCRIPTION' };
-  }
-
-  getDescriptionForPlacement(placement: TerrainObjectPlacement): TranslatableText {
-    return { translationKey: 'MAP.TERRAIN_OBJECT.' + this.id + '.PLACEMENT.' + placement.id + '.DESCRIPTION' };
+    return { translationKey: `MAP.TERRAIN_OBJECT.${this.id}.DESCRIPTION` };
   }
 }

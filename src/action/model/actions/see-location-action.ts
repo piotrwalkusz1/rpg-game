@@ -1,6 +1,6 @@
 import type { ActionContext } from '../action-context';
 import type { ActionExecutionContext } from '../action-execution-context';
-import { Action } from './action';
+import { Action, ActionId } from './action';
 import type { MapLocation } from '../../../map/model/map-location';
 import { ActionOrder } from '../action-order';
 
@@ -9,7 +9,7 @@ export class SeeLocationAction extends Action {
     super({ nameContext: location.name });
   }
 
-  override get id(): string {
+  override get id(): ActionId {
     return 'SEE_LOCATION';
   }
 

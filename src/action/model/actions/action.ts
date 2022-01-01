@@ -3,24 +3,31 @@ import type { ActionContext } from '../action-context';
 import type { ActionExecutionContext } from '../action-execution-context';
 import type { ActionOrder } from '../action-order';
 
+export type ActionId = 'GO_TO_TERRAIN_OBJECT' | 'GO_TO_FIELD' | 'LEAVE_TERRAIN_OBJECT' | 'SEE_LOCATION' | 'CHANGE_TERRAIN_OBJECT_PLACEMENT';
+
 export abstract class Action {
-  readonly name: TranslatableText;
+  readonly nameContext?: TranslatableText;
 
   constructor({ nameContext }: { nameContext?: TranslatableText }) {
-    this.name = this.prepareName(nameContext);
+    this.nameContext = nameContext;
   }
 
-  abstract get id(): string;
+  abstract get id(): ActionId;
 
   abstract get order(): ActionOrder;
 
-  abstract executeAction(actionExecutionContext: ActionExecutionContext): ActionContext | undefined;
-
-  protected get baseName(): TranslatableText {
-    return { translationKey: 'ACTION.ACTION_TYPE.' + this.id };
+  get name(): TranslatableText {
+    const baseName: TranslatableText = {
+      translationKey: `ACTION.ACTION_TYPE.${this.id}`,
+      properties: this.getNameTranslationKeyProperties()
+    };
+    const nameContext = this.nameContext;
+    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', baseName]) : baseName;
   }
 
-  private prepareName(nameContext?: TranslatableText): TranslatableText {
-    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', this.baseName]) : this.baseName;
+  abstract executeAction(actionExecutionContext: ActionExecutionContext): ActionContext | undefined;
+
+  protected getNameTranslationKeyProperties(): Record<string, TranslatableText> | undefined {
+    return undefined;
   }
 }

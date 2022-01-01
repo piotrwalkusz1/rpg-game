@@ -1,4 +1,5 @@
 import type { TType } from './translation-service';
+import type { TranslationKey } from './translations';
 
 const DEFAULT_SEPARATOR = '';
 
@@ -16,7 +17,7 @@ class TranslationContext {
 
 export type TranslatableText =
   | string
-  | { translationKey: string; properties?: Record<string, TranslatableText> }
+  | { translationKey: TranslationKey; properties?: Record<string, TranslatableText> }
   | ((tc: TranslationContext) => string);
 
 export const convertTranslatableTextToString = (t: TType, translatableText: TranslatableText): string => {

@@ -5,14 +5,14 @@ import type { TerrainObjectPlacement } from '../../../map/terrain-object/model/t
 import type { ActionContext } from '../action-context';
 import type { ActionExecutionContext } from '../action-execution-context';
 import { ActionOrder } from '../action-order';
-import { Action } from './action';
+import { Action, ActionId } from './action';
 
 export class ChangeTerrainObjectPlacementAction extends Action {
   constructor(readonly terrainObject: TerrainObject, readonly terrainObjectPlacement: TerrainObjectPlacement) {
     super({ nameContext: terrainObject.name });
   }
 
-  override get id(): string {
+  override get id(): ActionId {
     return 'CHANGE_TERRAIN_OBJECT_PLACEMENT';
   }
 
@@ -20,8 +20,10 @@ export class ChangeTerrainObjectPlacementAction extends Action {
     return ActionOrder.CHANGE_TERRAIN_OBJECT_PLACEMENT;
   }
 
-  override get baseName(): TranslatableText {
-    return this.terrainObjectPlacement.getMovementActivityName();
+  protected override getNameTranslationKeyProperties(): Record<string, TranslatableText> | undefined {
+    return {
+      terrainObjectPlacementMovementActivity: this.terrainObjectPlacement.getMovementActivityName()
+    };
   }
 
   override executeAction(actionExecutionContext: ActionExecutionContext): ActionContext | undefined {
