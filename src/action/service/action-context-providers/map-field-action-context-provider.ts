@@ -2,7 +2,7 @@ import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { MapFieldKind } from '../../../map/model/map-field-kind';
-import { FieldPosition, Position } from '../../../map/model/position';
+import { FieldPosition } from '../../../map/model/position';
 import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
 import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';

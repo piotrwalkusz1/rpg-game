@@ -1,11 +1,12 @@
 import type { GameState } from '../../../game/model/game-state';
-import { TerrainObjectPosition, FieldPosition } from '../../../map/model/position';
+import type { TranslatableText } from '../../../i18n/translatable-text';
+import type { MapField } from '../../../map/model/map-field';
+import { FieldPosition, TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
 import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
-import { MapField } from '../../../map/model/map-field';
 
 interface Data {
   terrainObjects: readonly TerrainObject[];
@@ -16,6 +17,23 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
   override getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): Data | undefined {
     const field = actionTrigger instanceof FieldSelectedActionTrigger && actionTrigger.field;
     return field && field.terrainObjects.length > 0 ? { terrainObjects: field.terrainObjects.getArray(), field: field } : undefined;
+  }
+
+  override getDescription({ terrainObjects }: Data, gameState: GameState): { description: TranslatableText; order: number }[] {
+    const terrainObjectWherePlayerIs = terrainObjects.find((terrainObject) =>
+      gameState.player.character.isNearTerrainObject(terrainObject)
+    );
+    if (!terrainObjectWherePlayerIs) {
+      return [];
+    }
+    return terrainObjectWherePlayerIs.characters
+      .getArray()
+      .filter((character) => character !== gameState.player.character)
+      .map(
+        (character) =>
+          character.position instanceof TerrainObjectPosition && character.position.placement.getCharacterDescription(character)
+      )
+      .flatMap((description) => (description ? [{ description, order: 100 }] : []));
   }
 
   override getActions({ terrainObjects, field }: Data, gameState: GameState): Array<Action> {
