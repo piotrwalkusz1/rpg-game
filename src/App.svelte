@@ -3,7 +3,7 @@
   import ActionPanel from './action/component/action-panel.svelte';
   import type { ActionContext } from './action/model/action-context';
   import { ActionExecutionContext } from './action/model/action-execution-context';
-  import { MapFieldActionTrigger } from './action/model/map-field-action-trigger';
+  import { FieldSelectedActionTrigger } from './action/model/map-field-action-trigger';
   import { getActionContextByActionTrigger } from './action/service/action-service';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
   import Toolbox from './game/component/toolbox.svelte';
@@ -23,7 +23,10 @@
 
   const actionExecutionContext = new ActionExecutionContext({
     go: (newPosition) => (gameState.player.character.position = newPosition),
-    changeCurrentLocationView: (newLocation) => (gameState.locationView = newLocation)
+    changeCurrentLocationView: (newLocation) => {
+      gameState.locationView = newLocation;
+      gameState.selectedField = undefined;
+    }
   });
 
   function onFieldClick(field: MapField) {
@@ -39,7 +42,7 @@
     if (!gameState.selectedField) {
       return;
     }
-    const actionTrigger = new MapFieldActionTrigger(gameState.selectedField);
+    const actionTrigger = new FieldSelectedActionTrigger(gameState.selectedField);
     return getActionContextByActionTrigger(actionTrigger, gameState);
   }
 </script>

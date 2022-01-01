@@ -5,7 +5,7 @@ import { MapFieldKind } from '../../../map/model/map-field-kind';
 import { FieldPosition, Position } from '../../../map/model/position';
 import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
-import { MapFieldActionTrigger } from '../../model/map-field-action-trigger';
+import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
 
 interface Data {
@@ -14,7 +14,7 @@ interface Data {
 
 export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   override getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): Data | undefined {
-    const field = actionTrigger instanceof MapFieldActionTrigger && actionTrigger.field;
+    const field = actionTrigger instanceof FieldSelectedActionTrigger && actionTrigger.field;
     return field ? { field: field } : undefined;
   }
 
@@ -27,10 +27,10 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   override getActions({ field }: Data, gameState: GameState): Array<Action> {
-    return [...this.getSeeLocationActions(field), this.getGoAction(field, gameState)].flatMap((action) => (action ? [action] : []));
+    return [...this.prepareSeeLocationActions(field), this.prepareGoAction(field, gameState)].flatMap((action) => (action ? [action] : []));
   }
 
-  private getSeeLocationActions(field: MapField): Action[] {
+  private prepareSeeLocationActions(field: MapField): Action[] {
     return field.subLocations.getArray().map(
       (subLocation) =>
         new Action({
@@ -45,7 +45,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
     );
   }
 
-  private getGoAction(field: MapField, gameState: GameState): Action | undefined {
+  private prepareGoAction(field: MapField, gameState: GameState): Action | undefined {
     const newPostion = new FieldPosition(field);
     if (field.kind === MapFieldKind.FIELD && !Position.areEqual(gameState.player.character.position, newPostion)) {
       return new Action({

@@ -5,8 +5,12 @@ import { ActionContext } from '../model/action-context';
 import type { ActionTrigger } from '../model/action-trigger';
 import type { ActionContextProvider, ActionContextProviderWithData } from './action-context-providers/action-context-provider';
 import { MapFieldActionContextProvider } from './action-context-providers/map-field-action-context-provider';
+import { TerrainObjectActionContextProvider } from './action-context-providers/terrain-object-action-context-provider copy';
 
-const actionContextProviders: ActionContextProvider<any>[] = [new MapFieldActionContextProvider()];
+const actionContextProviders: ActionContextProvider<any>[] = [
+  new MapFieldActionContextProvider(),
+  new TerrainObjectActionContextProvider()
+];
 
 export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, gameState: GameState): ActionContext => {
   const actionContextProvidersWithData: Array<ActionContextProviderWithData<any>> = actionContextProviders.flatMap(
@@ -16,9 +20,11 @@ export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, ga
       return actionContextProviderWithData ? [actionContextProviderWithData] : [];
     }
   );
-  const title = actionContextProvidersWithData
+  const titles = actionContextProvidersWithData
     .map((actionContextProviderWithData) => actionContextProviderWithData.getTitle())
-    .sort((a, b) => a.order - b.order)[0].title;
+    .flatMap((title) => (title ? [title] : []))
+    .sort((a, b) => a.order - b.order);
+  const title = titles.length > 0 ? titles[0].title : '';
   const descriptions = actionContextProvidersWithData
     .flatMap((actionContextProviderWithData) => actionContextProviderWithData.getDescription(gameState))
     .sort((a, b) => a.order - b.order)

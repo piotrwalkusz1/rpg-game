@@ -11,17 +11,23 @@ export abstract class ActionContextProvider<T extends {}> {
 
   abstract getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): T | undefined;
 
-  abstract getTitle(data: T): { title: TranslatableText; order: number };
+  getTitle(_data: T): { title: TranslatableText; order: number } | undefined {
+    return undefined;
+  }
 
-  abstract getDescription(data: T, gameState: GameState): Array<{ description: TranslatableText; order: number }>;
+  getDescription(_data: T, _gameState: GameState): { description: TranslatableText; order: number }[] {
+    return [];
+  }
 
-  abstract getActions(data: T, gameState: GameState): Array<Action>;
+  getActions(_data: T, _gameState: GameState): Action[] {
+    return [];
+  }
 }
 
 export class ActionContextProviderWithData<T> {
   constructor(readonly actionContextProvider: ActionContextProvider<T>, readonly data: T) {}
 
-  getTitle(): { title: TranslatableText; order: number } {
+  getTitle(): { title: TranslatableText; order: number } | undefined {
     return this.actionContextProvider.getTitle(this.data);
   }
 

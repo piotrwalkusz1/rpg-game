@@ -1,6 +1,7 @@
 import { Character, CharactersCollection } from '../../../character/model/character';
 import { OneToManyForeignKey } from '../../../common/cache-relationship-utils';
 import { areSame } from '../../../common/object-utils';
+import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
 import type { TerrainObjectType } from './terrain-object-type';
@@ -33,5 +34,9 @@ export class TerrainObject {
 
   set field(field: MapField | undefined) {
     this.fieldFK.value = field;
+  }
+
+  get name(): TranslatableText {
+    return this.type.name;
   }
 }

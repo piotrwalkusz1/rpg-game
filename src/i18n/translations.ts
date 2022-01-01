@@ -5,7 +5,6 @@ export default {
       'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'You cannot enter!',
       'ACTION.ACTION_TYPE.GO': 'Go',
       'ACTION.ACTION_TYPE.SEE_LOCATION': 'See location',
-      'ACTION.CHOOSE_ACTION': 'Choose action',
       'MAP.FIELD.EMPTY': 'Empty field',
       'MAP.FIELD.EMPTY.DESCRIPTION': 'There is nothing here.',
       'MAP.FIELD.GRASS': 'Grass',
@@ -18,6 +17,8 @@ export default {
       'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} is inside the building.`,
       'MAP.TERRAIN_OBJECT.HOUSE': 'House',
       'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'The house seems normal.',
+      'MAP.TERRAIN_OBJECT.CAVE': 'Cave',
+      'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'The cave seems normal.',
       'CHARACTER.RACE.HUMAN': 'Human'
     }
   },
@@ -27,7 +28,6 @@ export default {
       'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'Nie możesz wejść!',
       'ACTION.ACTION_TYPE.GO': 'Idź',
       'ACTION.ACTION_TYPE.SEE_LOCATION': 'Zobacz lokację',
-      'ACTION.CHOOSE_ACTION': 'Wybierz akcję',
       'MAP.FIELD.EMPTY': 'Puste pole',
       'MAP.FIELD.EMPTY.DESCRIPTION': 'Nic tutaj nie ma.',
       'MAP.FIELD.GRASS': 'Trawa',
@@ -40,6 +40,8 @@ export default {
       'MAP.TERRAIN_OBJECT_PLACEMENT.INSIDE.CHARACTER_DESCRIPTION': `{{characterName}} jest wewnątrz budynku.`,
       'MAP.TERRAIN_OBJECT.HOUSE': 'Dom',
       'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'Dom wygląda normalnie.',
+      'MAP.TERRAIN_OBJECT.CAVE': 'Jaskinia',
+      'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'Jaskinia wygląda normalnie.',
       'CHARACTER.RACE.HUMAN': 'Człowiek'
     }
   }
