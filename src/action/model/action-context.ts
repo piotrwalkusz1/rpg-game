@@ -1,12 +1,27 @@
+import type { TranslatableText } from '../../i18n/translatable-text';
 import type { Action } from './action';
 import type { ActionContextDescription } from './action-conctext-description';
-import type { TranslatableText } from '../../i18n/translatable-text';
 
 export class ActionContext {
-  constructor(
-    readonly title: TranslatableText,
-    readonly description: ActionContextDescription,
-    readonly isActionRequired: boolean,
-    readonly actions: Array<Action>
-  ) {}
+  readonly title: TranslatableText;
+  readonly description: ActionContextDescription;
+  readonly actions: Action[];
+  readonly isActionRequired: boolean;
+
+  constructor({
+    description,
+    title,
+    actions,
+    isActionRequired
+  }: {
+    title: TranslatableText;
+    description: ActionContextDescription;
+    actions: Action[];
+    isActionRequired?: boolean;
+  }) {
+    this.title = title;
+    this.description = description;
+    this.actions = actions;
+    this.isActionRequired = isActionRequired || false;
+  }
 }

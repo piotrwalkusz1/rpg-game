@@ -8,7 +8,7 @@ import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
 
-const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 20, height: 20, fieldType: MapFieldType.MEADOW });
+const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 10, height: 10, fieldType: MapFieldType.MEADOW });
 const createWorld = (): MapLocation => {
   const world = new MapLocation({ name: 'World', width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
   world.fields.forEach((row) => row.forEach((field) => field.subLocations.add(createRegion())));

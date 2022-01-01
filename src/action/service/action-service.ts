@@ -28,5 +28,5 @@ export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, ga
     actionContextProviderWithData.getActions(gameState)
   );
 
-  return new ActionContext(title, new ActionContextDescription(description), false, actions);
+  return new ActionContext({ title: title, description: new ActionContextDescription(description), actions: actions });
 };

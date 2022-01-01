@@ -41,6 +41,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
           order: 50,
           executeAction: (actionExecutionContext) => {
             actionExecutionContext.changeCurrentLocationView(subLocation);
+            return undefined;
           }
         })
     );
@@ -54,6 +55,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
         order: 100,
         executeAction: (actionExecutionContext) => {
           actionExecutionContext.go(newPostion);
+          return undefined;
         }
       });
     }
