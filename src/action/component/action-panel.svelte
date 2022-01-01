@@ -1,6 +1,6 @@
 <script lang="ts">
   import TranslatableTextView from '../../i18n/translatable-text-view.svelte';
-  import type { Action } from '../model/action';
+  import type { Action } from '../model/actions/action';
   import type { ActionContext } from '../model/action-context';
   import type { ActionExecutionContext } from '../model/action-execution-context';
 

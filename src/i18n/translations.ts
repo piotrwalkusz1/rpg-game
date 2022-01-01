@@ -3,8 +3,9 @@ export default {
     common: {
       'ACTION.ACTION_TYPE.ENTER_BUILDING': 'Enter the building',
       'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'You cannot enter!',
-      'ACTION.ACTION_TYPE.GO': 'Go',
-      'ACTION.ACTION_TYPE.LEAVE': 'Leave',
+      'ACTION.ACTION_TYPE.GO_TO_TERRAIN_OBJECT': 'Go',
+      'ACTION.ACTION_TYPE.GO_TO_FIELD': 'Go',
+      'ACTION.ACTION_TYPE.LEAVE_TERRAIN_OBJECT': 'Leave',
       'ACTION.ACTION_TYPE.SEE_LOCATION': 'See location',
       'MAP.FIELD.EMPTY': 'Empty field',
       'MAP.FIELD.EMPTY.DESCRIPTION': 'There is nothing here.',
@@ -27,8 +28,9 @@ export default {
     common: {
       'ACTION.ACTION_TYPE.ENTER_BUILDING': 'Wejdź do budynku',
       'ACTION.ACTION_TYPE.ENTER_BUILDING.DIALOGUE_001_YOU_CANNOT_ENTER': 'Nie możesz wejść!',
-      'ACTION.ACTION_TYPE.GO': 'Idź',
-      'ACTION.ACTION_TYPE.LEAVE': 'Opuść',
+      'ACTION.ACTION_TYPE.GO_TO_TERRAIN_OBJECT': 'Idź',
+      'ACTION.ACTION_TYPE.GO_TO_FIELD': 'Idź',
+      'ACTION.ACTION_TYPE.LEAVE_TERRAIN_OBJECT': 'Opuść',
       'ACTION.ACTION_TYPE.SEE_LOCATION': 'Zobacz lokację',
       'MAP.FIELD.EMPTY': 'Puste pole',
       'MAP.FIELD.EMPTY.DESCRIPTION': 'Nic tutaj nie ma.',

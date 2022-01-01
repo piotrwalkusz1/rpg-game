@@ -1,5 +1,5 @@
 import type { TranslatableText } from '../../i18n/translatable-text';
-import type { Action } from './action';
+import type { Action } from './actions/action';
 import type { ActionContextDescription } from './action-conctext-description';
 
 export class ActionContext {

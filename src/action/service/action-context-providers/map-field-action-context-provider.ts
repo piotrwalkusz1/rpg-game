@@ -2,9 +2,10 @@ import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { MapFieldKind } from '../../../map/model/map-field-kind';
-import { FieldPosition } from '../../../map/model/position';
-import { Action } from '../../model/action';
 import type { ActionTrigger } from '../../model/action-trigger';
+import type { Action } from '../../model/actions/action';
+import { GoToFieldAction } from '../../model/actions/go-to-field-action';
+import { SeeLocationAction } from '../../model/actions/see-location-action';
 import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
 
@@ -31,31 +32,13 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   private prepareSeeLocationActions(field: MapField): Action[] {
-    return field.subLocations.getArray().map(
-      (subLocation) =>
-        new Action({
-          id: 'SEE_LOCATION',
-          nameContext: subLocation.name,
-          order: 50,
-          executeAction: (actionExecutionContext) => {
-            actionExecutionContext.changeCurrentLocationView(subLocation);
-            return undefined;
-          }
-        })
-    );
+    return field.subLocations.getArray().map((subLocation) => new SeeLocationAction(subLocation));
   }
 
   private prepareGoAction(field: MapField, gameState: GameState): Action | undefined {
     if (field.kind !== MapFieldKind.FIELD || gameState.player.character.isOnField(field)) {
       return;
     }
-    return new Action({
-      id: 'GO',
-      order: 110,
-      executeAction: (actionExecutionContext) => {
-        actionExecutionContext.go(new FieldPosition(field));
-        return undefined;
-      }
-    });
+    return new GoToFieldAction(field);
   }
 }

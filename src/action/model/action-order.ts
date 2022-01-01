@@ -1,0 +1,6 @@
+export enum ActionOrder {
+  LEAVE_TERRAIN_OBJECT = 1000,
+  GO_TO_TERRAIN_OBJECT = 2000,
+  GO_TO_FIELD = 3000,
+  SEE_LOCATION = 4000
+}
