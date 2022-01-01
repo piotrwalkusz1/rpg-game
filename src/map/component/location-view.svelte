@@ -7,11 +7,13 @@
   export let onFieldClick: (field: MapField) => void;
 
   function getFieldStyle(field: MapField): string {
+    let style = 'w-[64px] h-[64px] hover:outline outline-[2px] outline-offset-[-2px] hover:outline-white';
     if (gameState.player.character.isOnField(field)) {
-      return 'w-[64px] h-[64px] outline outline-[2px] outline-offset-[-2px] outline-blue-500 hover:outline-white';
-    } else {
-      return 'w-[64px] h-[64px] hover:outline outline-[2px] outline-offset-[-2px] outline-white';
+      style += ' outline outline-blue-500';
+    } else if (gameState.selectedField === field) {
+      style += ' outline outline-yellow-500';
     }
+    return style;
   }
 </script>
 
