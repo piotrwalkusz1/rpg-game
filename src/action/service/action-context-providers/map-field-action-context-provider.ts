@@ -46,16 +46,16 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   private prepareGoAction(field: MapField, gameState: GameState): Action | undefined {
-    const newPostion = new FieldPosition(field);
-    if (field.kind === MapFieldKind.FIELD && !Position.areEqual(gameState.player.character.position, newPostion)) {
-      return new Action({
-        id: 'GO',
-        order: 100,
-        executeAction: (actionExecutionContext) => {
-          actionExecutionContext.go(newPostion);
-          return undefined;
-        }
-      });
+    if (field.kind !== MapFieldKind.FIELD || gameState.player.character.isOnField(field)) {
+      return;
     }
+    return new Action({
+      id: 'GO',
+      order: 110,
+      executeAction: (actionExecutionContext) => {
+        actionExecutionContext.go(new FieldPosition(field));
+        return undefined;
+      }
+    });
   }
 }

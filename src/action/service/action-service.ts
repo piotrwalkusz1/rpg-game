@@ -30,9 +30,9 @@ export const getActionContextByActionTrigger = (actionTrigger: ActionTrigger, ga
     .sort((a, b) => a.order - b.order)
     .map((actionContextDecriptionWithData) => actionContextDecriptionWithData.description);
   const description = createTranslatableTextFromArray(descriptions, ' ');
-  const actions = actionContextProvidersWithData.flatMap((actionContextProviderWithData) =>
-    actionContextProviderWithData.getActions(gameState)
-  );
+  const actions = actionContextProvidersWithData
+    .flatMap((actionContextProviderWithData) => actionContextProviderWithData.getActions(gameState))
+    .sort((a, b) => a.order - b.order);
 
   return new ActionContext({ title: title, description: new ActionContextDescription(description), actions: actions });
 };
