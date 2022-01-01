@@ -8,6 +8,7 @@ import { GoToTerrainObjectAction } from '../../model/actions/go-to-terrain-objec
 import { LeaveTerrainAction } from '../../model/actions/leave-terrain-object';
 import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
+import { ChangeTerrainObjectPlacementAction } from '../../model/actions/change-terrain-object-placement-action';
 
 interface Data {
   terrainObjects: readonly TerrainObject[];
@@ -41,9 +42,11 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
   }
 
   private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): Action[] {
-    return [this.prepareGoAction(terrainObject, gameState), this.prepareLeaveAction(terrainObject, gameState)].flatMap((action) =>
-      action ? [action] : []
-    );
+    return [
+      this.prepareGoAction(terrainObject, gameState),
+      this.prepareLeaveAction(terrainObject, gameState),
+      ...this.prepareChangeTerrainObjectPlacementActions(terrainObject, gameState)
+    ].flatMap((action) => (action ? [action] : []));
   }
 
   private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): Action | undefined {
@@ -58,5 +61,16 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
       return;
     }
     return new LeaveTerrainAction(terrainObject);
+  }
+
+  private prepareChangeTerrainObjectPlacementActions(terrainObject: TerrainObject, gameState: GameState): Action[] {
+    if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
+      return [];
+    }
+    const playerTerrrainPositionPlacement =
+      gameState.player.character.position instanceof TerrainObjectPosition && gameState.player.character.position.placement;
+    return terrainObject.type.placements
+      .filter((placement) => placement !== playerTerrrainPositionPlacement)
+      .map((placement) => new ChangeTerrainObjectPlacementAction(terrainObject, placement));
   }
 }

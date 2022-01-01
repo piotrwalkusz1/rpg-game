@@ -5,7 +5,7 @@ import { ActionContext } from '../model/action-context';
 import type { ActionTrigger } from '../model/action-trigger';
 import type { ActionContextProvider, ActionContextProviderWithData } from './action-context-providers/action-context-provider';
 import { MapFieldActionContextProvider } from './action-context-providers/map-field-action-context-provider';
-import { TerrainObjectActionContextProvider } from './action-context-providers/terrain-object-action-context-provider copy';
+import { TerrainObjectActionContextProvider } from './action-context-providers/terrain-object-action-context-provider';
 
 const actionContextProviders: ActionContextProvider<any>[] = [
   new MapFieldActionContextProvider(),

@@ -11,6 +11,10 @@ export class TerrainObjectPlacement {
     return { translationKey: 'MAP.TERRAIN_OBJECT_PLACEMENT.' + this.id };
   }
 
+  getMovementActivityName(): TranslatableText {
+    return { translationKey: 'MAP.TERRAIN_OBJECT_PLACEMENT.' + this.id + '.MOVEMENT_ACTIVITY' };
+  }
+
   getCharacterDescription(character: Character): TranslatableText {
     return {
       translationKey: 'MAP.TERRAIN_OBJECT_PLACEMENT.' + this.id + '.CHARACTER_DESCRIPTION',

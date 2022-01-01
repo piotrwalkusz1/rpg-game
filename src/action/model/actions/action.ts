@@ -6,14 +6,8 @@ import type { ActionOrder } from '../action-order';
 export abstract class Action {
   readonly name: TranslatableText;
 
-  constructor({
-    nameTranslationProperties,
-    nameContext
-  }: {
-    nameTranslationProperties?: Record<string, TranslatableText>;
-    nameContext?: TranslatableText;
-  }) {
-    this.name = this.prepareName(nameTranslationProperties, nameContext);
+  constructor({ nameContext }: { nameContext?: TranslatableText }) {
+    this.name = this.prepareName(nameContext);
   }
 
   abstract get id(): string;
@@ -22,8 +16,11 @@ export abstract class Action {
 
   abstract executeAction(actionExecutionContext: ActionExecutionContext): ActionContext | undefined;
 
-  private prepareName(nameTranslationProperties?: Record<string, TranslatableText>, nameContext?: TranslatableText): TranslatableText {
-    const name = { translationKey: 'ACTION.ACTION_TYPE.' + this.id, properties: nameTranslationProperties };
-    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', name]) : name;
+  protected get baseName(): TranslatableText {
+    return { translationKey: 'ACTION.ACTION_TYPE.' + this.id };
+  }
+
+  private prepareName(nameContext?: TranslatableText): TranslatableText {
+    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', this.baseName]) : this.baseName;
   }
 }
