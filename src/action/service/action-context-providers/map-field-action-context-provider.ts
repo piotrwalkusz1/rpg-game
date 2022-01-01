@@ -31,7 +31,7 @@ export class MapFieldActionContextProvider extends ActionContextProvider<Data> {
   }
 
   private getSeeLocationActions(field: MapField): Action[] {
-    return field.subLocations.map(
+    return field.subLocations.getArray().map(
       (subLocation) =>
         new Action({
           id: 'SEE_LOCATION',

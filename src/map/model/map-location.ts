@@ -1,27 +1,21 @@
-import { MapField } from './map-field';
-import type { MapFieldType } from './map-field-type';
+import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
+import { areSame } from '../../common/object-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
-import { createManyToOneRelationship } from '../../common/cache-relationship-utils';
+import { MapField, SubLocationsCollection } from './map-field';
+import type { MapFieldType } from './map-field-type';
+
+class LocationParentFieldFK extends OneToManyForeignKey<MapLocation, SubLocationsCollection, MapField> {
+  override getCollection = (field?: MapField) => field?.subLocations;
+  override areForeignKeysEqual = areSame;
+}
 
 export class MapLocation {
-  private static readonly PARENT_FIELD_RELATIONSHIP = createManyToOneRelationship<MapLocation, MapField, MapField>({
-    getForeignKey: (location) => location._parentField,
-    setForeignKeyInternally: (location, newParentField) => (location._parentField = newParentField),
-    areForeignKeysEqual: (firstField, secondField) => firstField === secondField,
-    getParent: (field) => field,
-    addChild: (field, subLocation) => field.addSubLocation(subLocation),
-    removeChild: (field, subLocation) => field.removeSubLocation(subLocation)
-  });
-  static readonly INTERNAL = {
-    setParentField: (location: MapLocation, newParentField: MapField) => (location._parentField = newParentField)
-  };
-
   name: TranslatableText;
   readonly width: number;
   readonly height: number;
   readonly fields: readonly MapField[][];
   readonly startingField?: MapField;
-  private _parentField?: MapField;
+  readonly parentFieldFK: LocationParentFieldFK = new LocationParentFieldFK(this);
 
   constructor({
     name,
@@ -64,10 +58,10 @@ export class MapLocation {
   }
 
   get parentField(): MapField | undefined {
-    return this._parentField;
+    return this.parentFieldFK.value;
   }
 
-  set parentField(newParentField: MapField | undefined) {
-    MapLocation.PARENT_FIELD_RELATIONSHIP.setForeignKey(this, newParentField);
+  set parentField(parentField: MapField | undefined) {
+    this.parentFieldFK.value = parentField;
   }
 }

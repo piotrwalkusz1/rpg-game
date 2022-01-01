@@ -1,13 +1,16 @@
-import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
+import { OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Position } from '../../map/model/position';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
-import type { CharactersCollection } from './characters-container';
 import type { Race } from './race';
 
-class PositionFK extends OneToManyForeignKey<Character, CharactersCollection, Position> {
-  override getCollectionByForeignKey = (position: Position | undefined) => position?.characters;
+export class CharactersCollection extends OneToManyCollection<Character, Position> {
+  override getForeignKey = (character: Character) => character.positionFK;
+}
+
+class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersCollection, Position> {
+  override getCollection = (position: Position | undefined) => position?.characters;
   override areForeignKeysEqual = Position.areEqual;
 }
 
@@ -15,7 +18,7 @@ export class Character {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
-  readonly positionFK: PositionFK = new PositionFK(this);
+  readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;

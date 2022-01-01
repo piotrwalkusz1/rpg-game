@@ -1,4 +1,4 @@
-import type { CharactersCollection } from '../../character/model/characters-container';
+import type { CharactersCollection } from '../../character/model/character';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { TerrainObjectPlacement } from '../terrain-object/model/terrain-object-placement';
 import type { MapField } from './map-field';

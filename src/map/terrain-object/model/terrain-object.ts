@@ -1,29 +1,25 @@
-import type { Character } from '../../../character/model/character';
-import { CharactersCollection } from '../../../character/model/characters-container';
-import { createManyToOneRelationship } from '../../../common/cache-relationship-utils';
-import type { MapField } from '../../model/map-field';
+import { Character, CharactersCollection } from '../../../character/model/character';
+import { OneToManyForeignKey } from '../../../common/cache-relationship-utils';
+import { areSame } from '../../../common/object-utils';
+import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
 import type { TerrainObjectType } from './terrain-object-type';
 
-export class TerrainObject {
-  private static readonly FIELD_RELATIONSHIP = createManyToOneRelationship<TerrainObject, MapField, MapField>({
-    getForeignKey: (terrainObject) => terrainObject._field,
-    setForeignKeyInternally: (terrainObject, newField) => (terrainObject._field = newField),
-    areForeignKeysEqual: (firstField, secondField) => firstField === secondField,
-    getParent: (field) => field,
-    addChild: (field, terrainObject) => field.addTerrainObject(terrainObject),
-    removeChild: (field, terrainObject) => field.removeTerrainObject(terrainObject)
-  });
+class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObjectsCollection, MapField> {
+  override getCollection = (field?: MapField) => field?.terrainObjects;
+  override areForeignKeysEqual = areSame;
+}
 
+export class TerrainObject {
   readonly type: TerrainObjectType;
-  guards: Array<Character>;
-  private _field?: MapField;
-  characters: CharactersCollection;
+  readonly guards: Array<Character>;
+  readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
+  readonly characters: CharactersCollection;
 
   constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
     this.guards = guards || [];
-    this.field = field;
+    this.fieldFK.value = field;
     this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
   }
 
@@ -32,10 +28,10 @@ export class TerrainObject {
   }
 
   get field(): MapField | undefined {
-    return this._field;
+    return this.fieldFK.value;
   }
 
-  set field(newField: MapField | undefined) {
-    TerrainObject.FIELD_RELATIONSHIP.setForeignKey(this, newField);
+  set field(field: MapField | undefined) {
+    this.fieldFK.value = field;
   }
 }

@@ -11,13 +11,13 @@ import { Player } from '../model/player';
 const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 20, height: 20, fieldType: MapFieldType.MEADOW });
 const createWorld = (): MapLocation => {
   const world = new MapLocation({ name: 'World', width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
-  world.fields.forEach((row) => row.forEach((field) => field.addSubLocation(createRegion())));
+  world.fields.forEach((row) => row.forEach((field) => field.subLocations.add(createRegion())));
   return world;
 };
 const world = createWorld();
 
 const locations = {
-  REGION_WHERE_ALICE_LIVE: world.fields[0][0].subLocations[0]
+  REGION_WHERE_ALICE_LIVE: world.fields[0][0].subLocations.get(0)
 };
 
 const terrainObjects = {

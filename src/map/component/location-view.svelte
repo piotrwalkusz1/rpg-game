@@ -16,7 +16,7 @@
   }
 </script>
 
-<div class="flex flex-col divide-y-[2px] divide-black h-full ">
+<div class="flex flex-col divide-y-[2px] divide-black h-full">
   <div class="text-center font-bold py-[5px]">
     <TranslatableTextView text={gameState.currentLocationView.name} />
   </div>
