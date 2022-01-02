@@ -25,10 +25,11 @@
 
   const actionExecutionContext: ActionExecutionContext = {
     changePlayerPosition: (newPosition: Position) => (gameState.player.character.position = newPosition),
-    gameState
+    getGameState: () => gameState
   };
   const narrationActionExecutionContext: NarrationActionExecutionContext = {
     changeLocationView: (newLocationView: MapLocation) => (gameState.locationView = newLocationView),
+    getNarration: () => narration,
     ...actionExecutionContext
   };
 

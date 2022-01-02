@@ -1,4 +1,4 @@
 export enum NarrationActionExecutionResult {
   NEXT_NARRATION,
-  RESET_NARRATION
+  KEEP_NARRATION
 }

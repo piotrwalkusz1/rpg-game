@@ -43,8 +43,8 @@ export namespace NarrationService {
     switch (result) {
       case NarrationActionExecutionResult.NEXT_NARRATION:
         return narrationAction.getNextNarration();
-      case NarrationActionExecutionResult.RESET_NARRATION:
-        return undefined;
+      case NarrationActionExecutionResult.KEEP_NARRATION:
+        return narrationActionExecutionContext.getNarration();
     }
   };
 }

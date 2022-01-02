@@ -1,7 +1,14 @@
 import type { DetectableEvent } from './detectable-event';
 
-export abstract class Detector {
-  readonly observators: (() => {})[] = [];
+export abstract class Detector<T extends {} = any> {
+  readonly observators: ((detectionInfo: T) => {})[] = [];
 
-  abstract check(detectableEvent: DetectableEvent): boolean;
+  run(detectableEvent: DetectableEvent): void {
+    const detectionInfo = this.check(detectableEvent);
+    if (detectionInfo !== undefined) {
+      this.observators.forEach((observator) => observator(detectionInfo));
+    }
+  }
+
+  protected abstract check(detectableEvent: DetectableEvent): T | undefined;
 }

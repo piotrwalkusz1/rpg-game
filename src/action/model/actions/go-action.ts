@@ -29,13 +29,13 @@ export class GoAction extends Action {
   }
 
   execute(actionExecutionContext: ActionExecutionContext): GoActionResultEvent {
-    const oldPosition = actionExecutionContext.gameState.player.character.position;
+    const oldPosition = actionExecutionContext.getGameState().player.character.position;
     actionExecutionContext.changePlayerPosition(this.position);
     return new GoActionResultEvent(this.position, oldPosition);
   }
 
   getActionScheduledEvent(actionExecutionContext: ActionExecutionContext): ActionScheduledEvent | undefined {
-    const oldPosition = actionExecutionContext.gameState.player.character.position;
+    const oldPosition = actionExecutionContext.getGameState().player.character.position;
     return new GoActionScheduledEvent(this.position, oldPosition);
   }
 }
