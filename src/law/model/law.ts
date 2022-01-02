@@ -1,1 +1,1 @@
-export abstract class Law {}
+export class Law {}

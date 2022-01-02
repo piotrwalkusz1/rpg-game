@@ -20,8 +20,11 @@ export class LeaveTerrainObjectNarrationAction extends ActionBasedNarrationActio
     return NarrationActionOrder.GO_TO_TERRAIN_OBJECT;
   }
 
-  override getAction(): Action | undefined {
-    return this.terrainObject.field && new GoAction(new FieldPosition(this.terrainObject.field));
+  override getAction(): Action {
+    if (!this.terrainObject.field) {
+      throw new Error('Cannot leave terrain object that has no parent field');
+    }
+    return new GoAction(new FieldPosition(this.terrainObject.field));
   }
 
   protected override getNameContext(): TranslatableText | undefined {

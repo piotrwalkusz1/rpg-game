@@ -19,7 +19,7 @@ export class GoToFieldNarrationAction extends ActionBasedNarrationAction {
     return NarrationActionOrder.GO_TO_FIELD;
   }
 
-  override getAction(): Action | undefined {
+  override getAction(): Action {
     return new GoAction(new FieldPosition(this.field));
   }
 }

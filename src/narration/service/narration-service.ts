@@ -2,6 +2,9 @@ import type { GameState } from '../../game/model/game-state';
 import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Narration } from '../model/narration';
+import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
+import { NarrationActionExecutionResult } from '../model/narration-action-execution-result';
+import type { NarrationAction } from '../model/narration-actions/narration-action';
 import { NarrationDescription } from '../model/narration-description';
 import { FieldNarrationProvider } from './narration-providers/field-narration-provider';
 import type { NarrationProvider, NarrationProviderWithData } from './narration-providers/narration-provider';
@@ -30,5 +33,18 @@ export namespace NarrationService {
       .sort((a, b) => a.order - b.order);
 
     return new Narration({ title: title, description: new NarrationDescription(description), actions: actions });
+  };
+
+  export const executeNarrationAction = (
+    narrationAction: NarrationAction,
+    narrationActionExecutionContext: NarrationActionExecutionContext
+  ): Narration | undefined => {
+    const result = narrationAction.execute(narrationActionExecutionContext);
+    switch (result) {
+      case NarrationActionExecutionResult.NEXT_NARRATION:
+        return narrationAction.getNextNarration();
+      case NarrationActionExecutionResult.RESET_NARRATION:
+        return undefined;
+    }
   };
 }

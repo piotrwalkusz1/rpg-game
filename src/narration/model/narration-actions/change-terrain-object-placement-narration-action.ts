@@ -21,7 +21,7 @@ export class ChangeTerrainObjectPlacementNarrationAction extends ActionBasedNarr
     return NarrationActionOrder.CHANGE_TERRAIN_OBJECT_PLACEMENT;
   }
 
-  override getAction(): Action | undefined {
+  override getAction(): Action {
     return new GoAction(new TerrainObjectPosition(this.terrainObject, this.terrainObjectPlacement));
   }
 

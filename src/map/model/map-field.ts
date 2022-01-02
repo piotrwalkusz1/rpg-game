@@ -1,5 +1,7 @@
 import { CharactersCollection } from '../../character/model/character';
 import { OneToManyCollection } from '../../common/cache-relationship-utils';
+import type { Detector } from '../../detector/model/detector';
+import type { DetectorContext } from '../../detector/model/detector-context';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { MapFieldKind } from './map-field-kind';
 import type { MapFieldType } from './map-field-type';
@@ -14,12 +16,13 @@ export class TerrainObjectsCollection extends OneToManyCollection<TerrainObject,
   override getForeignKey = (terrainObject: TerrainObject) => terrainObject.fieldFK;
 }
 
-export class MapField {
+export class MapField implements DetectorContext {
   readonly fieldType: MapFieldType;
   readonly location: MapLocation;
   readonly subLocations: SubLocationsCollection = new SubLocationsCollection(this);
   readonly terrainObjects: TerrainObjectsCollection = new TerrainObjectsCollection(this);
   readonly characters: CharactersCollection = new CharactersCollection(new FieldPosition(this));
+  readonly detectors: Detector[] = [];
 
   constructor({ fieldType, location }: { fieldType: MapFieldType; location: MapLocation }) {
     this.fieldType = fieldType;
@@ -32,5 +35,9 @@ export class MapField {
 
   isOnField(otherField: MapField): boolean {
     return otherField === this || (this.location.parentField ? this.location.parentField.isOnField(otherField) : false);
+  }
+
+  getParentDetectorContext(): DetectorContext | undefined {
+    return this.location;
   }
 }

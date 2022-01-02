@@ -1,4 +1,5 @@
 import type { CharactersCollection } from '../../character/model/character';
+import type { DetectorContext } from '../../detector/model/detector-context';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { TerrainObjectPlacement } from '../terrain-object/model/terrain-object-placement';
 import type { MapField } from './map-field';
@@ -25,6 +26,8 @@ export abstract class Position {
   isOnField(field: MapField): boolean {
     return this.field?.isOnField(field) || false;
   }
+
+  abstract get detectorContexts(): DetectorContext[];
 }
 
 export class FieldPosition extends Position {
@@ -46,6 +49,10 @@ export class FieldPosition extends Position {
 
   override isNearTerrainObject(): boolean {
     return false;
+  }
+
+  override get detectorContexts(): DetectorContext[] {
+    return [this._field];
   }
 }
 
@@ -74,5 +81,9 @@ export class TerrainObjectPosition extends Position {
 
   override isNearTerrainObject(terrainObject: TerrainObject): boolean {
     return this.terrainObject === terrainObject;
+  }
+
+  override get detectorContexts(): DetectorContext[] {
+    return [this.terrainObject];
   }
 }

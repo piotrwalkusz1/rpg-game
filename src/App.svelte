@@ -24,7 +24,8 @@
   let gameState: GameState = MockedGame.gameState;
 
   const actionExecutionContext: ActionExecutionContext = {
-    changePlayerPosition: (newPosition: Position) => (gameState.player.character.position = newPosition)
+    changePlayerPosition: (newPosition: Position) => (gameState.player.character.position = newPosition),
+    gameState
   };
   const narrationActionExecutionContext: NarrationActionExecutionContext = {
     changeLocationView: (newLocationView: MapLocation) => (gameState.locationView = newLocationView),

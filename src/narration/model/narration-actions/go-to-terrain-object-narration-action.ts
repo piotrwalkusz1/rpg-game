@@ -20,7 +20,7 @@ export class GoToTerrainObjectNarrationAction extends ActionBasedNarrationAction
     return NarrationActionOrder.GO_TO_TERRAIN_OBJECT;
   }
 
-  override getAction(): Action | undefined {
+  override getAction(): Action {
     return new GoAction(new TerrainObjectPosition(this.terrainObject));
   }
 

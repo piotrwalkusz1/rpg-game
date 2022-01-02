@@ -1,6 +1,7 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { Narration } from '../narration';
 import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
+import type { NarrationActionExecutionResult } from '../narration-action-execution-result';
 import type { NarrationActionOrder } from '../narration-action-order';
 
 export type NarrationActionId =
@@ -24,7 +25,7 @@ export abstract class NarrationAction {
     return nameContext ? (tc) => tc.join(['[', nameContext, '] ', baseName]) : baseName;
   }
 
-  abstract execute(narrationActionExecutionContext: NarrationActionExecutionContext): any;
+  abstract execute(narrationActionExecutionContext: NarrationActionExecutionContext): NarrationActionExecutionResult;
 
   getNextNarration(): Narration | undefined {
     return undefined;

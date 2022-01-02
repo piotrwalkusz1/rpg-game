@@ -1,5 +1,7 @@
 import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import { areSame } from '../../common/object-utils';
+import type { Detector } from '../../detector/model/detector';
+import type { DetectorContext } from '../../detector/model/detector-context';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import { MapField, SubLocationsCollection } from './map-field';
 import type { MapFieldType } from './map-field-type';
@@ -9,13 +11,14 @@ class LocationParentFieldFK extends OneToManyForeignKey<MapLocation, SubLocation
   override areForeignKeysEqual = areSame;
 }
 
-export class MapLocation {
+export class MapLocation implements DetectorContext {
   name: TranslatableText;
   readonly width: number;
   readonly height: number;
   readonly fields: readonly MapField[][];
   readonly startingField?: MapField;
   readonly parentFieldFK: LocationParentFieldFK = new LocationParentFieldFK(this);
+  readonly detectors: Detector[] = [];
 
   constructor({
     name,
@@ -63,5 +66,9 @@ export class MapLocation {
 
   set parentField(parentField: MapField | undefined) {
     this.parentFieldFK.value = parentField;
+  }
+
+  getParentDetectorContext(): DetectorContext | undefined {
+    return this.parentField;
   }
 }

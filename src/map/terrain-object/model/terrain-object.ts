@@ -1,6 +1,8 @@
 import { Character, CharactersCollection } from '../../../character/model/character';
 import { OneToManyForeignKey } from '../../../common/cache-relationship-utils';
 import { areSame } from '../../../common/object-utils';
+import type { Detector } from '../../../detector/model/detector';
+import type { DetectorContext } from '../../../detector/model/detector-context';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
@@ -11,11 +13,12 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
   override areForeignKeysEqual = areSame;
 }
 
-export class TerrainObject {
+export class TerrainObject implements DetectorContext {
   readonly type: TerrainObjectType;
   readonly guards: Array<Character>;
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
+  readonly detectors: Detector[] = [];
 
   constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
@@ -38,5 +41,9 @@ export class TerrainObject {
 
   get name(): TranslatableText {
     return this.type.name;
+  }
+
+  getParentDetectorContext(): DetectorContext | undefined {
+    return this.field;
   }
 }
