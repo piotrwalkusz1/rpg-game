@@ -1,11 +1,11 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapLocation } from '../../../map/model/map-location';
 import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
-import { NarrationActionExecutionResult } from '../narration-action-execution-result';
 import { NarrationActionOrder } from '../narration-action-order';
-import { NarrationAction, NarrationActionId } from './narration-action';
+import { TemplateNarrationAction, NarrationActionId } from './template-narration-action';
+import type { Narration } from '../narration';
 
-export class SeeLocationNarrationAction extends NarrationAction {
+export class SeeLocationNarrationAction extends TemplateNarrationAction {
   constructor(readonly location: MapLocation) {
     super();
   }
@@ -18,9 +18,9 @@ export class SeeLocationNarrationAction extends NarrationAction {
     return NarrationActionOrder.SEE_LOCATION;
   }
 
-  override execute(narrationActionExecutionContext: NarrationActionExecutionContext): NarrationActionExecutionResult {
+  override execute(narrationActionExecutionContext: NarrationActionExecutionContext): Narration | undefined {
     narrationActionExecutionContext.changeLocationView(this.location);
-    return NarrationActionExecutionResult.NEXT_NARRATION;
+    return undefined;
   }
 
   protected override getNameContext(): TranslatableText | undefined {

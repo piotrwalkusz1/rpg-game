@@ -4,6 +4,7 @@ import { areSame } from '../../../common/object-utils';
 import type { Detector } from '../../../detector/model/detector';
 import type { DetectorContext } from '../../../detector/model/detector-context';
 import type { TranslatableText } from '../../../i18n/translatable-text';
+import type { Law } from '../../../law/model/law';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
 import type { TerrainObjectType } from './terrain-object-type';
@@ -18,7 +19,7 @@ export class TerrainObject implements DetectorContext {
   readonly guards: Array<Character>;
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
-  readonly detectors: Detector[] = [];
+  readonly laws: Law[] = [];
 
   constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
     this.type = type;
@@ -45,5 +46,9 @@ export class TerrainObject implements DetectorContext {
 
   getParentDetectorContext(): DetectorContext | undefined {
     return this.field;
+  }
+
+  get detectors(): Detector[] {
+    return this.laws.flatMap((law) => law.detectors);
   }
 }

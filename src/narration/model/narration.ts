@@ -9,8 +9,8 @@ export class Narration {
   readonly isActionRequired: boolean;
 
   constructor({
-    description,
     title,
+    description,
     actions,
     isActionRequired
   }: {

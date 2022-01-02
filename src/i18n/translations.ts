@@ -2,7 +2,7 @@ import type { RaceId } from '../character/model/race';
 import type { FieldTypeId } from '../map/model/map-field-type';
 import type { TerrainObjectPlacementId } from '../map/terrain-object/model/terrain-object-placement';
 import type { TerrainObjectTypeId } from '../map/terrain-object/model/terrain-object-type';
-import type { NarrationActionId } from '../narration/model/narration-actions/narration-action';
+import type { NarrationActionId } from '../narration/model/narration-actions/template-narration-action';
 
 type RequiredTranslationKey =
   | `NARRATION.ACTION.${NarrationActionId}`
@@ -19,6 +19,7 @@ export type TranslationKey = keyof typeof defaultTranslations;
 type Translations = { [key in TranslationKey]: string };
 
 const defaultTranslations = {
+  'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Go',
   'NARRATION.ACTION.GO_TO_FIELD': 'Go',
   'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Leave',
@@ -40,10 +41,12 @@ const defaultTranslations = {
   'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'The house seems normal.',
   'MAP.TERRAIN_OBJECT.CAVE': 'Cave',
   'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'The cave seems normal.',
-  'CHARACTER.RACE.HUMAN': 'Human'
+  'CHARACTER.RACE.HUMAN': 'Human',
+  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'This is illegal.'
 };
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
+  'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Idź',
   'NARRATION.ACTION.GO_TO_FIELD': 'Idź',
   'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Opuść',
@@ -65,7 +68,8 @@ const plTranslations: Translations = {
   'MAP.TERRAIN_OBJECT.HOUSE.DESCRIPTION': 'Dom wygląda normalnie.',
   'MAP.TERRAIN_OBJECT.CAVE': 'Jaskinia',
   'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'Jaskinia wygląda normalnie.',
-  'CHARACTER.RACE.HUMAN': 'Człowiek'
+  'CHARACTER.RACE.HUMAN': 'Człowiek',
+  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'To jest nielegalne.'
 };
 
 export default {

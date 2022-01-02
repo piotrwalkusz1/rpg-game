@@ -9,8 +9,8 @@
   export let narrationActionExecutionContext: NarrationActionExecutionContext;
 
   function executeNarrationAction(narrationAction: NarrationAction) {
-    narrationAction.execute(narrationActionExecutionContext);
-    onNarrationChange(narrationAction.getNextNarration());
+    const newNarration = narrationAction.execute(narrationActionExecutionContext);
+    onNarrationChange(newNarration);
   }
 </script>
 

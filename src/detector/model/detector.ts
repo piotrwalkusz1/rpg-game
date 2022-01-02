@@ -1,14 +1,13 @@
 import type { DetectableEvent } from './detectable-event';
+import type { DetectorType } from './detector-type';
 
-export abstract class Detector<T extends {} = any> {
-  readonly observators: ((detectionInfo: T) => {})[] = [];
+export class Detector<T extends {} = any> {
+  constructor(private readonly detectorType: DetectorType<T>, private readonly observator: (detectionInfo: T) => void) {}
 
   run(detectableEvent: DetectableEvent): void {
-    const detectionInfo = this.check(detectableEvent);
+    const detectionInfo = this.detectorType.check(detectableEvent);
     if (detectionInfo !== undefined) {
-      this.observators.forEach((observator) => observator(detectionInfo));
+      this.observator(detectionInfo);
     }
   }
-
-  protected abstract check(detectableEvent: DetectableEvent): T | undefined;
 }
