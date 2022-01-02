@@ -2,7 +2,7 @@ import type { GameState } from '../../game/model/game-state';
 import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import { ActionContextDescription } from '../model/action-conctext-description';
 import { ActionContext } from '../model/action-context';
-import type { ActionTrigger } from '../model/action-trigger';
+import type { ActionTrigger } from '../model/action-triggers/action-trigger';
 import type { ActionContextProvider, ActionContextProviderWithData } from './action-context-providers/action-context-provider';
 import { MapFieldActionContextProvider } from './action-context-providers/map-field-action-context-provider';
 import { TerrainObjectActionContextProvider } from './action-context-providers/terrain-object-action-context-provider';

@@ -3,8 +3,7 @@
   import ActionPanel from './action/component/action-panel.svelte';
   import type { ActionContext } from './action/model/action-context';
   import { ActionExecutionContext } from './action/model/action-execution-context';
-  import { FieldSelectedActionTrigger } from './action/model/map-field-action-trigger';
-  import { getActionContextByActionTrigger } from './action/service/action-service';
+  import { FieldSelectedActionTrigger } from './action/m./action/model/action-triggers/map-field-action-triggert { getActionContextByActionTrigger } from './action/service/action-service';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
   import Toolbox from './game/component/toolbox.svelte';
   import * as MockedGame from './game/mock/mocked-game';

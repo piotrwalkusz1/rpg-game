@@ -1,7 +1,7 @@
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { Action } from '../../model/actions/action';
-import type { ActionTrigger } from '../../model/action-trigger';
+import type { ActionTrigger } from '../../model/action-triggers/action-trigger';
 
 export abstract class ActionContextProvider<T extends {}> {
   getActionContextProviderWithDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): ActionContextProviderWithData<T> | undefined {

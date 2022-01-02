@@ -2,11 +2,11 @@ import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
-import type { ActionTrigger } from '../../model/action-trigger';
+import type { ActionTrigger } from '../../model/action-triggers/action-trigger';
 import type { Action } from '../../model/actions/action';
 import { GoToTerrainObjectAction } from '../../model/actions/go-to-terrain-object';
 import { LeaveTerrainAction } from '../../model/actions/leave-terrain-object';
-import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
+import { FieldSelectedActionTrigger } from '../../model/action-triggers/field-selected-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
 import { ChangeTerrainObjectPlacementAction } from '../../model/actions/change-terrain-object-placement-action';
 

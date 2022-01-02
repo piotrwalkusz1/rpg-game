@@ -2,11 +2,11 @@ import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { MapFieldKind } from '../../../map/model/map-field-kind';
-import type { ActionTrigger } from '../../model/action-trigger';
+import type { ActionTrigger } from '../../model/action-triggers/action-trigger';
 import type { Action } from '../../model/actions/action';
 import { GoToFieldAction } from '../../model/actions/go-to-field-action';
 import { SeeLocationAction } from '../../model/actions/see-location-action';
-import { FieldSelectedActionTrigger } from '../../model/map-field-action-trigger';
+import { FieldSelectedActionTrigger } from '../../model/action-triggers/field-selected-action-trigger';
 import { ActionContextProvider } from './action-context-provider';
 
 interface Data {
