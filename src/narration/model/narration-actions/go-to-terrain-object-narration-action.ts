@@ -5,7 +5,7 @@ import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { NarrationActionOrder } from '../narration-action-order';
 import { ActionBasedNarrationAction } from './action-based-narration-action';
-import type { NarrationActionId } from './narration-action';
+import type { NarrationActionId } from './template-narration-action';
 
 export class GoToTerrainObjectNarrationAction extends ActionBasedNarrationAction {
   constructor(readonly terrainObject: TerrainObject) {

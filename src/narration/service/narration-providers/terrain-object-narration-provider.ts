@@ -6,7 +6,7 @@ import type { TerrainObject } from '../../../map/terrain-object/model/terrain-ob
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
 import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
 import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';
-import type { NarrationAction } from '../../model/narration-actions/narration-action';
+import type { TemplateNarrationAction } from '../../model/narration-actions/template-narration-action';
 import { NarrationProvider } from './narration-provider';
 
 interface Data {
@@ -35,11 +35,11 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .flatMap((description) => (description ? [{ description, order: 100 }] : []));
   }
 
-  override getActions({ terrainObjects }: Data, gameState: GameState): NarrationAction[] {
+  override getActions({ terrainObjects }: Data, gameState: GameState): TemplateNarrationAction[] {
     return terrainObjects.flatMap((terrainObject) => this.prepareActionsForTerrainObject(terrainObject, gameState));
   }
 
-  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
+  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] {
     return [
       this.prepareGoAction(terrainObject, gameState),
       this.prepareLeaveAction(terrainObject, gameState),
@@ -47,21 +47,21 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     ].flatMap((action) => (action ? [action] : []));
   }
 
-  private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): NarrationAction | undefined {
+  private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined {
     if (gameState.player.character.isNearTerrainObject(terrainObject)) {
       return;
     }
     return new GoToTerrainObjectNarrationAction(terrainObject);
   }
 
-  private prepareLeaveAction(terrainObject: TerrainObject, gameState: GameState): NarrationAction | undefined {
+  private prepareLeaveAction(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined {
     if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
       return;
     }
     return new LeaveTerrainObjectNarrationAction(terrainObject);
   }
 
-  private prepareChangeTerrainObjectPlacementActions(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
+  private prepareChangeTerrainObjectPlacementActions(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] {
     if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
       return [];
     }
