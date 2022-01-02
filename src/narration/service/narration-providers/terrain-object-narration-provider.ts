@@ -1,23 +1,21 @@
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
+import type { MapField } from '../../../map/model/map-field';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
-import type { ActionTrigger } from '../../model/action-triggers/action-trigger';
-import type { Action } from '../../model/actions/action';
-import { GoToTerrainObjectAction } from '../../model/actions/go-to-terrain-object';
-import { LeaveTerrainAction } from '../../model/actions/leave-terrain-object';
-import { FieldSelectedActionTrigger } from '../../model/action-triggers/field-selected-action-trigger';
-import { ActionContextProvider } from './action-context-provider';
-import { ChangeTerrainObjectPlacementAction } from '../../model/actions/change-terrain-object-placement-action';
+import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
+import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
+import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';
+import type { NarrationAction } from '../../model/narration-actions/narration-action';
+import { NarrationProvider } from './narration-provider';
 
 interface Data {
   terrainObjects: readonly TerrainObject[];
 }
 
-export class TerrainObjectActionContextProvider extends ActionContextProvider<Data> {
-  override getDataFromActionTriggerIfSupported(actionTrigger: ActionTrigger): Data | undefined {
-    const field = actionTrigger instanceof FieldSelectedActionTrigger && actionTrigger.field;
-    return field && field.terrainObjects.length > 0 ? { terrainObjects: field.terrainObjects.getArray() } : undefined;
+export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
+  override getDataIfSupported(field: MapField): Data | undefined {
+    return field.terrainObjects.length > 0 ? { terrainObjects: field.terrainObjects.getArray() } : undefined;
   }
 
   override getDescription({ terrainObjects }: Data, gameState: GameState): { description: TranslatableText; order: number }[] {
@@ -37,11 +35,11 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
       .flatMap((description) => (description ? [{ description, order: 100 }] : []));
   }
 
-  override getActions({ terrainObjects }: Data, gameState: GameState): Array<Action> {
+  override getActions({ terrainObjects }: Data, gameState: GameState): NarrationAction[] {
     return terrainObjects.flatMap((terrainObject) => this.prepareActionsForTerrainObject(terrainObject, gameState));
   }
 
-  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): Action[] {
+  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
     return [
       this.prepareGoAction(terrainObject, gameState),
       this.prepareLeaveAction(terrainObject, gameState),
@@ -49,21 +47,21 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
     ].flatMap((action) => (action ? [action] : []));
   }
 
-  private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): Action | undefined {
+  private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): NarrationAction | undefined {
     if (gameState.player.character.isNearTerrainObject(terrainObject)) {
       return;
     }
-    return new GoToTerrainObjectAction(terrainObject);
+    return new GoToTerrainObjectNarrationAction(terrainObject);
   }
 
-  private prepareLeaveAction(terrainObject: TerrainObject, gameState: GameState): Action | undefined {
+  private prepareLeaveAction(terrainObject: TerrainObject, gameState: GameState): NarrationAction | undefined {
     if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
       return;
     }
-    return new LeaveTerrainAction(terrainObject);
+    return new LeaveTerrainObjectNarrationAction(terrainObject);
   }
 
-  private prepareChangeTerrainObjectPlacementActions(terrainObject: TerrainObject, gameState: GameState): Action[] {
+  private prepareChangeTerrainObjectPlacementActions(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
     if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
       return [];
     }
@@ -71,6 +69,6 @@ export class TerrainObjectActionContextProvider extends ActionContextProvider<Da
       gameState.player.character.position instanceof TerrainObjectPosition && gameState.player.character.position.placement;
     return terrainObject.type.placements
       .filter((placement) => placement !== playerTerrrainPositionPlacement)
-      .map((placement) => new ChangeTerrainObjectPlacementAction(terrainObject, placement));
+      .map((placement) => new ChangeTerrainObjectPlacementNarrationAction(terrainObject, placement));
   }
 }

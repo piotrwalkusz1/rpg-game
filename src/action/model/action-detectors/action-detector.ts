@@ -1,5 +1,5 @@
-import type { ActionTrigger } from '../action-triggers/action-trigger';
+import type { ActionResultEvent } from '../actions/action';
 
 export abstract class ActionDetector {
-  abstract isActionDetected(actionTrigger: ActionTrigger): boolean;
+  abstract isActionDetected(actionResultEvent: ActionResultEvent): boolean;
 }

@@ -1,8 +1,5 @@
 <script lang="ts">
-  import ActionPanelDialog from './action/component/action-panel-dialog.svelte';
-  import ActionPanel from './action/component/action-panel.svelte';
-  import type { ActionContext } from './action/model/action-context';
-  import { ActionExecutionContext } from './action/model/action-execution-context';
+  import type { ActionExecutionContext } from './action/model/action-execution-context';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
   import Toolbox from './game/component/toolbox.svelte';
   import * as MockedGame from './game/mock/mocked-game';
@@ -11,39 +8,40 @@
   import LocationNameView from './map/component/location-name-view.svelte';
   import LocationView from './map/component/location-view.svelte';
   import type { MapField } from './map/model/map-field';
-  import { getActionContextByActionTrigger } from './action/service/action-service';
-  import { FieldSelectedActionTrigger } from './action/model/action-triggers/field-selected-action-trigger';
+  import type { MapLocation } from './map/model/map-location';
+  import type { Position } from './map/model/position';
+  import NarrationPanelDialog from './narration/component/narration-panel-dialog.svelte';
+  import NarrationPanel from './narration/component/narration-panel.svelte';
+  import type { Narration } from './narration/model/narration';
+  import type { NarrationActionExecutionContext } from './narration/model/narration-action-execution-context';
+  import { NarrationService } from './narration/service/narration-service';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
   i18n.addResourceBundle('pl', 'common', {});
 
-  let actionContext: ActionContext | undefined = undefined;
+  let narration: Narration | undefined = undefined;
   let gameState: GameState = MockedGame.gameState;
 
-  const actionExecutionContext = new ActionExecutionContext({
-    go: (newPosition) => (gameState.player.character.position = newPosition),
-    changeCurrentLocationView: (newLocation) => {
-      gameState.locationView = newLocation;
-      gameState.selectedField = undefined;
-    }
-  });
+  const actionExecutionContext: ActionExecutionContext = {
+    changePlayerPosition: (newPosition: Position) => (gameState.player.character.position = newPosition)
+  };
+  const narrationActionExecutionContext: NarrationActionExecutionContext = {
+    changeLocationView: (newLocationView: MapLocation) => (gameState.locationView = newLocationView),
+    ...actionExecutionContext
+  };
 
   function onFieldClick(field: MapField) {
     gameState.selectedField = field;
-    actionContext = prepareActionContextForSelectedField();
+    narration = getNarrationSelectedField();
   }
 
-  function onActionContextChange(newActionContext?: ActionContext) {
-    actionContext = newActionContext || prepareActionContextForSelectedField();
+  function onNarrationChange(newNarration?: Narration) {
+    narration = newNarration || getNarrationSelectedField();
   }
 
-  function prepareActionContextForSelectedField(): ActionContext | undefined {
-    if (!gameState.selectedField) {
-      return;
-    }
-    const actionTrigger = new FieldSelectedActionTrigger(gameState.selectedField);
-    return getActionContextByActionTrigger(actionTrigger, gameState);
+  function getNarrationSelectedField(): Narration | undefined {
+    return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
   }
 </script>
 
@@ -55,16 +53,16 @@
       <Toolbox bind:gameState />
       <LocationView {gameState} {onFieldClick} />
       <div class="w-[300px] flex">
-        {#if actionContext && !actionContext.isActionRequired}
-          <ActionPanel {actionContext} {onActionContextChange} {actionExecutionContext} />
+        {#if narration && !narration.isActionRequired}
+          <NarrationPanel {narration} {onNarrationChange} {narrationActionExecutionContext} />
         {/if}
       </div>
     </div>
   </div>
 </div>
 
-{#if actionContext && actionContext.isActionRequired}
-  <ActionPanelDialog {actionContext} {onActionContextChange} {actionExecutionContext} />
+{#if narration && narration.isActionRequired}
+  <NarrationPanelDialog {narration} {onNarrationChange} {narrationActionExecutionContext} />
 {/if}
 
 <style lang="postcss" global>

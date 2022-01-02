@@ -1,11 +1,11 @@
-import type { ActionId } from '../action/model/actions/action';
 import type { RaceId } from '../character/model/race';
 import type { FieldTypeId } from '../map/model/map-field-type';
 import type { TerrainObjectPlacementId } from '../map/terrain-object/model/terrain-object-placement';
 import type { TerrainObjectTypeId } from '../map/terrain-object/model/terrain-object-type';
+import type { NarrationActionId } from '../narration/model/narration-actions/narration-action';
 
 type RequiredTranslationKey =
-  | `ACTION.ACTION_TYPE.${ActionId}`
+  | `NARRATION.ACTION.${NarrationActionId}`
   | `MAP.FIELD.${FieldTypeId}`
   | `MAP.FIELD.${FieldTypeId}.DESCRIPTION`
   | `MAP.TERRAIN_OBJECT.${TerrainObjectTypeId}`
@@ -19,11 +19,11 @@ export type TranslationKey = keyof typeof defaultTranslations;
 type Translations = { [key in TranslationKey]: string };
 
 const defaultTranslations = {
-  'ACTION.ACTION_TYPE.GO_TO_TERRAIN_OBJECT': 'Go',
-  'ACTION.ACTION_TYPE.GO_TO_FIELD': 'Go',
-  'ACTION.ACTION_TYPE.LEAVE_TERRAIN_OBJECT': 'Leave',
-  'ACTION.ACTION_TYPE.SEE_LOCATION': 'See location',
-  'ACTION.ACTION_TYPE.CHANGE_TERRAIN_OBJECT_PLACEMENT': '{{terrainObjectPlacementMovementActivity}}',
+  'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Go',
+  'NARRATION.ACTION.GO_TO_FIELD': 'Go',
+  'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Leave',
+  'NARRATION.ACTION.SEE_LOCATION': 'See location',
+  'NARRATION.ACTION.CHANGE_TERRAIN_OBJECT_PLACEMENT': '{{terrainObjectPlacementMovementActivity}}',
   'MAP.FIELD.EMPTY': 'Empty field',
   'MAP.FIELD.EMPTY.DESCRIPTION': 'There is nothing here.',
   'MAP.FIELD.GRASS': 'Grass',
@@ -44,11 +44,11 @@ const defaultTranslations = {
 };
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
-  'ACTION.ACTION_TYPE.GO_TO_TERRAIN_OBJECT': 'Idź',
-  'ACTION.ACTION_TYPE.GO_TO_FIELD': 'Idź',
-  'ACTION.ACTION_TYPE.LEAVE_TERRAIN_OBJECT': 'Opuść',
-  'ACTION.ACTION_TYPE.SEE_LOCATION': 'Zobacz lokację',
-  'ACTION.ACTION_TYPE.CHANGE_TERRAIN_OBJECT_PLACEMENT': '{{terrainObjectPlacementMovementActivity}}',
+  'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Idź',
+  'NARRATION.ACTION.GO_TO_FIELD': 'Idź',
+  'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Opuść',
+  'NARRATION.ACTION.SEE_LOCATION': 'Zobacz lokację',
+  'NARRATION.ACTION.CHANGE_TERRAIN_OBJECT_PLACEMENT': '{{terrainObjectPlacementMovementActivity}}',
   'MAP.FIELD.EMPTY': 'Puste pole',
   'MAP.FIELD.EMPTY.DESCRIPTION': 'Nic tutaj nie ma.',
   'MAP.FIELD.GRASS': 'Trawa',

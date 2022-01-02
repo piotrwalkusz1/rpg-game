@@ -1,4 +1,4 @@
-export enum ActionOrder {
+export enum NarrationActionOrder {
   CHANGE_TERRAIN_OBJECT_PLACEMENT = 500,
   LEAVE_TERRAIN_OBJECT = 1000,
   GO_TO_TERRAIN_OBJECT = 2000,
