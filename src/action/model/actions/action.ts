@@ -1,12 +1,15 @@
+import type { Character } from '../../../character/model/character';
 import type { DetectableEvent } from '../../../detector/model/detectable-event';
-import type { DetectorContext } from '../../../detector/model/detector-context';
+import type { Position } from '../../../map/model/position';
 import type { NarrationDescription } from '../../../narration/model/narration-description';
 import type { ActionExecutionContext } from '../action-execution-context';
 
 export abstract class ActionScheduledEvent implements DetectableEvent {
   preventionNarrationDescription?: NarrationDescription;
 
-  abstract get detectorContexts(): DetectorContext[];
+  abstract get detectablePositions(): Position[];
+
+  abstract canCharacterDetect(character: Character): boolean;
 
   setPreventionNarrationDescription(preventionNarrationDescription: NarrationDescription) {
     this.preventionNarrationDescription = preventionNarrationDescription;
@@ -14,7 +17,9 @@ export abstract class ActionScheduledEvent implements DetectableEvent {
 }
 
 export abstract class ActionResultEvent implements DetectableEvent {
-  abstract get detectorContexts(): DetectorContext[];
+  abstract get detectablePositions(): Position[];
+
+  abstract canCharacterDetect(character: Character): boolean;
 }
 
 export abstract class Action {

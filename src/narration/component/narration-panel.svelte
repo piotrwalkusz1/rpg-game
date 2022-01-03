@@ -19,7 +19,7 @@
     <TranslatableTextView text={narration.title} />
   </div>
   <div class="overflow-auto">
-    <div class="p-[10px]">
+    <div class="p-[10px] overflow-auto">
       {#if narration.description.character && narration.description.character.avatarUrl}
         <img
           src={narration.description.character.avatarUrl}

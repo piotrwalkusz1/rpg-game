@@ -1,4 +1,6 @@
-import type { DetectorContext } from '../../../detector/model/detector-context';
+import type { Character } from '../../../character/model/character';
+import { CharacterVisionService } from '../../../character/service/character-vision-service';
+import { ArrayUtils } from '../../../common/array-utils';
 import type { Position } from '../../../map/model/position';
 import type { ActionExecutionContext } from '../action-execution-context';
 import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
@@ -8,8 +10,14 @@ export class GoActionScheduledEvent extends ActionScheduledEvent {
     super();
   }
 
-  override get detectorContexts(): DetectorContext[] {
-    return [...this.newPosition.detectorContexts, ...(this.oldPosition?.detectorContexts || [])];
+  override get detectablePositions(): Position[] {
+    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]);
+  }
+
+  override canCharacterDetect(character: Character): boolean {
+    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]).some((position) =>
+      CharacterVisionService.canCharacterSeeWhatIsHappening(character, position)
+    );
   }
 }
 
@@ -18,8 +26,14 @@ export class GoActionResultEvent extends ActionResultEvent {
     super();
   }
 
-  override get detectorContexts(): DetectorContext[] {
-    return [...this.newPosition.detectorContexts, ...(this.oldPosition?.detectorContexts || [])];
+  override get detectablePositions(): Position[] {
+    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]);
+  }
+
+  override canCharacterDetect(character: Character): boolean {
+    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]).some((position) =>
+      CharacterVisionService.canCharacterSeeWhatIsHappening(character, position)
+    );
   }
 }
 

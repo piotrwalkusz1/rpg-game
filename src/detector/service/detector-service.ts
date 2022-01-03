@@ -9,7 +9,9 @@ export namespace DetectorService {
   };
 
   export const getDetectorsFromDetectableEvent = (detectableEvent: DetectableEvent): Detector[] => {
-    return detectableEvent.detectorContexts.flatMap((detectorContext) => getDetectorsFromDetectorContext(detectorContext));
+    return detectableEvent.detectablePositions
+      .flatMap((position) => position.detectorContexts)
+      .flatMap((detectorContext) => getDetectorsFromDetectorContext(detectorContext));
   };
 
   export const getDetectorsFromDetectorContext = (detectorContext: DetectorContext): Detector[] => {

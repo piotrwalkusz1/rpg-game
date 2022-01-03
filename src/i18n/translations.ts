@@ -42,7 +42,8 @@ const defaultTranslations = {
   'MAP.TERRAIN_OBJECT.CAVE': 'Cave',
   'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'The cave seems normal.',
   'CHARACTER.RACE.HUMAN': 'Human',
-  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'This is illegal.'
+  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'This is illegal.',
+  'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER': 'You cannot enter!'
 };
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
@@ -69,7 +70,8 @@ const plTranslations: Translations = {
   'MAP.TERRAIN_OBJECT.CAVE': 'Jaskinia',
   'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'Jaskinia wygląda normalnie.',
   'CHARACTER.RACE.HUMAN': 'Człowiek',
-  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'To jest nielegalne.'
+  'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'To jest nielegalne.',
+  'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER': 'Nie możesz wejść!'
 };
 
 export default {

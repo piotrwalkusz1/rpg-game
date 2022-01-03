@@ -26,9 +26,6 @@ const terrainObjects = {
   ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.HOUSE, field: locations.REGION_WHERE_ALICE_LIVE.fields[1][1] }),
   CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] })
 };
-terrainObjects.ALICE_HOUSE.laws.push(
-  new Law(new AttemptGoToPositionDetector({ terrainObject: terrainObjects.ALICE_HOUSE, terrainObjectPlacementOtherThanDefault: true }))
-);
 
 const characters = {
   PIOTR: new Character({
@@ -44,6 +41,14 @@ const characters = {
     position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
   })
 };
+
+terrainObjects.ALICE_HOUSE.laws.push(
+  new Law({
+    detector: new AttemptGoToPositionDetector({ terrainObject: terrainObjects.ALICE_HOUSE, terrainObjectPlacementOtherThanDefault: true }),
+    guards: [characters.ALICE],
+    lawViolationPreventionDialogue: { translationKey: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER' }
+  })
+);
 
 const player = new Player(characters.PIOTR);
 

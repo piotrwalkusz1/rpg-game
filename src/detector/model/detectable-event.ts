@@ -1,5 +1,5 @@
-import type { DetectorContext } from './detector-context';
+import type { Position } from '../../map/model/position';
 
 export interface DetectableEvent {
-  get detectorContexts(): DetectorContext[];
+  get detectablePositions(): Position[];
 }
