@@ -17,15 +17,26 @@ export class AttemptGoToPositionDetector extends DetectorType<GoActionScheduledE
           terrainObject: TerrainObject;
           terrainObjectPlacement?: TerrainObjectPlacement;
         }
+      | {
+          terrainObject: TerrainObject;
+          terrainObjectPlacementOtherThanDefault: true;
+        }
   ) {
     super();
-    if ('field' in args) {
-      this.positionChecker = (position) => position instanceof FieldPosition && position.field === args.field;
+    if ('terrainObject' in args) {
+      if ('terrainObjectPlacementOtherThanDefault' in args) {
+        this.positionChecker = (position) =>
+          position instanceof TerrainObjectPosition &&
+          position.terrainObject === args.terrainObject &&
+          position.placement !== args.terrainObject.type.defaultCharacterPlacement;
+      } else {
+        this.positionChecker = (position) =>
+          position instanceof TerrainObjectPosition &&
+          position.terrainObject === args.terrainObject &&
+          (!args.terrainObjectPlacement || position.placement === args.terrainObjectPlacement);
+      }
     } else {
-      this.positionChecker = (position) =>
-        position instanceof TerrainObjectPosition &&
-        position.terrainObject === args.terrainObject &&
-        (!args.terrainObjectPlacement || position.placement === args.terrainObjectPlacement);
+      this.positionChecker = (position) => position instanceof FieldPosition && position.field === args.field;
     }
   }
 

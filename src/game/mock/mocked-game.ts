@@ -1,5 +1,7 @@
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
+import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
+import { Law } from '../../law/model/law';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
 import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
@@ -7,8 +9,6 @@ import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
-import { Law } from '../../law/model/law';
-import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
 
 const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 10, height: 10, fieldType: MapFieldType.MEADOW });
 const createWorld = (): MapLocation => {
@@ -26,7 +26,9 @@ const terrainObjects = {
   ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.HOUSE, field: locations.REGION_WHERE_ALICE_LIVE.fields[1][1] }),
   CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] })
 };
-terrainObjects.ALICE_HOUSE.laws.push(new Law(new AttemptGoToPositionDetector({ terrainObject: terrainObjects.ALICE_HOUSE })));
+terrainObjects.ALICE_HOUSE.laws.push(
+  new Law(new AttemptGoToPositionDetector({ terrainObject: terrainObjects.ALICE_HOUSE, terrainObjectPlacementOtherThanDefault: true }))
+);
 
 const characters = {
   PIOTR: new Character({

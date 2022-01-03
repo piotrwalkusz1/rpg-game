@@ -13,7 +13,7 @@ export abstract class ActionBasedNarrationAction extends TemplateNarrationAction
         return this.getNextNarration();
       case 'PREVENTION':
         return new Narration({
-          title: '',
+          title: narrationActionExecutionContext.getNarration()?.title || '',
           description: result.description,
           actions: [
             new CustomNarrationAction({
