@@ -1,19 +1,22 @@
 <script lang="ts">
-  import type { GameState } from '../../game/model/game-state';
+  import { gameState } from '../../common/store';
+  import { NarrationService } from '../../narration/service/narration-service';
   import type { MapField } from '../model/map-field';
   import FieldView from './field-view.svelte';
 
-  export let gameState: GameState;
-  export let onFieldClick: (field: MapField) => void;
-
   function getFieldStyle(field: MapField): string {
     let style = 'w-[64px] h-[64px] hover:outline outline-[2px] outline-offset-[-2px] hover:outline-white';
-    if (gameState.player.character.isOnField(field)) {
+    if ($gameState.player.character.isOnField(field)) {
       style += ' outline outline-blue-500';
-    } else if (gameState.selectedField === field) {
+    } else if ($gameState.selectedField === field) {
       style += ' outline outline-yellow-500';
     }
     return style;
+  }
+
+  function onFieldClick(field: MapField) {
+    $gameState.selectedField = field;
+    $gameState.narration = NarrationService.getNarrationForField(field, $gameState);
   }
 </script>
 
@@ -23,7 +26,7 @@
     <div class="flex flex-col">
       <div class="grow" />
       <div>
-        {#each gameState.locationView.fields as row}
+        {#each $gameState.locationView.fields as row}
           <div class="flex flex-row">
             {#each row as field}
               <div class={getFieldStyle(field)} on:click={() => onFieldClick(field)}>

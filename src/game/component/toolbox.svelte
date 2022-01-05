@@ -1,20 +1,18 @@
 <script lang="ts">
   import { faBahai, faSearchMinus } from '@fortawesome/free-solid-svg-icons';
   import Fa from 'svelte-fa';
-  import type { GameState } from '../../game/model/game-state';
-
-  export let gameState: GameState;
+  import { gameState } from '../../common/store';
 
   function goToPlayerLocation() {
-    const playerLocation = gameState.player.character.position?.field?.location;
+    const playerLocation = $gameState.player.character.position?.field?.location;
     if (playerLocation) {
-      gameState.locationView = playerLocation;
+      $gameState.locationView = playerLocation;
     }
   }
 
   function zoomOut() {
-    if (gameState.locationView.parentField) {
-      gameState.locationView = gameState.locationView.parentField.location;
+    if ($gameState.locationView.parentField) {
+      $gameState.locationView = $gameState.locationView.parentField.location;
     }
   }
 </script>

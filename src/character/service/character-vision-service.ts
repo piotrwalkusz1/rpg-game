@@ -10,4 +10,16 @@ export namespace CharacterVisionService {
       character.position.terrainObject === position.terrainObject
     );
   };
+
+  export const getAllCharactersSeenByCharacter = (character: Character): readonly Character[] => {
+    return (character.position instanceof TerrainObjectPosition && character.position.characters.getArray()) || [];
+  };
+
+  export const isCharacterSeenByCharacter = (observed: Character, observator: Character): boolean => {
+    return (
+      observed.position instanceof TerrainObjectPosition &&
+      observator.position instanceof TerrainObjectPosition &&
+      observed.position.terrainObject === observator.position.terrainObject
+    );
+  };
 }

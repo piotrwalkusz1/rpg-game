@@ -1,5 +1,6 @@
 import type { Action } from '../../../action/model/actions/action';
 import { ActionService } from '../../../action/service/action-service';
+import type { GameState } from '../../../game/model/game-state';
 import { Narration } from '../narration';
 import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
 import { CustomNarrationAction } from './custom-narration-action';
@@ -7,7 +8,8 @@ import { TemplateNarrationAction } from './template-narration-action';
 
 export abstract class ActionBasedNarrationAction extends TemplateNarrationAction {
   execute(narrationActionExecutionContext: NarrationActionExecutionContext): Narration | undefined {
-    const result = ActionService.executeAction(this.getAction(), narrationActionExecutionContext);
+    const action = this.getAction(narrationActionExecutionContext.getGameState());
+    const result = ActionService.executeAction(action, narrationActionExecutionContext);
     switch (result.type) {
       case 'SUCCESS':
         return this.getNextNarration();
@@ -26,7 +28,7 @@ export abstract class ActionBasedNarrationAction extends TemplateNarrationAction
     }
   }
 
-  protected abstract getAction(): Action;
+  protected abstract getAction(gameState: GameState): Action;
 
   protected getNextNarration(): Narration | undefined {
     return undefined;

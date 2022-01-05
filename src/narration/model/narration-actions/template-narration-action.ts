@@ -6,7 +6,8 @@ export type NarrationActionId =
   | 'GO_TO_FIELD'
   | 'LEAVE_TERRAIN_OBJECT'
   | 'SEE_LOCATION'
-  | 'CHANGE_TERRAIN_OBJECT_PLACEMENT';
+  | 'CHANGE_TERRAIN_OBJECT_PLACEMENT'
+  | 'ATTACK_CHARACTER';
 
 export abstract class TemplateNarrationAction extends NarrationAction {
   abstract get id(): NarrationActionId;

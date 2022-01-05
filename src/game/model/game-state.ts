@@ -1,5 +1,7 @@
+import type { Battle } from '../../battle/model/battle';
 import type { MapField } from '../../map/model/map-field';
 import type { MapLocation } from '../../map/model/map-location';
+import type { Narration } from '../../narration/model/narration';
 import type { Player } from './player';
 
 export class GameState {
@@ -7,6 +9,8 @@ export class GameState {
   readonly world: MapLocation;
   locationView: MapLocation;
   selectedField?: MapField;
+  narration?: Narration;
+  battle?: Battle;
 
   constructor({ player, world }: { player: Player; world: MapLocation }) {
     this.player = player;

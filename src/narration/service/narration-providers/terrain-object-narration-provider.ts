@@ -1,8 +1,10 @@
+import { CharacterVisionService } from '../../../character/service/character-vision-service';
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
+import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
 import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
 import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';
@@ -30,7 +32,9 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .filter((character) => character !== gameState.player.character)
       .map(
         (character) =>
-          character.position instanceof TerrainObjectPosition && character.position.placement.getCharacterDescription(character)
+          character.position instanceof TerrainObjectPosition &&
+          CharacterVisionService.isCharacterSeenByCharacter(character, gameState.player.character) &&
+          character.position.placement.getCharacterDescription(character)
       )
       .flatMap((description) => (description ? [{ description, order: 100 }] : []));
   }
@@ -43,7 +47,8 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     return [
       this.prepareGoAction(terrainObject, gameState),
       this.prepareLeaveAction(terrainObject, gameState),
-      ...this.prepareChangeTerrainObjectPlacementActions(terrainObject, gameState)
+      ...this.prepareChangeTerrainObjectPlacementActions(terrainObject, gameState),
+      ...this.prepareAttackActions(terrainObject, gameState)
     ].flatMap((action) => (action ? [action] : []));
   }
 
@@ -70,5 +75,16 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     return terrainObject.type.placements
       .filter((placement) => placement !== playerTerrrainPositionPlacement)
       .map((placement) => new ChangeTerrainObjectPlacementNarrationAction(terrainObject, placement));
+  }
+
+  private prepareAttackActions(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] {
+    if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
+      return [];
+    }
+    return terrainObject.characters
+      .getArray()
+      .filter((character) => character !== gameState.player.character)
+      .filter((character) => CharacterVisionService.isCharacterSeenByCharacter(character, gameState.player.character))
+      .map((character) => new AttackNarrationAction(character));
   }
 }

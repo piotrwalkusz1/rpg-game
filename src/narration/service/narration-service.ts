@@ -31,4 +31,8 @@ export namespace NarrationService {
 
     return new Narration({ title: title, description: new NarrationDescription(description), actions: actions });
   };
+
+  export const getNarrationSelectedField = (gameState: GameState): Narration | undefined => {
+    return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
+  }
 }
