@@ -19,7 +19,9 @@ export class Character {
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
-  healthPoints: number = 100;
+  healthPoints: number = 20;
+  maxHealthPoints: number = 100;
+  damage: number = 10;
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;
@@ -44,11 +46,19 @@ export class Character {
     this.positionFK.value = newPosition;
   }
 
+  get lostPercentageOfHealth(): number {
+    return Math.round((100 * (this.maxHealthPoints - this.healthPoints)) / this.maxHealthPoints);
+  }
+
   isOnField(field: MapField): boolean {
     return this.positionFK.value?.isOnField(field) || false;
   }
 
   isNearTerrainObject(terrainObject: TerrainObject): boolean {
     return this.positionFK.value?.isNearTerrainObject(terrainObject) || false;
+  }
+
+  dealDamage(damage: number): void {
+    this.healthPoints = Math.max(this.healthPoints - damage, 0);
   }
 }

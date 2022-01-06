@@ -6,4 +6,8 @@ export class BattleParticipant {
   constructor({ character }: { character: Character }) {
     this.character = character;
   }
+
+  canStillFight(): boolean {
+    return this.character.healthPoints > 0;
+  }
 }

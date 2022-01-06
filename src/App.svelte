@@ -38,7 +38,9 @@
   </Dialog>
 {/if}
 
-<BattleView />
+{#if $gameState.battle}
+  <BattleView bind:battle={$gameState.battle} />
+{/if}
 
 <style lang="postcss" global>
   @tailwind base;

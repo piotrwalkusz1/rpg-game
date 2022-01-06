@@ -52,4 +52,4 @@ terrainObjects.ALICE_HOUSE.laws.push(
 
 const player = new Player(characters.PIOTR);
 
-export const gameState = new GameState({ player: player, world: world });
+export const mockedGameState = new GameState({ player: player, world: world });
