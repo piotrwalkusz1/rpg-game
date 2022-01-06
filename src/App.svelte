@@ -4,6 +4,8 @@
   import Dialog from './common/component/dialog.svelte';
   import { gameState } from './common/store';
   import Toolbox from './game/component/toolbox.svelte';
+  import { MockedGame } from './game/mock/mocked-game';
+  import TranslatableTextView from './i18n/translatable-text-view.svelte';
   import { initLocalizationContext } from './i18n/translation-service';
   import LocationNameView from './map/component/location-name-view.svelte';
   import LocationView from './map/component/location-view.svelte';
@@ -14,6 +16,10 @@
   i18n.addResourceBundle('pl', 'common', {});
 
   $: narration = $gameState.narration;
+
+  function repeatGame() {
+    $gameState = MockedGame.createGameState();
+  }
 </script>
 
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
@@ -40,6 +46,17 @@
 
 {#if $gameState.battle}
   <BattleView bind:battle={$gameState.battle} />
+{/if}
+
+{#if $gameState.player.character.position === undefined}
+  <Dialog>
+    <div class="flex flex-col w-full justify-center items-center">
+      <div class="text-[60px] font-bold"><TranslatableTextView text={{ translationKey: 'GAME.MESSAGE.YOU_ARE_DEAD' }} /></div>
+      <div on:click={repeatGame} class="text-[30px] font-bold cursor-pointer hover:text-blue-300">
+        <TranslatableTextView text={{ translationKey: 'GAME.BUTTON.REPEAT' }} />
+      </div>
+    </div>
+  </Dialog>
 {/if}
 
 <style lang="postcss" global>

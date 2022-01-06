@@ -10,46 +10,53 @@ import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
 
-const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 10, height: 10, fieldType: MapFieldType.MEADOW });
-const createWorld = (): MapLocation => {
-  const world = new MapLocation({ name: 'World', width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
-  world.fields.forEach((row) => row.forEach((field) => field.subLocations.add(createRegion())));
-  return world;
-};
-const world = createWorld();
+export namespace MockedGame {
+  export const createGameState = () => {
+    const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 10, height: 10, fieldType: MapFieldType.MEADOW });
+    const createWorld = (): MapLocation => {
+      const world = new MapLocation({ name: 'World', width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
+      world.fields.forEach((row) => row.forEach((field) => field.subLocations.add(createRegion())));
+      return world;
+    };
+    const world = createWorld();
 
-const locations = {
-  REGION_WHERE_ALICE_LIVE: world.fields[0][0].subLocations.get(0)
-};
+    const locations = {
+      REGION_WHERE_ALICE_LIVE: world.fields[0][0].subLocations.get(0)
+    };
 
-const terrainObjects = {
-  ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.HOUSE, field: locations.REGION_WHERE_ALICE_LIVE.fields[1][1] }),
-  CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] })
-};
+    const terrainObjects = {
+      ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.HOUSE, field: locations.REGION_WHERE_ALICE_LIVE.fields[1][1] }),
+      CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] })
+    };
 
-const characters = {
-  PIOTR: new Character({
-    name: 'Piotr',
-    race: Race.HUMAN,
-    avatarUrl: 'images/character_001_avatar.png',
-    position: new FieldPosition(locations.REGION_WHERE_ALICE_LIVE.fields[2][2])
-  }),
-  ALICE: new Character({
-    name: 'Alice',
-    race: Race.HUMAN,
-    avatarUrl: 'images/character_002_avatar.png',
-    position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
-  })
-};
+    const characters = {
+      PIOTR: new Character({
+        name: 'Piotr',
+        race: Race.HUMAN,
+        avatarUrl: 'images/character_001_avatar.png',
+        position: new FieldPosition(locations.REGION_WHERE_ALICE_LIVE.fields[2][2])
+      }),
+      ALICE: new Character({
+        name: 'Alice',
+        race: Race.HUMAN,
+        avatarUrl: 'images/character_002_avatar.png',
+        position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
+      })
+    };
 
-terrainObjects.ALICE_HOUSE.laws.push(
-  new Law({
-    detector: new AttemptGoToPositionDetector({ terrainObject: terrainObjects.ALICE_HOUSE, terrainObjectPlacementOtherThanDefault: true }),
-    guards: [characters.ALICE],
-    lawViolationPreventionDialogue: { translationKey: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER' }
-  })
-);
+    terrainObjects.ALICE_HOUSE.laws.push(
+      new Law({
+        detector: new AttemptGoToPositionDetector({
+          terrainObject: terrainObjects.ALICE_HOUSE,
+          terrainObjectPlacementOtherThanDefault: true
+        }),
+        guards: [characters.ALICE],
+        lawViolationPreventionDialogue: { translationKey: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER' }
+      })
+    );
 
-const player = new Player(characters.PIOTR);
+    const player = new Player(characters.PIOTR);
 
-export const mockedGameState = new GameState({ player: player, world: world });
+    return new GameState({ player: player, world: world });
+  };
+}

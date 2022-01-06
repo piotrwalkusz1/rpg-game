@@ -61,4 +61,8 @@ export class Character {
   dealDamage(damage: number): void {
     this.healthPoints = Math.max(this.healthPoints - damage, 0);
   }
+
+  remove(): void {
+    this.position?.characters.remove(this);
+  }
 }

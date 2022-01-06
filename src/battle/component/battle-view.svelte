@@ -3,6 +3,7 @@
   import type { Character } from '../../character/model/character';
   import Dialog from '../../common/component/dialog.svelte';
   import { gameState } from '../../common/store';
+  import { NarrationService } from '../../narration/service/narration-service';
   import { AttackBattleAction } from '../model/actions/attack-battle-action';
   import type { Battle } from '../model/battle';
   import type { BattleActionExecutionContext } from '../model/battle-action-execution-context';
@@ -20,6 +21,7 @@
     }
   };
   let nextAIScheduledTurn: NodeJS.Timeout | undefined = undefined;
+  let endBattleTimeout: NodeJS.Timeout | undefined = undefined;
 
   onMount(() => {
     if (!isPlayerTurn()) {
@@ -27,7 +29,10 @@
     }
   });
 
-  onDestroy(() => nextAIScheduledTurn && clearTimeout(nextAIScheduledTurn));
+  onDestroy(() => {
+    nextAIScheduledTurn && clearTimeout(nextAIScheduledTurn);
+    endBattleTimeout && clearTimeout(endBattleTimeout);
+  });
 
   function getParticipantStyle(participant: BattleParticipant): string | undefined {
     if (participant === getNextParticipant()) {
@@ -48,7 +53,7 @@
 
   function nextTurn(): void {
     if (battle.isBattleEnded()) {
-      $gameState.battle = undefined;
+      endBattleTimeout = setTimeout(() => finishBattle(), 2000);
       return;
     }
 
@@ -77,6 +82,7 @@
   function executeAITurn(): void {
     const nextParticipantCharacter = getNextParticipantCharacter();
     if (!nextParticipantCharacter) {
+      nextTurn();
       return;
     }
     const enemy: BattleParticipant | undefined = battle.getEnemiesOfCharacterThanStillCanFight(nextParticipantCharacter)[0];
@@ -87,12 +93,22 @@
     nextTurn();
   }
 
+  function finishBattle(): void {
+    for (const participant of battle.participants) {
+      if (participant.character.healthPoints === 0) {
+        participant.character.remove();
+      }
+    }
+    $gameState.battle = undefined;
+    $gameState.narration = $gameState.selectedField && NarrationService.getNarrationForField($gameState.selectedField, $gameState);
+  }
+
   function getNextParticipantCharacter(): Character | undefined {
     return getNextParticipant()?.character;
   }
 
   function getNextParticipant(): BattleParticipant | undefined {
-    return battle.queue.queue[0];
+    return battle.isBattleEnded() ? undefined : battle.queue.queue[0];
   }
 
   function getPlayerCharacter(): Character {

@@ -14,6 +14,10 @@ export class Battle {
     this.queue = new BattleQueue([...firstTeam.participants, ...secondTeam.participants]);
   }
 
+  get participants(): BattleParticipant[] {
+    return this.getTeams().flatMap((team) => team.participants);
+  }
+
   areEnemies(firstCharacter: Character, secondCharacter: Character): boolean {
     return !this.areAllies(firstCharacter, secondCharacter);
   }
