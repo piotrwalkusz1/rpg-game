@@ -1,9 +1,16 @@
+import { ArrayUtils } from '../../common/array-utils';
 import { OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { DialogueOption } from '../../dialogue/model/dialogue-option';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
-import { Position } from '../../map/model/position';
+import { Position, TerrainObjectPosition } from '../../map/model/position';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
+import type { ObservableObject } from '../../vision/model/observable-object';
+import type { ObservableTrait } from '../../vision/model/observable-trait';
+import { PositionBasedObservableTrait } from '../../vision/model/observable-traits/position-based-observable-trait';
+import type { Observator } from '../../vision/model/observator';
+import type { ObservatorTrait } from '../../vision/model/observator-trait';
+import { PositionBasedObservatorTrait } from '../../vision/model/observator-traits/position-based-observator-trait';
 import type { Race } from './race';
 
 export class CharactersCollection extends OneToManyCollection<Character, Position> {
@@ -15,12 +22,14 @@ class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersColle
   override areForeignKeysEqual = Position.areEqual;
 }
 
-export class Character {
+export class Character implements Observator, ObservableObject {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly dialogues: DialogueOption[];
+  readonly observatorTraits: ObservatorTrait[];
+  readonly observableTraits: ObservableTrait[];
   healthPoints: number = 100;
   maxHealthPoints: number = 100;
   damage: number = 10;
@@ -43,6 +52,15 @@ export class Character {
     this.avatarUrl = avatarUrl;
     this.positionFK.value = position;
     this.dialogues = dialogues || [];
+    this.observatorTraits = [
+      new PositionBasedObservatorTrait(
+        (otherPosition) =>
+          this.position instanceof TerrainObjectPosition &&
+          otherPosition instanceof TerrainObjectPosition &&
+          this.position.terrainObject === otherPosition.terrainObject
+      )
+    ];
+    this.observableTraits = [new PositionBasedObservableTrait(() => ArrayUtils.filterNotNull([this.position]))];
   }
 
   get displayName(): TranslatableText {

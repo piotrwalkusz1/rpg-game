@@ -4,6 +4,7 @@ import { Detector } from '../../detector/model/detector';
 import type { DetectorType } from '../../detector/model/detector-type';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import { NarrationDescription } from '../../narration/model/narration-description';
+import { VisionService } from '../../vision/service/vision-service';
 
 export class Law {
   private readonly lawViolationAttemptDetector: Detector;
@@ -29,7 +30,7 @@ export class Law {
   }
 
   private preventLawViolation(actionScheduledEvent: ActionScheduledEvent) {
-    const guard = this.guards.find((guard) => actionScheduledEvent.canCharacterDetect(guard));
+    const guard = this.guards.find((guard) => VisionService.isVisible(actionScheduledEvent, guard));
     if (guard && this.lawViolationPreventionDialogue) {
       actionScheduledEvent.preventionNarrationDescription = new NarrationDescription(this.lawViolationPreventionDialogue, guard);
     } else {

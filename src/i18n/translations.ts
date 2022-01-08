@@ -46,7 +46,7 @@ const defaultTranslations = {
   'MAP.TERRAIN_OBJECT.CAVE.DESCRIPTION': 'The cave seems normal.',
   'CHARACTER.RACE.HUMAN': 'Human',
   'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL': 'This is illegal.',
-  'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER': '"You cannot enter"!',
+  'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER': '"You cannot enter!"',
   'GAME.MESSAGE.YOU_ARE_DEAD': 'You are dead',
   'GAME.BUTTON.REPEAT': 'Repeat',
   'DIALOGUE.COMMON.EXIT': 'Exit',

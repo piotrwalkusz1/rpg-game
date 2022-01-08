@@ -10,16 +10,12 @@ export class AttackActionScheduledEvent extends ActionScheduledEvent {
   readonly position: Position;
 
   constructor({ position }: { position: Position }) {
-    super();
+    super({ visibilityPositions: [] });
     this.position = position;
   }
 
   override get detectablePositions(): Position[] {
     return [this.position];
-  }
-
-  override canCharacterDetect(): boolean {
-    return false;
   }
 }
 
@@ -27,16 +23,12 @@ export class AttackActionResultEvent extends ActionResultEvent {
   readonly position: Position;
 
   constructor({ position }: { position: Position }) {
-    super();
+    super({ visibilityPositions: [] });
     this.position = position;
   }
 
   override get detectablePositions(): Position[] {
     return [this.position];
-  }
-
-  override canCharacterDetect(): boolean {
-    return false;
   }
 }
 
