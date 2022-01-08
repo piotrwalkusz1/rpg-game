@@ -4,6 +4,7 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
+import { VisionService } from '../../../vision/service/vision-service';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
 import { DialogueNarrationAction } from '../../model/narration-actions/dialogue-narration-action';
@@ -35,7 +36,7 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .map(
         (character) =>
           character.position instanceof TerrainObjectPosition &&
-          CharacterVisionService.isCharacterSeenByCharacter(character, gameState.player.character) &&
+          VisionService.isVisible(character, gameState.player.character) &&
           character.position.placement.getCharacterDescription(character)
       )
       .flatMap((description) => (description ? [{ description, order: 100 }] : []));
@@ -87,7 +88,7 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     return terrainObject.characters
       .getArray()
       .filter((character) => character !== gameState.player.character)
-      .filter((character) => CharacterVisionService.isCharacterSeenByCharacter(character, gameState.player.character))
+      .filter((character) => VisionService.isVisible(character, gameState.player.character))
       .map((character) => new AttackNarrationAction(character));
   }
 
