@@ -30,9 +30,11 @@
 
 {#if narration}
   <div class="flex flex-col divide-y-[2px] divide-black w-full">
-    <div class="p-[10px]">
-      <TranslatableTextView text={narration.title} />
-    </div>
+    {#if narration.title}
+      <div class="p-[10px]">
+        <TranslatableTextView text={narration.title} />
+      </div>
+    {/if}
     <div class="overflow-auto">
       <div class="p-[10px] overflow-auto">
         {#if narration.description.character && narration.description.character.avatarUrl}

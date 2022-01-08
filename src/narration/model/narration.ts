@@ -1,9 +1,10 @@
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { NarrationAction } from './narration-actions/narration-action';
+import { ExitNarrationAction } from './narration-actions/exit-narration-action';
 import type { NarrationDescription } from './narration-description';
 
 export class Narration {
-  readonly title: TranslatableText;
+  readonly title?: TranslatableText;
   readonly description: NarrationDescription;
   readonly actions: NarrationAction[];
   readonly isActionRequired: boolean;
@@ -14,11 +15,13 @@ export class Narration {
     actions,
     isActionRequired
   }: {
-    title: TranslatableText;
+    title?: TranslatableText;
     description: NarrationDescription;
     actions: NarrationAction[];
     isActionRequired?: boolean;
   }) {
+    actions = actions.length > 0 ? actions : [new ExitNarrationAction({ translationKey: 'NARRATION.COMMON.OK' })];
+
     this.title = title;
     this.description = description;
     this.actions = actions;

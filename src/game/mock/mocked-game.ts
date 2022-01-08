@@ -1,6 +1,8 @@
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
 import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
+import { Dialogue } from '../../dialogue/model/dialogue';
+import { DialogueOption } from '../../dialogue/model/dialogue-option';
 import { Law } from '../../law/model/law';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
@@ -40,7 +42,29 @@ export namespace MockedGame {
         name: 'Alice',
         race: Race.HUMAN,
         avatarUrl: 'images/character_002_avatar.png',
-        position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
+        position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE),
+        dialogues: [
+          new DialogueOption(
+            'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
+            new Dialogue({
+              text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
+              options: [
+                new DialogueOption(
+                  'DIALOGUE.TEXT.00001_YES',
+                  new Dialogue({
+                    text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
+                  })
+                ),
+                new DialogueOption(
+                  'DIALOGUE.TEXT.00002_NO',
+                  new Dialogue({
+                    text: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY'
+                  })
+                )
+              ]
+            })
+          )
+        ]
       })
     };
 

@@ -18,7 +18,7 @@ export class CustomNarrationAction extends NarrationAction {
     return NarrationActionOrder.CUSTOM;
   }
 
-  override getName(): TranslatableText {
+  protected override getBaseName(): TranslatableText {
     return this.name;
   }
 

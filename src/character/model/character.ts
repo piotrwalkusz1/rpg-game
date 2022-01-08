@@ -1,4 +1,5 @@
 import { OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
+import type { DialogueOption } from '../../dialogue/model/dialogue-option';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Position } from '../../map/model/position';
@@ -19,15 +20,29 @@ export class Character {
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
-  healthPoints: number = 20;
+  readonly dialogues: DialogueOption[];
+  healthPoints: number = 100;
   maxHealthPoints: number = 100;
   damage: number = 10;
 
-  constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
+  constructor({
+    name,
+    race,
+    avatarUrl,
+    position,
+    dialogues
+  }: {
+    name?: string;
+    race: Race;
+    avatarUrl?: string;
+    position?: Position;
+    dialogues?: DialogueOption[];
+  }) {
     this.name = name;
     this.race = race;
     this.avatarUrl = avatarUrl;
     this.positionFK.value = position;
+    this.dialogues = dialogues || [];
   }
 
   get displayName(): TranslatableText {

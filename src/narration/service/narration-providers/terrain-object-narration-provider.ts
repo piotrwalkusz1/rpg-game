@@ -6,8 +6,10 @@ import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
+import { DialogueNarrationAction } from '../../model/narration-actions/dialogue-narration-action';
 import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
 import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';
+import type { NarrationAction } from '../../model/narration-actions/narration-action';
 import type { TemplateNarrationAction } from '../../model/narration-actions/template-narration-action';
 import { NarrationProvider } from './narration-provider';
 
@@ -39,12 +41,13 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .flatMap((description) => (description ? [{ description, order: 100 }] : []));
   }
 
-  override getActions({ terrainObjects }: Data, gameState: GameState): TemplateNarrationAction[] {
+  override getActions({ terrainObjects }: Data, gameState: GameState): NarrationAction[] {
     return terrainObjects.flatMap((terrainObject) => this.prepareActionsForTerrainObject(terrainObject, gameState));
   }
 
-  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] {
+  private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
     return [
+      ...this.prepareDialogueActions(terrainObject, gameState),
       this.prepareGoAction(terrainObject, gameState),
       this.prepareLeaveAction(terrainObject, gameState),
       ...this.prepareChangeTerrainObjectPlacementActions(terrainObject, gameState),
@@ -86,5 +89,18 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .filter((character) => character !== gameState.player.character)
       .filter((character) => CharacterVisionService.isCharacterSeenByCharacter(character, gameState.player.character))
       .map((character) => new AttackNarrationAction(character));
+  }
+
+  private prepareDialogueActions(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
+    if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
+      return [];
+    }
+    return terrainObject.characters
+      .getArray()
+      .filter((character) => character !== gameState.player.character)
+      .filter((character) => CharacterVisionService.canCharactersTalk(character, gameState.player.character))
+      .flatMap((character) =>
+        character.dialogues.map((dialogueOption) => new DialogueNarrationAction({ character, dialogueOption, showNameContext: true }))
+      );
   }
 }

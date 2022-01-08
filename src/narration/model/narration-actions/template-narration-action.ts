@@ -12,17 +12,11 @@ export type NarrationActionId =
 export abstract class TemplateNarrationAction extends NarrationAction {
   abstract get id(): NarrationActionId;
 
-  override getName(): TranslatableText {
-    const baseName: TranslatableText = {
+  protected override getBaseName(): TranslatableText {
+    return {
       translationKey: `NARRATION.ACTION.${this.id}`,
       properties: this.getNameTranslationKeyProperties()
     };
-    const nameContext = this.getNameContext();
-    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', baseName]) : baseName;
-  }
-
-  protected getNameContext(): TranslatableText | undefined {
-    return undefined;
   }
 
   protected getNameTranslationKeyProperties(): Record<string, TranslatableText> | undefined {

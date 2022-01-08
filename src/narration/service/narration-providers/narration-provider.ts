@@ -1,7 +1,7 @@
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
-import type { TemplateNarrationAction } from '../../model/narration-actions/template-narration-action';
+import type { NarrationAction } from '../../model/narration-actions/narration-action';
 
 export abstract class NarrationProvider<T extends {}> {
   getNarrationProviderWithDataIfSupported(field: MapField): NarrationProviderWithData<T> | undefined {
@@ -19,7 +19,7 @@ export abstract class NarrationProvider<T extends {}> {
     return [];
   }
 
-  getActions(_data: T, _gameState: GameState): TemplateNarrationAction[] {
+  getActions(_data: T, _gameState: GameState): NarrationAction[] {
     return [];
   }
 }
@@ -35,7 +35,7 @@ export class NarrationProviderWithData<T> {
     return this.narrationProvider.getDescription(this.data, gameState);
   }
 
-  getActions(gameState: GameState): TemplateNarrationAction[] {
+  getActions(gameState: GameState): NarrationAction[] {
     return this.narrationProvider.getActions(this.data, gameState);
   }
 }
