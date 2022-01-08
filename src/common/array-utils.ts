@@ -2,6 +2,9 @@ export namespace ArrayUtils {
   export const filterNotNull = <T extends {}>(array: (T | undefined | null)[]): T[] =>
     array.filter((item): item is T => item !== undefined && item !== null);
 
+  export const filterInstanceOf = <T>(array: unknown[], type: abstract new () => T): T[] =>
+    array.filter((item): item is T => item instanceof type);
+
   export const getShuffledArray = <T>(array: T[]) => {
     const newArray = array.slice();
     for (let i = newArray.length - 1; i > 0; i--) {

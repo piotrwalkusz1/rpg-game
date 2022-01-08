@@ -1,4 +1,4 @@
-import type { Position } from '../../../map/model/position';
+import type { Position } from '../../../../map/model/position';
 import { ObservableTrait } from '../observable-trait';
 import type { ObservatorTrait } from '../observator-trait';
 import { PositionBasedObservatorTrait } from '../observator-traits/position-based-observator-trait';
@@ -12,7 +12,7 @@ export class PositionBasedObservableTrait extends ObservableTrait {
     this.positionsProvider = Array.isArray(positions) ? () => positions : positions;
   }
 
-  override getVisibilityLevel(observator: ObservatorTrait): VisibilityLevel {
+  override getValue(observator: ObservatorTrait): VisibilityLevel {
     return observator instanceof PositionBasedObservatorTrait &&
       this.positionsProvider().some((position) => observator.isPositionVisible(position))
       ? VisibilityLevel.VISIBLE

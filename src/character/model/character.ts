@@ -5,12 +5,12 @@ import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Position, TerrainObjectPosition } from '../../map/model/position';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
-import type { ObservableObject } from '../../vision/model/observable-object';
-import type { ObservableTrait } from '../../vision/model/observable-trait';
-import { PositionBasedObservableTrait } from '../../vision/model/observable-traits/position-based-observable-trait';
-import type { Observator } from '../../vision/model/observator';
-import type { ObservatorTrait } from '../../vision/model/observator-trait';
-import { PositionBasedObservatorTrait } from '../../vision/model/observator-traits/position-based-observator-trait';
+import { PositionBasedHearableTrait } from '../../trait/hearing/model/hearable-traits/position-based-hearable-trait';
+import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-traits/position-based-hearer-trait';
+import type { Trait } from '../../trait/model/trait';
+import type { TraitOwner } from '../../trait/model/trait-owner';
+import { PositionBasedObservableTrait } from '../../trait/vision/model/observable-traits/position-based-observable-trait';
+import { PositionBasedObservatorTrait } from '../../trait/vision/model/observator-traits/position-based-observator-trait';
 import type { Race } from './race';
 
 export class CharactersCollection extends OneToManyCollection<Character, Position> {
@@ -22,14 +22,13 @@ class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersColle
   override areForeignKeysEqual = Position.areEqual;
 }
 
-export class Character implements Observator, ObservableObject {
+export class Character implements TraitOwner {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly dialogues: DialogueOption[];
-  readonly observatorTraits: ObservatorTrait[];
-  readonly observableTraits: ObservableTrait[];
+  readonly traits: Trait[];
   healthPoints: number = 100;
   maxHealthPoints: number = 100;
   damage: number = 10;
@@ -52,15 +51,19 @@ export class Character implements Observator, ObservableObject {
     this.avatarUrl = avatarUrl;
     this.positionFK.value = position;
     this.dialogues = dialogues || [];
-    this.observatorTraits = [
+    this.traits = [
       new PositionBasedObservatorTrait(
         (otherPosition) =>
           this.position instanceof TerrainObjectPosition &&
           otherPosition instanceof TerrainObjectPosition &&
           this.position.terrainObject === otherPosition.terrainObject
-      )
+      ),
+      new PositionBasedObservableTrait(() => ArrayUtils.filterNotNull([this.position])),
+      new PositionBasedHearerTrait(
+        (otherPositon) => this.position instanceof TerrainObjectPosition && Position.areEqual(this.position, otherPositon)
+      ),
+      new PositionBasedHearableTrait(() => ArrayUtils.filterNotNull([this.position]))
     ];
-    this.observableTraits = [new PositionBasedObservableTrait(() => ArrayUtils.filterNotNull([this.position]))];
   }
 
   get displayName(): TranslatableText {

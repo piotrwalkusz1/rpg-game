@@ -1,10 +1,10 @@
-import { CharacterVisionService } from '../../../character/service/character-vision-service';
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
-import { VisionService } from '../../../vision/service/vision-service';
+import { HearingService } from '../../../trait/hearing/service/hearing-service';
+import { VisionService } from '../../../trait/vision/service/vision-service';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
 import { DialogueNarrationAction } from '../../model/narration-actions/dialogue-narration-action';
@@ -99,7 +99,7 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     return terrainObject.characters
       .getArray()
       .filter((character) => character !== gameState.player.character)
-      .filter((character) => CharacterVisionService.canCharactersTalk(character, gameState.player.character))
+      .filter((character) => HearingService.canTalk(character, gameState.player.character))
       .flatMap((character) =>
         character.dialogues.map((dialogueOption) => new DialogueNarrationAction({ character, dialogueOption, showNameContext: true }))
       );
