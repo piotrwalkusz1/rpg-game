@@ -1,9 +1,9 @@
 import type { TraitOwner } from '../../model/trait-owner';
 import { TraitService } from '../../service/trait-service';
 import { ObservableTrait } from '../model/observable-trait';
-import { KnownLocalizationObservableTrait } from '../model/observable-traits/known-localization-observable-trait';
+import { KnownLocationObservableTrait } from '../model/observable-traits/known-location-observable-trait';
 import { ObservatorTrait } from '../model/observator-trait';
-import { KnownLocalizationObservatorTrait } from '../model/observator-traits/known-localization-observator-trait';
+import { KnownLocationObservatorTrait } from '../model/observator-traits/known-location-observator-trait';
 import { VisibilityLevel } from '../model/visibility-level';
 
 export namespace VisionService {
@@ -11,8 +11,8 @@ export namespace VisionService {
     return getVisibilityLevel(observable, observator) >= VisibilityLevel.VISIBLE;
   };
 
-  export const isLocalizable = (observable: TraitOwner, observator: TraitOwner): boolean => {
-    return getVisibilityLevel(observable, observator) >= VisibilityLevel.LOCALIZABLE;
+  export const isLocatable = (observable: TraitOwner, observator: TraitOwner): boolean => {
+    return getVisibilityLevel(observable, observator) >= VisibilityLevel.LOCATABLE;
   };
 
   export const getVisibilityLevel = (observable: TraitOwner, observator: TraitOwner): VisibilityLevel => {
@@ -21,9 +21,9 @@ export namespace VisionService {
     );
   };
 
-  export const addKnownLocalization = (observator: TraitOwner, observable: TraitOwner): void => {
-    const knownLocalizationObservatorTrait = TraitService.getTrait(observator, KnownLocalizationObservatorTrait);
-    const knownLocalizationObservableTrait = TraitService.getTrait(observable, KnownLocalizationObservableTrait);
+  export const addKnownLocation = (observator: TraitOwner, observable: TraitOwner): void => {
+    const knownLocalizationObservatorTrait = TraitService.getTrait(observator, KnownLocationObservatorTrait);
+    const knownLocalizationObservableTrait = TraitService.getTrait(observable, KnownLocationObservableTrait);
     if (knownLocalizationObservatorTrait && knownLocalizationObservableTrait) {
       knownLocalizationObservatorTrait.knownLocations.push(knownLocalizationObservableTrait);
     }

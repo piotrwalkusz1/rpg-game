@@ -54,7 +54,7 @@ export namespace MockedGame {
 
     characters.ALICE.dialogues.push(
       new DialogueOption('DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA', () =>
-        VisionService.isLocalizable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
+        VisionService.isLocatable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
           ? new Dialogue({
               text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
               options: [
@@ -87,7 +87,7 @@ export namespace MockedGame {
       })
     );
 
-    characters.ALICE.addKnownLocalization(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE);
+    characters.ALICE.addKnownLocation(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE);
 
     const player = new Player(characters.PIOTR);
 

@@ -59,7 +59,7 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
   private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined {
     if (
       gameState.player.character.isNearTerrainObject(terrainObject) ||
-      !VisionService.isLocalizable(terrainObject, gameState.player.character)
+      !VisionService.isLocatable(terrainObject, gameState.player.character)
     ) {
       return;
     }

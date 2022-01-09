@@ -10,7 +10,7 @@ import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-trait
 import type { Trait } from '../../trait/model/trait';
 import type { TraitOwner } from '../../trait/model/trait-owner';
 import { PositionBasedObservableTrait } from '../../trait/vision/model/observable-traits/position-based-observable-trait';
-import { KnownLocalizationObservatorTrait } from '../../trait/vision/model/observator-traits/known-localization-observator-trait';
+import { KnownLocationObservatorTrait } from '../../trait/vision/model/observator-traits/known-location-observator-trait';
 import { PositionBasedObservatorTrait } from '../../trait/vision/model/observator-traits/position-based-observator-trait';
 import { VisionService } from '../../trait/vision/service/vision-service';
 import type { Race } from './race';
@@ -59,7 +59,7 @@ export class Character implements TraitOwner {
           ? PositionSet.create({ terrainObject: this.position.terrainObject })
           : PositionSet.create()
       ),
-      new KnownLocalizationObservatorTrait(),
+      new KnownLocationObservatorTrait(),
       new PositionBasedObservableTrait(() =>
         this.position instanceof TerrainObjectPosition
           ? PositionSet.create({ terrainObject: this.position.terrainObject, placement: this.position.placement })
@@ -108,7 +108,7 @@ export class Character implements TraitOwner {
     this.position?.characters.remove(this);
   }
 
-  addKnownLocalization(observable: TraitOwner): void {
-    VisionService.addKnownLocalization(this, observable);
+  addKnownLocation(observable: TraitOwner): void {
+    VisionService.addKnownLocation(this, observable);
   }
 }
