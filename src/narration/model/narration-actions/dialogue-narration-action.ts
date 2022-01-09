@@ -46,8 +46,8 @@ export class DialogueNarrationAction extends NarrationAction {
     if (this.dialogueOption.action) {
       const actionResult = ActionService.executeAction(this.dialogueOption.action(context.getGameState()), context);
       switch (actionResult.type) {
-        // case 'SUCCESS':
-        //   break;
+        case 'SUCCESS':
+          break;
         case 'PREVENTION':
           return new Narration({
             title: context.getNarration()?.title || '',
