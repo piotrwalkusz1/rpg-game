@@ -35,7 +35,7 @@ export abstract class ActionResultEvent implements DetectableEvent, TraitOwner {
 export abstract class Action {
   abstract execute(actionExecutionContext: ActionExecutionContext): ActionResultEvent;
 
-  getActionScheduledEvent(_FactionExecutionContext: ActionExecutionContext): ActionScheduledEvent | undefined {
+  getActionScheduledEvent(_actionExecutionContext: ActionExecutionContext): ActionScheduledEvent | undefined {
     return undefined;
   }
 }

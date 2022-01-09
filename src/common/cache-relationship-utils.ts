@@ -65,7 +65,7 @@ export abstract class OneToManyForeignKey<Item, Collection extends OneToManyColl
     this._value = newForeignKey;
     const oldCollection = this.getCollection(oldForeignKey);
     const newCollection = this.getCollection(newForeignKey);
-    if (oldCollection == newCollection) {
+    if (oldCollection === newCollection) {
       return;
     }
     oldCollection?.remove(this.item);

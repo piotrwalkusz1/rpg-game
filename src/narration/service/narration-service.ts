@@ -19,7 +19,7 @@ export namespace NarrationService {
       .map((narrationProviderWithData) => narrationProviderWithData.getTitle())
       .flatMap((title) => (title ? [title] : []))
       .sort((a, b) => a.order - b.order);
-    const title = titles.length > 0 ? titles[0].title : '';
+    const title = titles.length > 0 ? titles[0].title : undefined;
     const descriptions = narrationProvidersWithData
       .flatMap((narrationProviderWithData) => narrationProviderWithData.getDescription(gameState))
       .sort((a, b) => a.order - b.order)
@@ -29,10 +29,10 @@ export namespace NarrationService {
       .flatMap((narrationProviderWithData) => narrationProviderWithData.getActions(gameState))
       .sort((a, b) => a.order - b.order);
 
-    return new Narration({ title: title, description: new NarrationDescription(description), actions: actions });
+    return new Narration({ title, description: new NarrationDescription(description), actions });
   };
 
   export const getNarrationSelectedField = (gameState: GameState): Narration | undefined => {
     return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
-  }
+  };
 }

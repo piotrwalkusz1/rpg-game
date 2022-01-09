@@ -66,13 +66,12 @@ export namespace MockedGame {
                     dialogue: new Dialogue({
                       text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
                     }),
-                    actions: (gameState) => [
+                    action: (gameState) =>
                       new GiveLocationAction({
                         locationGiver: characters.ALICE,
                         locationReceiver: gameState.player.character,
                         location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
                       })
-                    ]
                   }),
                   new DialogueOption({
                     prompt: 'DIALOGUE.TEXT.00002_NO',
@@ -101,6 +100,6 @@ export namespace MockedGame {
 
     const player = new Player(characters.PIOTR);
 
-    return new GameState({ player: player, world: world });
+    return new GameState({ player, world });
   };
 }

@@ -25,7 +25,7 @@ export class TerrainObjectType {
 
   readonly id: TerrainObjectTypeId;
   readonly imageUrl: string;
-  readonly placements: Array<TerrainObjectPlacement>;
+  readonly placements: TerrainObjectPlacement[];
   readonly defaultCharacterPlacement: TerrainObjectPlacement;
 
   constructor({
@@ -36,7 +36,7 @@ export class TerrainObjectType {
   }: {
     id: TerrainObjectTypeId;
     imageUrl: string;
-    placements: Array<TerrainObjectPlacement>;
+    placements: TerrainObjectPlacement[];
     defaultCharacterPlacement: TerrainObjectPlacement;
   }) {
     if (placements.length === 0) {

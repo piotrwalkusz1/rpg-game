@@ -23,13 +23,13 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
 
 export class TerrainObject implements DetectorContext, TraitOwner {
   readonly type: TerrainObjectType;
-  readonly guards: Array<Character>;
+  readonly guards: Character[];
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
   readonly laws: Law[] = [];
   readonly traits: Trait[];
 
-  constructor({ type, field, guards, hidden }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character>; hidden?: boolean }) {
+  constructor({ type, field, guards, hidden }: { type: TerrainObjectType; field?: MapField; guards?: Character[]; hidden?: boolean }) {
     this.type = type;
     this.guards = guards || [];
     this.fieldFK.value = field;
