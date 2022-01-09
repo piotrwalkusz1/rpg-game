@@ -43,7 +43,7 @@ export class DialogueNarrationAction extends NarrationAction {
   }
 
   override execute(context: NarrationActionExecutionContext): Narration | undefined {
-    for (const action of this.dialogueOption.actions) {
+    for (const action of this.dialogueOption.actions(context.getGameState())) {
       const actionResult = ActionService.executeAction(action, context);
       switch (actionResult.type) {
         case 'SUCCESS':

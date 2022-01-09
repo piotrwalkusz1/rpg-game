@@ -1,3 +1,4 @@
+import { GiveLocationAction } from '../../action/model/actions/give-location-action';
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
 import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
@@ -12,7 +13,6 @@ import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object
 import { VisionService } from '../../trait/vision/service/vision-service';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
-import { GiveLocationAction } from '../../action/model/actions/give-location-action';
 
 export namespace MockedGame {
   export const createGameState = () => {
@@ -66,10 +66,10 @@ export namespace MockedGame {
                     dialogue: new Dialogue({
                       text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
                     }),
-                    actions: [
+                    actions: (gameState) => [
                       new GiveLocationAction({
                         locationGiver: characters.ALICE,
-                        locationReceiver: player.character,
+                        locationReceiver: gameState.player.character,
                         location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
                       })
                     ]
