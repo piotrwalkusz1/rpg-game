@@ -7,7 +7,7 @@ import { NarrationDescription } from '../../narration/model/narration-descriptio
 import { VisionService } from '../../trait/vision/service/vision-service';
 
 export class Law {
-  private readonly lawViolationAttemptDetector: Detector;
+  private readonly lawViolationAttemptDetector: Detector<ActionScheduledEvent>;
   private readonly guards: Character[];
   private readonly lawViolationPreventionDialogue?: TranslatableText;
 
@@ -25,8 +25,8 @@ export class Law {
     this.lawViolationPreventionDialogue = lawViolationPreventionDialogue;
   }
 
-  get detectors(): Detector[] {
-    return [this.lawViolationAttemptDetector];
+  get detectors(): Detector<unknown>[] {
+    return [this.lawViolationAttemptDetector] as Detector<unknown>[];
   }
 
   private preventLawViolation(actionScheduledEvent: ActionScheduledEvent) {

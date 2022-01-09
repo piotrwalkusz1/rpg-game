@@ -33,7 +33,7 @@ export class I18nService {
     this.i18n.changeLanguage(language);
   }
 
-  addResourceBundle(language: string, namespace: string, resources: any) {
+  addResourceBundle(language: string, namespace: string, resources: unknown) {
     this.i18n.addResourceBundle(language, namespace, resources);
   }
 }

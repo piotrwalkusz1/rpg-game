@@ -31,9 +31,9 @@ export class Character implements TraitOwner {
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly dialogues: DialogueOption[];
   readonly traits: Trait[];
-  healthPoints: number = 100;
-  maxHealthPoints: number = 100;
-  damage: number = 10;
+  healthPoints = 100;
+  maxHealthPoints = 100;
+  damage = 10;
 
   constructor({
     name,

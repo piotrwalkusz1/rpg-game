@@ -1,5 +1,5 @@
 export namespace ArrayUtils {
-  export const filterNotNull = <T extends {}>(array: (T | undefined | null)[]): T[] =>
+  export const filterNotNull = <T>(array: (T | undefined | null)[]): T[] =>
     array.filter((item): item is T => item !== undefined && item !== null);
 
   export const filterInstanceOf = <T>(array: unknown[], type: abstract new () => T): T[] =>

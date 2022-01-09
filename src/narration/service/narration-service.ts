@@ -7,11 +7,11 @@ import { FieldNarrationProvider } from './narration-providers/field-narration-pr
 import type { NarrationProvider, NarrationProviderWithData } from './narration-providers/narration-provider';
 import { TerrainObjectNarrationProvider } from './narration-providers/terrain-object-narration-provider';
 
-const narrationProviders: NarrationProvider<any>[] = [new FieldNarrationProvider(), new TerrainObjectNarrationProvider()];
+const narrationProviders: NarrationProvider<unknown>[] = [new FieldNarrationProvider(), new TerrainObjectNarrationProvider()];
 
 export namespace NarrationService {
   export const getNarrationForField = (field: MapField, gameState: GameState): Narration => {
-    const narrationProvidersWithData: NarrationProviderWithData<any>[] = narrationProviders.flatMap((narrationProvider) => {
+    const narrationProvidersWithData: NarrationProviderWithData<unknown>[] = narrationProviders.flatMap((narrationProvider) => {
       const narrationProviderWithData = narrationProvider.getNarrationProviderWithDataIfSupported(field);
       return narrationProviderWithData ? [narrationProviderWithData] : [];
     });

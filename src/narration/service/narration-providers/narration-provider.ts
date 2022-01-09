@@ -3,7 +3,7 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import type { NarrationAction } from '../../model/narration-actions/narration-action';
 
-export abstract class NarrationProvider<T extends {}> {
+export abstract class NarrationProvider<T> {
   getNarrationProviderWithDataIfSupported(field: MapField): NarrationProviderWithData<T> | undefined {
     const data = this.getDataIfSupported(field);
     return data && new NarrationProviderWithData(this, data);
