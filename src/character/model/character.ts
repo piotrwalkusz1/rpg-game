@@ -108,7 +108,7 @@ export class Character implements TraitOwner {
     this.position?.characters.remove(this);
   }
 
-  addKnownLocation(observable: TraitOwner): void {
-    VisionService.addKnownLocation(this, observable);
+  addKnownLocation(location: TraitOwner): void {
+    VisionService.addKnownLocation(this, location);
   }
 }

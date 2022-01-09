@@ -12,6 +12,7 @@ import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object
 import { VisionService } from '../../trait/vision/service/vision-service';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
+import { GiveLocationAction } from '../../action/model/actions/give-location-action';
 
 export namespace MockedGame {
   export const createGameState = () => {
@@ -53,27 +54,36 @@ export namespace MockedGame {
     };
 
     characters.ALICE.dialogues.push(
-      new DialogueOption('DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA', () =>
-        VisionService.isLocatable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
-          ? new Dialogue({
-              text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
-              options: [
-                new DialogueOption(
-                  'DIALOGUE.TEXT.00001_YES',
-                  new Dialogue({
-                    text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
+      new DialogueOption({
+        prompt: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
+        dialogue: () =>
+          VisionService.isLocatable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
+            ? new Dialogue({
+                text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
+                options: [
+                  new DialogueOption({
+                    prompt: 'DIALOGUE.TEXT.00001_YES',
+                    dialogue: new Dialogue({
+                      text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
+                    }),
+                    actions: [
+                      new GiveLocationAction({
+                        locationGiver: characters.ALICE,
+                        locationReceiver: player.character,
+                        location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
+                      })
+                    ]
+                  }),
+                  new DialogueOption({
+                    prompt: 'DIALOGUE.TEXT.00002_NO',
+                    dialogue: new Dialogue({
+                      text: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY'
+                    })
                   })
-                ),
-                new DialogueOption(
-                  'DIALOGUE.TEXT.00002_NO',
-                  new Dialogue({
-                    text: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY'
-                  })
-                )
-              ]
-            })
-          : new Dialogue({ text: 'DIALOGUE.TEXT.10005_I_KNOW_NOTHING' })
-      )
+                ]
+              })
+            : new Dialogue({ text: 'DIALOGUE.TEXT.10005_I_KNOW_NOTHING' })
+      })
     );
 
     terrainObjects.ALICE_HOUSE.laws.push(

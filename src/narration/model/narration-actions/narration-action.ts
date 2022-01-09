@@ -18,5 +18,5 @@ export abstract class NarrationAction {
     return undefined;
   }
 
-  abstract execute(narrationActionExecutionContext: NarrationActionExecutionContext): Narration | undefined;
+  abstract execute(context: NarrationActionExecutionContext): Narration | undefined;
 }

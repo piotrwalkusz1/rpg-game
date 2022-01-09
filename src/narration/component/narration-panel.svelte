@@ -1,10 +1,12 @@
 <script lang="ts">
   import type { ActionExecutionContext } from '../../action/model/action-execution-context';
   import type { Battle } from '../../battle/model/battle';
+  import type { Character } from '../../character/model/character';
   import { gameState } from '../../common/store';
   import TranslatableTextView from '../../i18n/translatable-text-view.svelte';
   import type { MapLocation } from '../../map/model/map-location';
   import type { Position } from '../../map/model/position';
+  import type { TraitOwner } from '../../trait/model/trait-owner';
   import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
   import type { NarrationAction } from '../model/narration-actions/narration-action';
   import { NarrationService } from '../service/narration-service';
@@ -14,7 +16,11 @@
   const actionExecutionContext: ActionExecutionContext = {
     changePlayerPosition: (newPosition: Position) => ($gameState.player.character.position = newPosition),
     getGameState: () => $gameState,
-    startBattle: (battle: Battle) => ($gameState.battle = battle)
+    startBattle: (battle: Battle) => ($gameState.battle = battle),
+    addKnownLocation: (character: Character, location: TraitOwner) => {
+      character.addKnownLocation(location);
+      $gameState = $gameState;
+    }
   };
   const narrationActionExecutionContext: NarrationActionExecutionContext = {
     changeLocationView: (newLocationView: MapLocation) => ($gameState.locationView = newLocationView),

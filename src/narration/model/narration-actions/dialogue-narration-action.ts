@@ -1,9 +1,12 @@
+import { ActionService } from '../../../action/service/action-service';
 import type { Character } from '../../../character/model/character';
 import type { DialogueOption } from '../../../dialogue/model/dialogue-option';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { Narration } from '../narration';
+import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
 import { NarrationActionOrder } from '../narration-action-order';
 import { NarrationDescription } from '../narration-description';
+import { CustomNarrationAction } from './custom-narration-action';
 import { ExitNarrationAction } from './exit-narration-action';
 import { NarrationAction } from './narration-action';
 
@@ -39,7 +42,27 @@ export class DialogueNarrationAction extends NarrationAction {
     return this.showNameContext ? this.character.displayName : undefined;
   }
 
-  override execute(): Narration | undefined {
+  override execute(context: NarrationActionExecutionContext): Narration | undefined {
+    for (const action of this.dialogueOption.actions) {
+      const actionResult = ActionService.executeAction(action, context);
+      switch (actionResult.type) {
+        case 'SUCCESS':
+          break;
+        case 'PREVENTION':
+          return new Narration({
+            title: context.getNarration()?.title || '',
+            description: actionResult.description,
+            actions: [
+              new CustomNarrationAction({
+                name: { translationKey: 'NARRATION.COMMON.OK' },
+                nextNarration: context.getNarration()
+              })
+            ],
+            isActionRequired: context.getNarration()?.isActionRequired
+          });
+      }
+    }
+
     const dialogue = this.dialogueOption.dialogueProvider();
     if (!dialogue) {
       return undefined;
