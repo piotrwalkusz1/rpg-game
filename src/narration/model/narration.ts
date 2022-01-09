@@ -20,7 +20,7 @@ export class Narration {
     actions: NarrationAction[];
     isActionRequired?: boolean;
   }) {
-    actions = actions.length > 0 ? actions : [new ExitNarrationAction({ translationKey: 'NARRATION.COMMON.OK' })];
+    actions = actions.length > 0 || !isActionRequired ? actions : [new ExitNarrationAction({ translationKey: 'NARRATION.COMMON.OK' })];
 
     this.title = title;
     this.description = description;

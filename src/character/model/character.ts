@@ -1,16 +1,18 @@
-import { ArrayUtils } from '../../common/array-utils';
 import { OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { DialogueOption } from '../../dialogue/model/dialogue-option';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Position, TerrainObjectPosition } from '../../map/model/position';
+import { PositionSet } from '../../map/model/position-set';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { PositionBasedHearableTrait } from '../../trait/hearing/model/hearable-traits/position-based-hearable-trait';
 import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-traits/position-based-hearer-trait';
 import type { Trait } from '../../trait/model/trait';
 import type { TraitOwner } from '../../trait/model/trait-owner';
 import { PositionBasedObservableTrait } from '../../trait/vision/model/observable-traits/position-based-observable-trait';
+import { KnownLocalizationObservatorTrait } from '../../trait/vision/model/observator-traits/known-localization-observator-trait';
 import { PositionBasedObservatorTrait } from '../../trait/vision/model/observator-traits/position-based-observator-trait';
+import { VisionService } from '../../trait/vision/service/vision-service';
 import type { Race } from './race';
 
 export class CharactersCollection extends OneToManyCollection<Character, Position> {
@@ -52,17 +54,21 @@ export class Character implements TraitOwner {
     this.positionFK.value = position;
     this.dialogues = dialogues || [];
     this.traits = [
-      new PositionBasedObservatorTrait(
-        (otherPosition) =>
-          this.position instanceof TerrainObjectPosition &&
-          otherPosition instanceof TerrainObjectPosition &&
-          this.position.terrainObject === otherPosition.terrainObject
+      new PositionBasedObservatorTrait(() =>
+        this.position instanceof TerrainObjectPosition
+          ? PositionSet.create({ terrainObject: this.position.terrainObject })
+          : PositionSet.create()
       ),
-      new PositionBasedObservableTrait(() => ArrayUtils.filterNotNull([this.position])),
-      new PositionBasedHearerTrait(
-        (otherPositon) => this.position instanceof TerrainObjectPosition && Position.areEqual(this.position, otherPositon)
+      new KnownLocalizationObservatorTrait(),
+      new PositionBasedObservableTrait(() =>
+        this.position instanceof TerrainObjectPosition
+          ? PositionSet.create({ terrainObject: this.position.terrainObject, placement: this.position.placement })
+          : PositionSet.create()
       ),
-      new PositionBasedHearableTrait(() => ArrayUtils.filterNotNull([this.position]))
+      new PositionBasedHearerTrait(() => this.position),
+      new PositionBasedHearableTrait(
+        (otherPosition) => this.position instanceof TerrainObjectPosition && Position.areEqual(this.position, otherPosition)
+      )
     ];
   }
 
@@ -100,5 +106,9 @@ export class Character implements TraitOwner {
 
   remove(): void {
     this.position?.characters.remove(this);
+  }
+
+  addKnownLocalization(observable: TraitOwner): void {
+    VisionService.addKnownLocalization(this, observable);
   }
 }

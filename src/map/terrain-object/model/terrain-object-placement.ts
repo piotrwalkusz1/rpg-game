@@ -1,11 +1,12 @@
 import type { Character } from '../../../character/model/character';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 
-export type TerrainObjectPlacementId = `OUTSIDE` | `INSIDE`;
+export type TerrainObjectPlacementId = `OUTSIDE` | `INSIDE` | `NEAR`;
 
 export class TerrainObjectPlacement {
   static readonly OUTSIDE = new TerrainObjectPlacement('OUTSIDE');
   static readonly INSIDE = new TerrainObjectPlacement('INSIDE');
+  static readonly NEAR = new TerrainObjectPlacement('NEAR');
 
   constructor(readonly id: TerrainObjectPlacementId) {}
 

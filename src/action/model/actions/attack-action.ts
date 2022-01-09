@@ -5,12 +5,13 @@ import type { Character } from '../../../character/model/character';
 import type { Position } from '../../../map/model/position';
 import type { ActionExecutionContext } from '../action-execution-context';
 import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
+import { PositionSet } from '../../../map/model/position-set';
 
 export class AttackActionScheduledEvent extends ActionScheduledEvent {
   readonly position: Position;
 
   constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: [] });
+    super({ visibilityPositions: PositionSet.create() });
     this.position = position;
   }
 
@@ -23,7 +24,7 @@ export class AttackActionResultEvent extends ActionResultEvent {
   readonly position: Position;
 
   constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: [] });
+    super({ visibilityPositions: PositionSet.create() });
     this.position = position;
   }
 

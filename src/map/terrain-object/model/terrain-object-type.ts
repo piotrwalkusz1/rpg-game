@@ -1,7 +1,7 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { TerrainObjectPlacement } from './terrain-object-placement';
 
-export type TerrainObjectTypeId = 'HOUSE' | 'CAVE';
+export type TerrainObjectTypeId = 'HOUSE' | 'CAVE' | 'HIDDEN_TREASURE';
 
 export class TerrainObjectType {
   static readonly HOUSE = new TerrainObjectType({
@@ -13,8 +13,14 @@ export class TerrainObjectType {
   static readonly CAVE = new TerrainObjectType({
     id: 'CAVE',
     imageUrl: 'images/terrain-objects/natural/cave.svg',
-    placements: [TerrainObjectPlacement.INSIDE],
-    defaultCharacterPlacement: TerrainObjectPlacement.INSIDE
+    placements: [TerrainObjectPlacement.OUTSIDE, TerrainObjectPlacement.INSIDE],
+    defaultCharacterPlacement: TerrainObjectPlacement.OUTSIDE
+  });
+  static readonly HIDDEN_TREASURE = new TerrainObjectType({
+    id: 'HIDDEN_TREASURE',
+    imageUrl: 'images/terrain-objects/treasure_chest.png',
+    placements: [TerrainObjectPlacement.NEAR],
+    defaultCharacterPlacement: TerrainObjectPlacement.NEAR
   });
 
   readonly id: TerrainObjectTypeId;

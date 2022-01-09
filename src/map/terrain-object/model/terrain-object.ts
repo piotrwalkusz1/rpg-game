@@ -5,8 +5,15 @@ import type { Detector } from '../../../detector/model/detector';
 import type { DetectorContext } from '../../../detector/model/detector-context';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { Law } from '../../../law/model/law';
+import type { Trait } from '../../../trait/model/trait';
+import type { TraitOwner } from '../../../trait/model/trait-owner';
+import { ConstantObservableTrait } from '../../../trait/vision/model/observable-traits/constant-observable-trait';
+import { KnownLocalizationObservableTrait } from '../../../trait/vision/model/observable-traits/known-localization-observable-trait';
+import { PositionBasedObservableTrait } from '../../../trait/vision/model/observable-traits/position-based-observable-trait';
+import { VisibilityLevel } from '../../../trait/vision/model/visibility-level';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
+import { PositionSet } from '../../model/position-set';
 import type { TerrainObjectType } from './terrain-object-type';
 
 class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObjectsCollection, MapField> {
@@ -14,18 +21,23 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
   override areForeignKeysEqual = areSame;
 }
 
-export class TerrainObject implements DetectorContext {
+export class TerrainObject implements DetectorContext, TraitOwner {
   readonly type: TerrainObjectType;
   readonly guards: Array<Character>;
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
   readonly laws: Law[] = [];
+  readonly traits: Trait[];
 
-  constructor({ type, field, guards }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character> }) {
+  constructor({ type, field, guards, hidden }: { type: TerrainObjectType; field?: MapField; guards?: Array<Character>; hidden?: boolean }) {
     this.type = type;
     this.guards = guards || [];
     this.fieldFK.value = field;
     this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
+    this.traits = [
+      new PositionBasedObservableTrait(() => PositionSet.create({ terrainObject: this })),
+      hidden ? new KnownLocalizationObservableTrait() : new ConstantObservableTrait(VisibilityLevel.LOCALIZABLE)
+    ];
   }
 
   get imageUrl(): string {

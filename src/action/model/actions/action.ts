@@ -1,5 +1,6 @@
 import type { DetectableEvent } from '../../../detector/model/detectable-event';
 import type { Position } from '../../../map/model/position';
+import type { PositionSet } from '../../../map/model/position-set';
 import type { NarrationDescription } from '../../../narration/model/narration-description';
 import type { Trait } from '../../../trait/model/trait';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
@@ -10,7 +11,7 @@ export abstract class ActionScheduledEvent implements DetectableEvent, TraitOwne
   readonly traits: Trait[];
   preventionNarrationDescription?: NarrationDescription;
 
-  constructor({ visibilityPositions }: { visibilityPositions: Position[] }) {
+  constructor({ visibilityPositions }: { visibilityPositions: PositionSet }) {
     this.traits = [new PositionBasedObservableTrait(visibilityPositions)];
   }
 
@@ -24,7 +25,7 @@ export abstract class ActionScheduledEvent implements DetectableEvent, TraitOwne
 export abstract class ActionResultEvent implements DetectableEvent, TraitOwner {
   readonly traits: Trait[];
 
-  constructor({ visibilityPositions }: { visibilityPositions: Position[] }) {
+  constructor({ visibilityPositions }: { visibilityPositions: PositionSet }) {
     this.traits = [new PositionBasedObservableTrait(visibilityPositions)];
   }
 

@@ -1,20 +1,20 @@
-import type { Position } from '../../../../map/model/position';
+import { PositionSet } from '../../../../map/model/position-set';
 import { ObservableTrait } from '../observable-trait';
 import type { ObservatorTrait } from '../observator-trait';
 import { PositionBasedObservatorTrait } from '../observator-traits/position-based-observator-trait';
 import { VisibilityLevel } from '../visibility-level';
 
 export class PositionBasedObservableTrait extends ObservableTrait {
-  readonly positionsProvider: () => Position[];
+  readonly positionSetProvider: () => PositionSet;
 
-  constructor(positions: Position[] | (() => Position[])) {
+  constructor(positionSet: PositionSet | (() => PositionSet)) {
     super();
-    this.positionsProvider = Array.isArray(positions) ? () => positions : positions;
+    this.positionSetProvider = typeof positionSet === 'object' ? () => positionSet : positionSet;
   }
 
   override getValue(observator: ObservatorTrait): VisibilityLevel {
     return observator instanceof PositionBasedObservatorTrait &&
-      this.positionsProvider().some((position) => observator.isPositionVisible(position))
+      PositionSet.areOverlapping(this.positionSetProvider(), observator.positionSetProvider())
       ? VisibilityLevel.VISIBLE
       : VisibilityLevel.NONE;
   }

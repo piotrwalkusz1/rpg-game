@@ -16,4 +16,8 @@ export namespace TraitService {
     const values = activeTraits.flatMap((activeTrait) => passiveTraits.map((passiveTrait) => activeTrait.getValue(passiveTrait)));
     return reducer(values);
   };
+
+  export const getTrait = <T extends Trait>(traitOwner: TraitOwner, traitType: abstract new () => T): T | undefined => {
+    return ArrayUtils.filterInstanceOf(traitOwner.traits, traitType)[0];
+  };
 }

@@ -9,6 +9,7 @@ import { MapLocation } from '../../map/model/map-location';
 import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
 import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
+import { VisionService } from '../../trait/vision/service/vision-service';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
 
@@ -28,7 +29,12 @@ export namespace MockedGame {
 
     const terrainObjects = {
       ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.HOUSE, field: locations.REGION_WHERE_ALICE_LIVE.fields[1][1] }),
-      CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] })
+      CAVE_NEAR_ALICE_HOUSE: new TerrainObject({ type: TerrainObjectType.CAVE, field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1] }),
+      HIDDEN_TREASURE_NEAR_ALICE_HOUSE: new TerrainObject({
+        type: TerrainObjectType.HIDDEN_TREASURE,
+        field: locations.REGION_WHERE_ALICE_LIVE.fields[2][1],
+        hidden: true
+      })
     };
 
     const characters = {
@@ -42,11 +48,14 @@ export namespace MockedGame {
         name: 'Alice',
         race: Race.HUMAN,
         avatarUrl: 'images/character_002_avatar.png',
-        position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE),
-        dialogues: [
-          new DialogueOption(
-            'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
-            new Dialogue({
+        position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
+      })
+    };
+
+    characters.ALICE.dialogues.push(
+      new DialogueOption('DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA', () =>
+        VisionService.isLocalizable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
+          ? new Dialogue({
               text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
               options: [
                 new DialogueOption(
@@ -63,10 +72,9 @@ export namespace MockedGame {
                 )
               ]
             })
-          )
-        ]
-      })
-    };
+          : new Dialogue({ text: 'DIALOGUE.TEXT.10005_I_KNOW_NOTHING' })
+      )
+    );
 
     terrainObjects.ALICE_HOUSE.laws.push(
       new Law({
@@ -78,6 +86,8 @@ export namespace MockedGame {
         lawViolationPreventionDialogue: { translationKey: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER' }
       })
     );
+
+    characters.ALICE.addKnownLocalization(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE);
 
     const player = new Player(characters.PIOTR);
 

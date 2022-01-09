@@ -57,7 +57,10 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
   }
 
   private prepareGoAction(terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined {
-    if (gameState.player.character.isNearTerrainObject(terrainObject)) {
+    if (
+      gameState.player.character.isNearTerrainObject(terrainObject) ||
+      !VisionService.isLocalizable(terrainObject, gameState.player.character)
+    ) {
       return;
     }
     return new GoToTerrainObjectNarrationAction(terrainObject);
@@ -101,7 +104,9 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .filter((character) => character !== gameState.player.character)
       .filter((character) => HearingService.canTalk(character, gameState.player.character))
       .flatMap((character) =>
-        character.dialogues.map((dialogueOption) => new DialogueNarrationAction({ character, dialogueOption, showNameContext: true }))
+        character.dialogues
+          .filter((dialogueOption) => dialogueOption.condition())
+          .map((dialogueOption) => new DialogueNarrationAction({ character, dialogueOption, showNameContext: true }))
       );
   }
 }

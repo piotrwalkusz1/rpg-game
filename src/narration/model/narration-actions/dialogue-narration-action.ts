@@ -40,14 +40,15 @@ export class DialogueNarrationAction extends NarrationAction {
   }
 
   override execute(): Narration | undefined {
-    if (!this.dialogueOption.dialogue) {
+    const dialogue = this.dialogueOption.dialogueProvider();
+    if (!dialogue) {
       return undefined;
     }
-    const actions = this.dialogueOption.dialogue.options.map(
-      (option) => new DialogueNarrationAction({ character: this.character, dialogueOption: option })
-    );
+    const actions = dialogue.options
+      .filter((option) => option.condition())
+      .map((option) => new DialogueNarrationAction({ character: this.character, dialogueOption: option }));
     return new Narration({
-      description: new NarrationDescription({ translationKey: this.dialogueOption.dialogue.text }, this.character),
+      description: new NarrationDescription({ translationKey: dialogue.text }, this.character),
       actions: actions.length > 0 ? actions : [new ExitNarrationAction({ translationKey: 'DIALOGUE.COMMON.EXIT' })],
       isActionRequired: true
     });

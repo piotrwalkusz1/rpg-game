@@ -1,8 +1,8 @@
-import type { PositionPredicate } from '../../../../map/model/position-predicate';
+import type { Position } from '../../../../map/model/position';
 import { HearerTrait } from '../hearer-trait';
 
 export class PositionBasedHearerTrait extends HearerTrait {
-  constructor(readonly isSoundHearableFromPosition: PositionPredicate) {
+  constructor(readonly positionProvider: () => Position | undefined) {
     super();
   }
 }
