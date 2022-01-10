@@ -13,18 +13,18 @@ export class CustomSequenceNarrationAction extends SequenceNarrationAction {
   constructor({
     narrationSequence,
     narrationSequenceStages,
-    baseName,
+    name,
     nameContext
   }: {
     narrationSequence: NarrationSequence;
     narrationSequenceStages?: NarrationSequenceStage[];
-    baseName: TranslatableText;
+    name: TranslatableText;
     nameContext?: TranslatableText;
   }) {
     super();
     this.narrationSequence = narrationSequence;
     this.narrationSequenceStages = narrationSequenceStages || narrationSequence.checkpointStages;
-    this.baseName = baseName;
+    this.baseName = name;
     this.nameContext = nameContext;
   }
 

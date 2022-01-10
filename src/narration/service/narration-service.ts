@@ -61,7 +61,7 @@ export namespace NarrationService {
       case 'SCENE':
         const actions = result.scene.actions.map(
           (action) =>
-            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStages: action.nextStages(), baseName: action.name })
+            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStages: action.nextStages(), name: action.name })
         );
         return new Narration({
           title: narrationSequence.title,

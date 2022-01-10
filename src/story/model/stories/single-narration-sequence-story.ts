@@ -19,7 +19,7 @@ export class SingleNarrationSequenceStory extends Story {
 
   override getNarrationActions(): NarrationAction[] {
     return this.narrationActionName
-      ? [new CustomSequenceNarrationAction({ baseName: this.narrationActionName, narrationSequence: this.narrationSequence })]
+      ? [new CustomSequenceNarrationAction({ name: this.narrationActionName, narrationSequence: this.narrationSequence })]
       : [];
   }
 }
