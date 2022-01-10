@@ -40,19 +40,28 @@ export namespace NarrationService {
     return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
   };
 
-  export const executeNarrationSequenceStage = (
+  export const executeNarrationSequenceStages = (
     narrationSequence: NarrationSequence,
-    narrationSequenceStage: NarrationSequenceStage,
+    narrationSequenceStages: NarrationSequenceStage[],
     context: NarrationActionExecutionContext
   ): Narration | undefined => {
-    const result = narrationSequenceStage.execute(context);
+    if (narrationSequenceStages.length === 0) {
+      return undefined;
+    }
+    const [currentStage, ...nextStages] = narrationSequenceStages;
+    const result = currentStage.execute({
+      ...context,
+      setCheckpointStages: (checkpointStage: NarrationSequenceStage[]) => {
+        narrationSequence.checkpointStages = checkpointStage;
+      }
+    });
     switch (result.type) {
       case 'NEXT_STAGE':
-        return result.nextStage ? executeNarrationSequenceStage(narrationSequence, result.nextStage, context) : undefined;
+        return executeNarrationSequenceStages(narrationSequence, result.nextStages || nextStages, context);
       case 'SCENE':
         const actions = result.scene.actions.map(
           (action) =>
-            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStage: action.nextStage(), name: action.name() })
+            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStages: action.nextStages(), baseName: action.name })
         );
         return new Narration({
           title: narrationSequence.title,

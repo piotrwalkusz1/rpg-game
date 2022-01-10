@@ -3,11 +3,9 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
-import { HearingService } from '../../../trait/hearing/service/hearing-service';
 import { VisionService } from '../../../trait/vision/service/vision-service';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
-import { DialogueNarrationAction } from '../../model/narration-actions/dialogue-narration-action';
 import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
 import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';
 import type { NarrationAction } from '../../model/narration-actions/narration-action';
@@ -48,7 +46,7 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
 
   private prepareActionsForTerrainObject(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
     return [
-      ...this.prepareDialogueActions(terrainObject, gameState),
+      ...this.prepareStoryActions(terrainObject, gameState),
       this.prepareGoAction(terrainObject, gameState),
       this.prepareLeaveAction(terrainObject, gameState),
       ...this.prepareChangeTerrainObjectPlacementActions(terrainObject, gameState),
@@ -95,18 +93,13 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
       .map((character) => new AttackNarrationAction(character));
   }
 
-  private prepareDialogueActions(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
+  private prepareStoryActions(terrainObject: TerrainObject, gameState: GameState): NarrationAction[] {
     if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
       return [];
     }
     return terrainObject.characters
       .getArray()
       .filter((character) => character !== gameState.player.character)
-      .filter((character) => HearingService.canTalk(character, gameState.player.character))
-      .flatMap((character) =>
-        character.dialogues
-          .filter((dialogueOption) => dialogueOption.condition())
-          .map((dialogueOption) => new DialogueNarrationAction({ character, dialogueOption, showNameContext: true }))
-      );
+      .flatMap((character) => character.stories.flatMap((story) => story.getNarrationActions()));
   }
 }

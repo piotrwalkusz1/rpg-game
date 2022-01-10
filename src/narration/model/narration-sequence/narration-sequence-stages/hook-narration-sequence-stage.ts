@@ -1,13 +1,13 @@
-import type { NarrationSequenceScene } from '../narration-sequence-scene';
 import { NarrationSequenceStage } from '../narration-sequence-stage';
 import type { NarrationSequenceStageExecutionResult } from '../narration-sequence-stage-execution-result';
 
-export class SceneNarrationSequenceStage extends NarrationSequenceStage {
-  constructor(private readonly scene: NarrationSequenceScene) {
+export class CheckpointNarrationSequenceStage extends NarrationSequenceStage {
+  constructor(private readonly hook: () => void) {
     super();
   }
 
   override execute(): NarrationSequenceStageExecutionResult {
-    return { type: 'SCENE', scene: this.scene };
+    this.hook();
+    return { type: 'NEXT_STAGE' };
   }
 }

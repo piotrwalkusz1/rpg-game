@@ -6,22 +6,26 @@ import { SequenceNarrationAction } from './sequence-narration-action';
 
 export class CustomSequenceNarrationAction extends SequenceNarrationAction {
   private readonly narrationSequence: NarrationSequence;
-  private readonly narrationSequenceStage: NarrationSequenceStage;
-  private readonly name: TranslatableText;
+  private readonly narrationSequenceStages: NarrationSequenceStage[];
+  private readonly baseName: TranslatableText;
+  private readonly nameContext?: TranslatableText;
 
   constructor({
     narrationSequence,
-    narrationSequenceStage,
-    name
+    narrationSequenceStages,
+    baseName,
+    nameContext
   }: {
     narrationSequence: NarrationSequence;
-    narrationSequenceStage?: NarrationSequenceStage;
-    name: TranslatableText;
+    narrationSequenceStages?: NarrationSequenceStage[];
+    baseName: TranslatableText;
+    nameContext?: TranslatableText;
   }) {
     super();
     this.narrationSequence = narrationSequence;
-    this.narrationSequenceStage = narrationSequenceStage || narrationSequence.checkpointStage;
-    this.name = name;
+    this.narrationSequenceStages = narrationSequenceStages || narrationSequence.checkpointStages;
+    this.baseName = baseName;
+    this.nameContext = nameContext;
   }
 
   get order(): NarrationActionOrder {
@@ -29,11 +33,15 @@ export class CustomSequenceNarrationAction extends SequenceNarrationAction {
   }
 
   protected override getBaseName(): TranslatableText {
-    return this.name;
+    return this.baseName;
   }
 
-  protected override getNarrationSequenceStage(): NarrationSequenceStage {
-    return this.narrationSequenceStage;
+  protected override getNameContext(): TranslatableText | undefined {
+    return this.nameContext;
+  }
+
+  protected override getNarrationSequenceStages(): NarrationSequenceStage[] {
+    return this.narrationSequenceStages;
   }
 
   protected override getNarrationSequence(): NarrationSequence {

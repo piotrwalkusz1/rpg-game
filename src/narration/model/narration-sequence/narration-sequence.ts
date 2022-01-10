@@ -1,11 +1,12 @@
+import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationSequenceStage } from './narration-sequence-stage';
 
 export class NarrationSequence {
-  readonly title: string | undefined;
-  readonly checkpointStage: NarrationSequenceStage;
+  readonly title: TranslatableText | undefined;
+  checkpointStages: NarrationSequenceStage[];
 
-  constructor({ title, checkpointStage }: { title?: string; checkpointStage: NarrationSequenceStage }) {
+  constructor({ title, checkpointStages }: { title?: TranslatableText; checkpointStages: NarrationSequenceStage[] }) {
     this.title = title;
-    this.checkpointStage = checkpointStage;
+    this.checkpointStages = checkpointStages;
   }
 }

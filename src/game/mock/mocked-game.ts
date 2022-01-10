@@ -2,15 +2,19 @@ import { GiveLocationAction } from '../../action/model/actions/give-location-act
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
 import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
-import { Dialogue } from '../../dialogue/model/dialogue';
-import { DialogueOption } from '../../dialogue/model/dialogue-option';
 import { Law } from '../../law/model/law';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
 import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
 import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
-import { VisionService } from '../../trait/vision/service/vision-service';
+import { NarrationDescription } from '../../narration/model/narration-description';
+import { NarrationSequence } from '../../narration/model/narration-sequence/narration-sequence';
+import { NarrationSequenceScene } from '../../narration/model/narration-sequence/narration-sequence-scene';
+import { NarrationSequenceSceneAction } from '../../narration/model/narration-sequence/narration-sequence-scene-action';
+import { ActionNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/action-narration-sequence-stage';
+import { SceneNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/scene-narration-sequence-stage';
+import { SingleNarrationSequenceStory } from '../../story/model/stories/single-narration-sequence-story';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
 
@@ -53,37 +57,46 @@ export namespace MockedGame {
       })
     };
 
-    characters.ALICE.dialogues.push(
-      new DialogueOption({
-        prompt: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
-        dialogue: () =>
-          VisionService.isLocatable(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE, characters.ALICE)
-            ? new Dialogue({
-                text: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE',
-                options: [
-                  new DialogueOption({
-                    prompt: 'DIALOGUE.TEXT.00001_YES',
-                    dialogue: new Dialogue({
-                      text: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT'
-                    }),
-                    action: (gameState) =>
-                      new GiveLocationAction({
-                        locationGiver: characters.ALICE,
-                        locationReceiver: gameState.player.character,
-                        location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
-                      })
-                  }),
-                  new DialogueOption({
-                    prompt: 'DIALOGUE.TEXT.00002_NO',
-                    dialogue: new Dialogue({
-                      text: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY'
-                    })
-                  })
+    const story = new SingleNarrationSequenceStory(
+      { translationKey: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA' },
+      () =>
+        new NarrationSequence({
+          title: characters.ALICE.displayName,
+          checkpointStages: [
+            new SceneNarrationSequenceStage(
+              new NarrationSequenceScene(
+                new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE' }, characters.ALICE),
+                [
+                  new NarrationSequenceSceneAction({ translationKey: 'DIALOGUE.TEXT.00001_YES' }, [
+                    new ActionNarrationSequenceStage(
+                      (gameState) =>
+                        new GiveLocationAction({
+                          locationGiver: characters.ALICE,
+                          locationReceiver: gameState.player.character,
+                          location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
+                        })
+                    ),
+                    new SceneNarrationSequenceStage(
+                      new NarrationSequenceScene(
+                        new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT' }, characters.ALICE)
+                      )
+                    )
+                  ]),
+                  new NarrationSequenceSceneAction({ translationKey: 'DIALOGUE.TEXT.00002_NO' }, [
+                    new SceneNarrationSequenceStage(
+                      new NarrationSequenceScene(
+                        new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY' }, characters.ALICE)
+                      )
+                    )
+                  ])
                 ]
-              })
-            : new Dialogue({ text: 'DIALOGUE.TEXT.10005_I_KNOW_NOTHING' })
-      })
+              )
+            )
+          ]
+        })
     );
+
+    characters.ALICE.stories.push(story);
 
     terrainObjects.ALICE_HOUSE.laws.push(
       new Law({

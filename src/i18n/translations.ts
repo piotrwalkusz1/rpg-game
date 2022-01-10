@@ -1,9 +1,19 @@
 import type { RaceId } from '../character/model/race';
-import type { DialogueTranslationKey } from '../dialogue/model/dialogue';
 import type { FieldTypeId } from '../map/model/map-field-type';
 import type { TerrainObjectPlacementId } from '../map/terrain-object/model/terrain-object-placement';
 import type { TerrainObjectTypeId } from '../map/terrain-object/model/terrain-object-type';
 import type { NarrationActionId } from '../narration/model/narration-actions/template-narration-action';
+
+type DialogueId =
+  | '00001_YES'
+  | '00002_NO'
+  | '10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA'
+  | '10002_THERE_IS_BURIED_TREASURE'
+  | '10003_JUST_DONT_FORGET_TO_SHARE_IT'
+  | '10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY'
+  | '10005_I_KNOW_NOTHING';
+
+export type DialogueTranslationKey = `DIALOGUE.TEXT.${DialogueId}`;
 
 type RequiredTranslationKey =
   | `NARRATION.ACTION.${NarrationActionId}`
