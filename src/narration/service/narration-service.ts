@@ -2,7 +2,11 @@ import type { GameState } from '../../game/model/game-state';
 import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Narration } from '../model/narration';
+import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
+import { CustomSequenceNarrationAction } from '../model/narration-actions/custom-sequence-narration-action';
 import { NarrationDescription } from '../model/narration-description';
+import type { NarrationSequence } from '../model/narration-sequence/narration-sequence';
+import type { NarrationSequenceStage } from '../model/narration-sequence/narration-sequence-stage';
 import { FieldNarrationProvider } from './narration-providers/field-narration-provider';
 import type { NarrationProvider, NarrationProviderWithData } from './narration-providers/narration-provider';
 import { TerrainObjectNarrationProvider } from './narration-providers/terrain-object-narration-provider';
@@ -34,5 +38,28 @@ export namespace NarrationService {
 
   export const getNarrationSelectedField = (gameState: GameState): Narration | undefined => {
     return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
+  };
+
+  export const executeNarrationSequenceStage = (
+    narrationSequence: NarrationSequence,
+    narrationSequenceStage: NarrationSequenceStage,
+    context: NarrationActionExecutionContext
+  ): Narration | undefined => {
+    const result = narrationSequenceStage.execute(context);
+    switch (result.type) {
+      case 'NEXT_STAGE':
+        return result.nextStage ? executeNarrationSequenceStage(narrationSequence, result.nextStage, context) : undefined;
+      case 'SCENE':
+        const actions = result.scene.actions.map(
+          (action) =>
+            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStage: action.nextStage(), name: action.name() })
+        );
+        return new Narration({
+          title: narrationSequence.title,
+          description: result.scene.description,
+          actions,
+          isActionRequired: true
+        });
+    }
   };
 }
