@@ -1,8 +1,10 @@
 import type { Character } from '../../../character/model/character';
+import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationAction } from '../../../narration/model/narration-actions/narration-action';
 import { NarrationDescription } from '../../../narration/model/narration-description';
 import type { NarrationSequenceStage } from '../../../narration/model/narration-sequence/narration-sequence-stage';
+import { HearingService } from '../../../trait/hearing/service/hearing-service';
 import { SingleNarrationSequenceStory } from './single-narration-sequence-story';
 
 interface DialogueStoryStagesProviderContext {
@@ -13,6 +15,8 @@ interface DialogueStoryStagesProviderContext {
 }
 
 export class DialogueStory extends SingleNarrationSequenceStory {
+  private readonly character: Character;
+
   constructor({
     character,
     prompt,
@@ -35,5 +39,10 @@ export class DialogueStory extends SingleNarrationSequenceStory {
         });
       }
     });
+    this.character = character;
+  }
+
+  override getNarrationActions(gameState: GameState): NarrationAction[] {
+    return HearingService.canTalk(this.character, gameState.player.character) ? super.getNarrationActions(gameState) : [];
   }
 }

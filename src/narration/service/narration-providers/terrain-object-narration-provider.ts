@@ -100,6 +100,6 @@ export class TerrainObjectNarrationProvider extends NarrationProvider<Data> {
     return terrainObject.characters
       .getArray()
       .filter((character) => character !== gameState.player.character)
-      .flatMap((character) => character.stories.flatMap((story) => story.getNarrationActions()));
+      .flatMap((character) => character.stories.flatMap((story) => story.getNarrationActions(gameState)));
   }
 }

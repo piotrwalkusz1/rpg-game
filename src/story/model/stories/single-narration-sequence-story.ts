@@ -1,3 +1,4 @@
+import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { NarrationAction } from '../../../narration/model/narration-actions/narration-action';
 import type { NarrationActionNameContext } from '../../../narration/model/narration-actions/narration-action-name-context';
@@ -41,7 +42,7 @@ export class SingleNarrationSequenceStory extends Story {
     });
   }
 
-  override getNarrationActions(): NarrationAction[] {
+  override getNarrationActions(_gameState: GameState): NarrationAction[] {
     return this.prompt
       ? [
           new NarrationAction({
