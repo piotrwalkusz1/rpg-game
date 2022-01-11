@@ -3,9 +3,10 @@ import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Narration } from '../model/narration';
 import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
-import type { NarrationAction } from '../model/narration-actions/narration-action';
+import { NarrationAction } from '../model/narration-actions/narration-action';
 import { NarrationDescription } from '../model/narration-description';
 import type { NarrationSequence } from '../model/narration-sequence/narration-sequence';
+import { NarrationSequenceSceneAction } from '../model/narration-sequence/narration-sequence-scene-action';
 import type { NarrationSequenceStage } from '../model/narration-sequence/narration-sequence-stage';
 import { FieldNarrationProvider } from './narration-providers/field-narration-provider';
 import type { NarrationProvider, NarrationProviderWithData } from './narration-providers/narration-provider';
@@ -61,10 +62,14 @@ export namespace NarrationService {
       case 'NEXT_STAGE':
         return executeNarrationSequenceStages(narrationSequence, result.nextStages || nextStages, context);
       case 'SCENE':
+        const actions = NarrationSequenceSceneAction.getNarrationActions(result.scene.actions || [], nextStages);
         return new Narration({
           title: narrationSequence.title,
           description: result.scene.description,
-          actions: result.scene.actions || [],
+          actions:
+            actions.length > 0
+              ? actions
+              : [new NarrationAction({ name: 'NARRATION.COMMON.OK', narrationSequence, narrationStages: nextStages })],
           isActionRequired: true
         });
     }

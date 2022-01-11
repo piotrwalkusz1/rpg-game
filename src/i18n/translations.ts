@@ -4,7 +4,7 @@ import type { TerrainObjectPlacementId } from '../map/terrain-object/model/terra
 import type { TerrainObjectTypeId } from '../map/terrain-object/model/terrain-object-type';
 import type { NarrationActionId } from '../narration/model/narration-actions/template-narration-action';
 
-type DialogueId =
+export type DialogueId =
   | '00001_YES'
   | '00002_NO'
   | '10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA'
@@ -73,7 +73,8 @@ const defaultTranslations = {
   'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT': `"Just don't forget to share it when you find it."`,
   'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY': '"Reasonably. No one has found it yet anyway."',
   'DIALOGUE.TEXT.10005_I_KNOW_NOTHING': `"Unfortunately. I don't know anything about that."`,
-  'DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE': 'On second thought, I want to know the location of the treasure.'
+  'DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE':
+    'On second thought, I want to know the location of the treasure.'
 };
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
