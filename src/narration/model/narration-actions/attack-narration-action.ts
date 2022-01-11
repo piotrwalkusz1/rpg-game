@@ -7,7 +7,7 @@ export class AttackNarrationAction extends ActionBasedNarrationAction {
   constructor(victim: Character) {
     super({
       id: 'ATTACK_CHARACTER',
-      nameContext: victim.displayName,
+      nameContext: victim,
       order: NarrationActionOrder.ATTACK_CHARACTER,
       action: (gameState) => new AttackAction({ attacker: gameState.player.character, victim })
     });

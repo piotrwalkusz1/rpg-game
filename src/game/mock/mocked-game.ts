@@ -59,7 +59,7 @@ export namespace MockedGame {
 
     const story = new SingleNarrationSequenceStory({
       actionName: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
-      actionNameContext: characters.ALICE.displayName,
+      actionNameContext: characters.ALICE,
       narrationSequence: () =>
         new NarrationSequence({
           title: characters.ALICE.displayName,

@@ -8,7 +8,7 @@ export class SeeLocationNarrationAction extends TemplateNarrationAction {
   constructor(location: MapLocation) {
     super({
       id: 'SEE_LOCATION',
-      nameContext: location.name,
+      nameContext: location,
       order: NarrationActionOrder.SEE_LOCATION,
       narrationSequence: new NarrationSequence({ checkpointStages: [new LocationViewNarrationSequenceStage(location)] })
     });

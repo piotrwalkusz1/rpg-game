@@ -8,7 +8,7 @@ export class GoToTerrainObjectNarrationAction extends ActionBasedNarrationAction
   constructor(terrainObject: TerrainObject) {
     super({
       id: 'GO_TO_TERRAIN_OBJECT',
-      nameContext: terrainObject.name,
+      nameContext: terrainObject,
       order: NarrationActionOrder.GO_TO_TERRAIN_OBJECT,
       action: new GoAction(new TerrainObjectPosition(terrainObject))
     });

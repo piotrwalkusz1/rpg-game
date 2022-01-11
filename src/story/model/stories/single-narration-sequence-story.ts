@@ -1,11 +1,12 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import { NarrationAction } from '../../../narration/model/narration-actions/narration-action';
+import type { NarrationActionNameContext } from '../../../narration/model/narration-actions/narration-action-name-context';
 import type { NarrationSequence } from '../../../narration/model/narration-sequence/narration-sequence';
 import { Story } from '../story';
 
 export class SingleNarrationSequenceStory extends Story {
   private narrationActionName: TranslatableText | undefined;
-  private narrationActionNameContext: TranslatableText | undefined;
+  private narrationActionNameContext: NarrationActionNameContext | undefined;
   private readonly narrationSequence: NarrationSequence;
 
   constructor({
@@ -14,7 +15,7 @@ export class SingleNarrationSequenceStory extends Story {
     narrationSequence
   }: {
     actionName: TranslatableText;
-    actionNameContext?: TranslatableText;
+    actionNameContext?: NarrationActionNameContext;
     narrationSequence: (setNarrationActionName: (name: TranslatableText | undefined) => void) => NarrationSequence;
   }) {
     super();

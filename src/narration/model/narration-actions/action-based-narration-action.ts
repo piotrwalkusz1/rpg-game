@@ -5,6 +5,7 @@ import type { NarrationActionOrder } from '../narration-action-order';
 import { NarrationSequence } from '../narration-sequence/narration-sequence';
 import { ActionNarrationSequenceStage } from '../narration-sequence/narration-sequence-stages/action-narration-sequence-stage';
 import { NarrationActionId, TemplateNarrationAction } from './template-narration-action';
+import type { NarrationActionNameContext } from './narration-action-name-context';
 
 export abstract class ActionBasedNarrationAction extends TemplateNarrationAction {
   constructor({
@@ -16,7 +17,7 @@ export abstract class ActionBasedNarrationAction extends TemplateNarrationAction
   }: {
     id: NarrationActionId;
     nameTranslationProperties?: Record<string, TranslatableText>;
-    nameContext?: TranslatableText;
+    nameContext?: NarrationActionNameContext;
     order?: NarrationActionOrder;
     action: Action | ((gameState: GameState) => Action);
   }) {

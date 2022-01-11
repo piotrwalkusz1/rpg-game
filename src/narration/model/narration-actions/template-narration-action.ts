@@ -2,6 +2,7 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationActionOrder } from '../narration-action-order';
 import type { NarrationSequence } from '../narration-sequence/narration-sequence';
 import { NarrationAction } from './narration-action';
+import type { NarrationActionNameContext } from './narration-action-name-context';
 
 export type NarrationActionId =
   | 'GO_TO_TERRAIN_OBJECT'
@@ -21,7 +22,7 @@ export abstract class TemplateNarrationAction extends NarrationAction {
   }: {
     id: NarrationActionId;
     nameTranslationProperties?: Record<string, TranslatableText>;
-    nameContext?: TranslatableText;
+    nameContext?: NarrationActionNameContext;
     order?: NarrationActionOrder;
     narrationSequence: NarrationSequence;
   }) {

@@ -8,7 +8,7 @@ export class LeaveTerrainObjectNarrationAction extends ActionBasedNarrationActio
   constructor(terrainObject: TerrainObject) {
     super({
       id: 'LEAVE_TERRAIN_OBJECT',
-      nameContext: terrainObject.name,
+      nameContext: terrainObject,
       order: NarrationActionOrder.GO_TO_TERRAIN_OBJECT,
       action: () => {
         if (!terrainObject.field) {

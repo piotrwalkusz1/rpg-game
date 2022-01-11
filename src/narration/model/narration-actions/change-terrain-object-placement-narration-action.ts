@@ -12,7 +12,7 @@ export class ChangeTerrainObjectPlacementNarrationAction extends ActionBasedNarr
       nameTranslationProperties: {
         terrainObjectPlacementMovementActivity: terrainObjectPlacement.getMovementActivityName()
       },
-      nameContext: terrainObject.name,
+      nameContext: terrainObject,
       order: NarrationActionOrder.CHANGE_TERRAIN_OBJECT_PLACEMENT,
       action: new GoAction(new TerrainObjectPosition(terrainObject, terrainObjectPlacement))
     });
