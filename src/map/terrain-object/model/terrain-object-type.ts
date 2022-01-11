@@ -53,10 +53,10 @@ export class TerrainObjectType {
   }
 
   get name(): TranslatableText {
-    return { translationKey: `MAP.TERRAIN_OBJECT.${this.id}` };
+    return `MAP.TERRAIN_OBJECT.${this.id}`;
   }
 
   get description(): TranslatableText {
-    return { translationKey: `MAP.TERRAIN_OBJECT.${this.id}.DESCRIPTION` };
+    return `MAP.TERRAIN_OBJECT.${this.id}.DESCRIPTION`;
   }
 }

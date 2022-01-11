@@ -22,7 +22,7 @@ export class NarrationAction {
     narrationSequence: NarrationSequence;
     narrationStages?: NarrationSequenceStage[];
   }) {
-    this.name = nameContext ? (tc) => tc.join(['[', nameContext, '] ', name]) : name;
+    this.name = nameContext ? (tc) => tc.join([{ literal: '[' }, nameContext, { literal: '] ' }, name]) : name;
     this.order = order || NarrationActionOrder.CUSTOM;
     this.narrationSequence = narrationSequence;
     this.narrationStages = narrationStages || narrationSequence.checkpointStages;

@@ -51,9 +51,9 @@
 {#if $gameState.player.character.position === undefined}
   <Dialog>
     <div class="flex flex-col w-full justify-center items-center">
-      <div class="text-[60px] font-bold"><TranslatableTextView text={{ translationKey: 'GAME.MESSAGE.YOU_ARE_DEAD' }} /></div>
+      <div class="text-[60px] font-bold"><TranslatableTextView text="GAME.MESSAGE.YOU_ARE_DEAD" /></div>
       <div on:click={repeatGame} class="text-[30px] font-bold cursor-pointer hover:text-blue-300">
-        <TranslatableTextView text={{ translationKey: 'GAME.BUTTON.REPEAT' }} />
+        <TranslatableTextView text="GAME.BUTTON.REPEAT" />
       </div>
     </div>
   </Dialog>

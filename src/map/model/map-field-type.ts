@@ -19,10 +19,10 @@ export class MapFieldType {
   }
 
   get name(): TranslatableText {
-    return { translationKey: `MAP.FIELD.${this.id}` };
+    return `MAP.FIELD.${this.id}`;
   }
 
   get description(): TranslatableText {
-    return { translationKey: `MAP.FIELD.${this.id}.DESCRIPTION` };
+    return `MAP.FIELD.${this.id}.DESCRIPTION`;
   }
 }

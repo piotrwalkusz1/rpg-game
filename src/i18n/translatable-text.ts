@@ -16,18 +16,21 @@ class TranslationContext {
 }
 
 export type TranslatableText =
-  | string
+  | TranslationKey
   | { translationKey: TranslationKey; properties?: Record<string, TranslatableText> }
+  | { literal: string }
   | ((tc: TranslationContext) => string);
 
 export const convertTranslatableTextToString = (t: TType, translatableText: TranslatableText): string => {
   if (typeof translatableText === 'string') {
-    return translatableText;
-  } else if (typeof translatableText === 'object') {
+    return t(translatableText);
+  } else if (typeof translatableText === 'function') {
+    return translatableText(new TranslationContext(t));
+  } else if ('literal' in translatableText) {
+    return translatableText.literal;
+  } else {
     const properties = translatableText.properties && convertTranslatableTextsToStringsOnObject(t, translatableText.properties);
     return t(translatableText.translationKey, properties);
-  } else {
-    return translatableText(new TranslationContext(t));
   }
 };
 
@@ -40,8 +43,5 @@ export const convertTranslatableTextsToStringsOnObject = (t: TType, object: Reco
 };
 
 export const createTranslatableTextFromArray = (translatableTexts: TranslatableText[], separator = DEFAULT_SEPARATOR): TranslatableText => {
-  if (translatableTexts.every((translatableText) => typeof translatableText === 'string')) {
-    return translatableTexts.join(separator);
-  }
   return (tc) => translatableTexts.map((translatableText) => tc.toString(translatableText)).join(separator);
 };

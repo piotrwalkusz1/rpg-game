@@ -25,7 +25,7 @@ export class Narration {
         ? actions
         : [
             new NarrationAction({
-              name: { translationKey: 'NARRATION.COMMON.OK' },
+              name: 'NARRATION.COMMON.OK',
               narrationSequence: new NarrationSequence({ checkpointStages: [] })
             })
           ];

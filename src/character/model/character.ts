@@ -73,7 +73,7 @@ export class Character implements TraitOwner {
   }
 
   get displayName(): TranslatableText {
-    return this.name || this.race.name;
+    return this.name ? { literal: this.name } : this.race.name;
   }
 
   get field(): MapField | undefined {

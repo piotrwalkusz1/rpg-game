@@ -19,9 +19,10 @@ import { Player } from '../model/player';
 
 export namespace MockedGame {
   export const createGameState = () => {
-    const createRegion = (): MapLocation => new MapLocation({ name: 'Region', width: 10, height: 10, fieldType: MapFieldType.MEADOW });
+    const createRegion = (): MapLocation =>
+      new MapLocation({ name: { literal: 'Region' }, width: 10, height: 10, fieldType: MapFieldType.MEADOW });
     const createWorld = (): MapLocation => {
-      const world = new MapLocation({ name: 'World', width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
+      const world = new MapLocation({ name: { literal: 'World' }, width: 10, height: 10, fieldType: MapFieldType.LOWLANDS });
       world.fields.forEach((row) => row.forEach((field) => field.subLocations.add(createRegion())));
       return world;
     };
@@ -57,42 +58,39 @@ export namespace MockedGame {
     };
 
     const story = new SingleNarrationSequenceStory(
-      { translationKey: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA' },
+      'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
       () =>
         new NarrationSequence({
           title: characters.ALICE.displayName,
           checkpointStages: (narrationSequence) => [
-            new SceneNarrationSequenceStage(
-              new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE' }, characters.ALICE),
-              [
-                new NarrationAction({
-                  name: { translationKey: 'DIALOGUE.TEXT.00001_YES' },
-                  narrationSequence,
-                  narrationStages: [
-                    new ActionNarrationSequenceStage(
-                      (gameState) =>
-                        new GiveLocationAction({
-                          locationGiver: characters.ALICE,
-                          locationReceiver: gameState.player.character,
-                          location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
-                        })
-                    ),
-                    new SceneNarrationSequenceStage(
-                      new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT' }, characters.ALICE)
-                    )
-                  ]
-                }),
-                new NarrationAction({
-                  name: { translationKey: 'DIALOGUE.TEXT.00002_NO' },
-                  narrationSequence,
-                  narrationStages: [
-                    new SceneNarrationSequenceStage(
-                      new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY' }, characters.ALICE)
-                    )
-                  ]
-                })
-              ]
-            )
+            new SceneNarrationSequenceStage(new NarrationDescription('DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', characters.ALICE), [
+              new NarrationAction({
+                name: 'DIALOGUE.TEXT.00001_YES',
+                narrationSequence,
+                narrationStages: [
+                  new ActionNarrationSequenceStage(
+                    (gameState) =>
+                      new GiveLocationAction({
+                        locationGiver: characters.ALICE,
+                        locationReceiver: gameState.player.character,
+                        location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
+                      })
+                  ),
+                  new SceneNarrationSequenceStage(
+                    new NarrationDescription('DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT', characters.ALICE)
+                  )
+                ]
+              }),
+              new NarrationAction({
+                name: 'DIALOGUE.TEXT.00002_NO',
+                narrationSequence,
+                narrationStages: [
+                  new SceneNarrationSequenceStage(
+                    new NarrationDescription('DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY', characters.ALICE)
+                  )
+                ]
+              })
+            ])
           ]
         })
     );
@@ -106,7 +104,7 @@ export namespace MockedGame {
           terrainObjectPlacementOtherThanDefault: true
         }),
         guards: [characters.ALICE],
-        lawViolationPreventionDialogue: { translationKey: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER' }
+        lawViolationPreventionDialogue: 'LAW.LAW_VIOLATION_PREVENTION.DIALOGUE.YOU_CANNOT_ENTER'
       })
     );
 

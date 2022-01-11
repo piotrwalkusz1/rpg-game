@@ -34,9 +34,7 @@ export class Law {
     if (guard && this.lawViolationPreventionDialogue) {
       actionScheduledEvent.preventionNarrationDescription = new NarrationDescription(this.lawViolationPreventionDialogue, guard);
     } else {
-      actionScheduledEvent.preventionNarrationDescription = new NarrationDescription({
-        translationKey: 'LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL'
-      });
+      actionScheduledEvent.preventionNarrationDescription = new NarrationDescription('LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL');
     }
   }
 }

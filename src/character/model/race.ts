@@ -12,6 +12,6 @@ export class Race {
   }
 
   get name(): TranslatableText {
-    return { translationKey: `CHARACTER.RACE.${this.id}` };
+    return `CHARACTER.RACE.${this.id}`;
   }
 }

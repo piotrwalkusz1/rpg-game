@@ -26,7 +26,7 @@ export class ActionNarrationSequenceStage extends NarrationSequenceStage {
             description: result.description,
             actions: [
               new NarrationAction({
-                name: { translationKey: 'NARRATION.COMMON.OK' },
+                name: 'NARRATION.COMMON.OK',
                 narrationSequence: context.narrationSequence,
                 narrationStages: []
               })
