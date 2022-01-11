@@ -57,9 +57,10 @@ export namespace MockedGame {
       })
     };
 
-    const story = new SingleNarrationSequenceStory(
-      'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
-      () =>
+    const story = new SingleNarrationSequenceStory({
+      actionName: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
+      actionNameContext: characters.ALICE.displayName,
+      narrationSequence: () =>
         new NarrationSequence({
           title: characters.ALICE.displayName,
           checkpointStages: (narrationSequence) => [
@@ -93,7 +94,7 @@ export namespace MockedGame {
             ])
           ]
         })
-    );
+    });
 
     characters.ALICE.stories.push(story);
 
