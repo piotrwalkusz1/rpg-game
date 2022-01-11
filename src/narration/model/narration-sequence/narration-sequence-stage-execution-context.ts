@@ -1,6 +1,6 @@
 import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
-import type { NarrationSequenceStage } from './narration-sequence-stage';
+import type { NarrationSequence } from './narration-sequence';
 
 export interface NarrationSequenceStageExecutionContext extends NarrationActionExecutionContext {
-  setCheckpointStages(checkpointStages: NarrationSequenceStage[]): void;
+  narrationSequence: NarrationSequence;
 }

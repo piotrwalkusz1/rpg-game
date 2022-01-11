@@ -1,7 +1,7 @@
 import type { TranslatableText } from '../../i18n/translatable-text';
-import type { NarrationAction } from './narration-actions/narration-action';
-import { ExitNarrationAction } from './narration-actions/exit-narration-action';
+import { NarrationAction } from './narration-actions/narration-action';
 import type { NarrationDescription } from './narration-description';
+import { NarrationSequence } from './narration-sequence/narration-sequence';
 
 export class Narration {
   readonly title?: TranslatableText;
@@ -20,7 +20,15 @@ export class Narration {
     actions: NarrationAction[];
     isActionRequired?: boolean;
   }) {
-    actions = actions.length > 0 || !isActionRequired ? actions : [new ExitNarrationAction({ translationKey: 'NARRATION.COMMON.OK' })];
+    actions =
+      actions.length > 0 || !isActionRequired
+        ? actions
+        : [
+            new NarrationAction({
+              name: { translationKey: 'NARRATION.COMMON.OK' },
+              narrationSequence: new NarrationSequence({ checkpointStages: [] })
+            })
+          ];
 
     this.title = title;
     this.description = description;

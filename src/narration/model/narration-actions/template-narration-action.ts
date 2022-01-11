@@ -1,4 +1,6 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
+import type { NarrationActionOrder } from '../narration-action-order';
+import type { NarrationSequence } from '../narration-sequence/narration-sequence';
 import { NarrationAction } from './narration-action';
 
 export type NarrationActionId =
@@ -10,16 +12,27 @@ export type NarrationActionId =
   | 'ATTACK_CHARACTER';
 
 export abstract class TemplateNarrationAction extends NarrationAction {
-  abstract get id(): NarrationActionId;
-
-  protected override getBaseName(): TranslatableText {
-    return {
-      translationKey: `NARRATION.ACTION.${this.id}`,
-      properties: this.getNameTranslationKeyProperties()
-    };
-  }
-
-  protected getNameTranslationKeyProperties(): Record<string, TranslatableText> | undefined {
-    return undefined;
+  constructor({
+    id,
+    nameTranslationProperties,
+    nameContext,
+    order,
+    narrationSequence
+  }: {
+    id: NarrationActionId;
+    nameTranslationProperties?: Record<string, TranslatableText>;
+    nameContext?: TranslatableText;
+    order?: NarrationActionOrder;
+    narrationSequence: NarrationSequence;
+  }) {
+    super({
+      name: {
+        translationKey: `NARRATION.ACTION.${id}`,
+        properties: nameTranslationProperties
+      },
+      nameContext,
+      order,
+      narrationSequence
+    });
   }
 }

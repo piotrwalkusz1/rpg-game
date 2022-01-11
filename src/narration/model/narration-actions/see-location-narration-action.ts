@@ -1,29 +1,16 @@
-import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapLocation } from '../../../map/model/map-location';
-import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
 import { NarrationActionOrder } from '../narration-action-order';
-import { TemplateNarrationAction, NarrationActionId } from './template-narration-action';
-import type { Narration } from '../narration';
+import { NarrationSequence } from '../narration-sequence/narration-sequence';
+import { LocationViewNarrationSequenceStage } from '../narration-sequence/narration-sequence-stages/location-view-narration-sequence-stage';
+import { TemplateNarrationAction } from './template-narration-action';
 
 export class SeeLocationNarrationAction extends TemplateNarrationAction {
-  constructor(readonly location: MapLocation) {
-    super();
-  }
-
-  override get id(): NarrationActionId {
-    return 'SEE_LOCATION';
-  }
-
-  override get order(): NarrationActionOrder {
-    return NarrationActionOrder.SEE_LOCATION;
-  }
-
-  override execute(narrationActionExecutionContext: NarrationActionExecutionContext): Narration | undefined {
-    narrationActionExecutionContext.changeLocationView(this.location);
-    return undefined;
-  }
-
-  protected override getNameContext(): TranslatableText | undefined {
-    return this.location.name;
+  constructor(location: MapLocation) {
+    super({
+      id: 'SEE_LOCATION',
+      nameContext: location.name,
+      order: NarrationActionOrder.SEE_LOCATION,
+      narrationSequence: new NarrationSequence({ checkpointStages: [new LocationViewNarrationSequenceStage(location)] })
+    });
   }
 }

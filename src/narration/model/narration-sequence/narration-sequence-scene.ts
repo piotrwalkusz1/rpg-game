@@ -1,12 +1,7 @@
+import type { NarrationAction } from '../narration-actions/narration-action';
 import type { NarrationDescription } from '../narration-description';
-import type { NarrationSequenceSceneAction } from './narration-sequence-scene-action';
 
-export class NarrationSequenceScene {
-  readonly description: NarrationDescription;
-  readonly actions: NarrationSequenceSceneAction[];
-
-  constructor(description: NarrationDescription, actions?: NarrationSequenceSceneAction[]) {
-    this.description = description;
-    this.actions = actions || [];
-  }
+export interface NarrationSequenceScene {
+  description: NarrationDescription;
+  actions?: NarrationAction[];
 }

@@ -8,10 +8,9 @@ import { MapLocation } from '../../map/model/map-location';
 import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
 import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
+import { NarrationAction } from '../../narration/model/narration-actions/narration-action';
 import { NarrationDescription } from '../../narration/model/narration-description';
 import { NarrationSequence } from '../../narration/model/narration-sequence/narration-sequence';
-import { NarrationSequenceScene } from '../../narration/model/narration-sequence/narration-sequence-scene';
-import { NarrationSequenceSceneAction } from '../../narration/model/narration-sequence/narration-sequence-scene-action';
 import { ActionNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/action-narration-sequence-stage';
 import { SceneNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/scene-narration-sequence-stage';
 import { SingleNarrationSequenceStory } from '../../story/model/stories/single-narration-sequence-story';
@@ -62,12 +61,14 @@ export namespace MockedGame {
       () =>
         new NarrationSequence({
           title: characters.ALICE.displayName,
-          checkpointStages: [
+          checkpointStages: (narrationSequence) => [
             new SceneNarrationSequenceStage(
-              new NarrationSequenceScene(
-                new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE' }, characters.ALICE),
-                [
-                  new NarrationSequenceSceneAction({ translationKey: 'DIALOGUE.TEXT.00001_YES' }, [
+              new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE' }, characters.ALICE),
+              [
+                new NarrationAction({
+                  name: { translationKey: 'DIALOGUE.TEXT.00001_YES' },
+                  narrationSequence,
+                  narrationStages: [
                     new ActionNarrationSequenceStage(
                       (gameState) =>
                         new GiveLocationAction({
@@ -77,20 +78,20 @@ export namespace MockedGame {
                         })
                     ),
                     new SceneNarrationSequenceStage(
-                      new NarrationSequenceScene(
-                        new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT' }, characters.ALICE)
-                      )
+                      new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT' }, characters.ALICE)
                     )
-                  ]),
-                  new NarrationSequenceSceneAction({ translationKey: 'DIALOGUE.TEXT.00002_NO' }, [
+                  ]
+                }),
+                new NarrationAction({
+                  name: { translationKey: 'DIALOGUE.TEXT.00002_NO' },
+                  narrationSequence,
+                  narrationStages: [
                     new SceneNarrationSequenceStage(
-                      new NarrationSequenceScene(
-                        new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY' }, characters.ALICE)
-                      )
+                      new NarrationDescription({ translationKey: 'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY' }, characters.ALICE)
                     )
-                  ])
-                ]
-              )
+                  ]
+                })
+              ]
             )
           ]
         })

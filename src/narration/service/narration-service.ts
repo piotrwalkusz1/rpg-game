@@ -3,7 +3,7 @@ import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Narration } from '../model/narration';
 import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
-import { CustomSequenceNarrationAction } from '../model/narration-actions/custom-sequence-narration-action';
+import type { NarrationAction } from '../model/narration-actions/narration-action';
 import { NarrationDescription } from '../model/narration-description';
 import type { NarrationSequence } from '../model/narration-sequence/narration-sequence';
 import type { NarrationSequenceStage } from '../model/narration-sequence/narration-sequence-stage';
@@ -40,6 +40,10 @@ export namespace NarrationService {
     return gameState.selectedField && NarrationService.getNarrationForField(gameState.selectedField, gameState);
   };
 
+  export const executeNarrationAction = (action: NarrationAction, context: NarrationActionExecutionContext): Narration | undefined => {
+    return executeNarrationSequenceStages(action.narrationSequence, action.narrationStages, context);
+  };
+
   export const executeNarrationSequenceStages = (
     narrationSequence: NarrationSequence,
     narrationSequenceStages: NarrationSequenceStage[],
@@ -51,22 +55,16 @@ export namespace NarrationService {
     const [currentStage, ...nextStages] = narrationSequenceStages;
     const result = currentStage.execute({
       ...context,
-      setCheckpointStages: (checkpointStage: NarrationSequenceStage[]) => {
-        narrationSequence.checkpointStages = checkpointStage;
-      }
+      narrationSequence
     });
     switch (result.type) {
       case 'NEXT_STAGE':
         return executeNarrationSequenceStages(narrationSequence, result.nextStages || nextStages, context);
       case 'SCENE':
-        const actions = result.scene.actions.map(
-          (action) =>
-            new CustomSequenceNarrationAction({ narrationSequence, narrationSequenceStages: action.nextStages(), name: action.name })
-        );
         return new Narration({
           title: narrationSequence.title,
           description: result.scene.description,
-          actions,
+          actions: result.scene.actions || [],
           isActionRequired: true
         });
     }

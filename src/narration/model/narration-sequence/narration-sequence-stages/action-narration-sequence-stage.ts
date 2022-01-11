@@ -1,8 +1,7 @@
 import { Action } from '../../../../action/model/actions/action';
 import { ActionService } from '../../../../action/service/action-service';
 import type { GameState } from '../../../../game/model/game-state';
-import { NarrationSequenceScene } from '../narration-sequence-scene';
-import { NarrationSequenceSceneAction } from '../narration-sequence-scene-action';
+import { NarrationAction } from '../../narration-actions/narration-action';
 import { NarrationSequenceStage } from '../narration-sequence-stage';
 import type { NarrationSequenceStageExecutionContext } from '../narration-sequence-stage-execution-context';
 import type { NarrationSequenceStageExecutionResult } from '../narration-sequence-stage-execution-result';
@@ -23,9 +22,16 @@ export class ActionNarrationSequenceStage extends NarrationSequenceStage {
       case 'PREVENTION':
         return {
           type: 'SCENE',
-          scene: new NarrationSequenceScene(result.description, [
-            new NarrationSequenceSceneAction({ translationKey: 'NARRATION.COMMON.OK' })
-          ])
+          scene: {
+            description: result.description,
+            actions: [
+              new NarrationAction({
+                name: { translationKey: 'NARRATION.COMMON.OK' },
+                narrationSequence: context.narrationSequence,
+                narrationStages: []
+              })
+            ]
+          }
         };
     }
   }

@@ -21,7 +21,7 @@ export class CheckpointNarrationSequenceStage extends NarrationSequenceStage {
   }
 
   override execute(context: NarrationSequenceStageExecutionContext): NarrationSequenceStageExecutionResult {
-    context.setCheckpointStages(this.checkpointStages);
+    context.narrationSequence.checkpointStages = this.checkpointStages;
     return { type: 'NEXT_STAGE', nextStages: this.nextStages };
   }
 }

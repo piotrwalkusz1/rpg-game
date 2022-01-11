@@ -29,7 +29,7 @@
   };
 
   function executeNarrationAction(narrationAction: NarrationAction) {
-    const newNarration = narrationAction.execute(narrationActionExecutionContext);
+    const newNarration = NarrationService.executeNarrationAction(narrationAction, narrationActionExecutionContext);
     $gameState.narration = newNarration || NarrationService.getNarrationSelectedField($gameState);
   }
 </script>
@@ -57,7 +57,7 @@
       <div class="p-[10px]">
         {#each narration.actions as action}
           <div on:click={() => executeNarrationAction(action)} class="cursor-pointer text-blue-700 hover:text-blue-400">
-            <TranslatableTextView text={action.getName()} />
+            <TranslatableTextView text={action.name} />
           </div>
         {/each}
       </div>

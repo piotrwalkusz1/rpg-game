@@ -1,33 +1,21 @@
-import type { Action } from '../../../action/model/actions/action';
 import { GoAction } from '../../../action/model/actions/go-action';
-import type { TranslatableText } from '../../../i18n/translatable-text';
 import { FieldPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { NarrationActionOrder } from '../narration-action-order';
 import { ActionBasedNarrationAction } from './action-based-narration-action';
-import type { NarrationActionId } from './template-narration-action';
 
 export class LeaveTerrainObjectNarrationAction extends ActionBasedNarrationAction {
-  constructor(readonly terrainObject: TerrainObject) {
-    super();
-  }
-
-  override get id(): NarrationActionId {
-    return 'LEAVE_TERRAIN_OBJECT';
-  }
-
-  override get order(): NarrationActionOrder {
-    return NarrationActionOrder.GO_TO_TERRAIN_OBJECT;
-  }
-
-  override getAction(): Action {
-    if (!this.terrainObject.field) {
-      throw new Error('Cannot leave terrain object that has no parent field');
-    }
-    return new GoAction(new FieldPosition(this.terrainObject.field));
-  }
-
-  protected override getNameContext(): TranslatableText | undefined {
-    return this.terrainObject.name;
+  constructor(terrainObject: TerrainObject) {
+    super({
+      id: 'LEAVE_TERRAIN_OBJECT',
+      nameContext: terrainObject.name,
+      order: NarrationActionOrder.GO_TO_TERRAIN_OBJECT,
+      action: () => {
+        if (!terrainObject.field) {
+          throw new Error('Cannot leave terrain object that has no parent field');
+        }
+        return new GoAction(new FieldPosition(terrainObject.field));
+      }
+    });
   }
 }

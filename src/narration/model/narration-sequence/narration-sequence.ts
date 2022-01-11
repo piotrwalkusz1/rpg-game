@@ -5,8 +5,14 @@ export class NarrationSequence {
   readonly title: TranslatableText | undefined;
   checkpointStages: NarrationSequenceStage[];
 
-  constructor({ title, checkpointStages }: { title?: TranslatableText; checkpointStages: NarrationSequenceStage[] }) {
+  constructor({
+    title,
+    checkpointStages
+  }: {
+    title?: TranslatableText;
+    checkpointStages: NarrationSequenceStage[] | ((narrationSequence: NarrationSequence) => NarrationSequenceStage[]);
+  }) {
     this.title = title;
-    this.checkpointStages = checkpointStages;
+    this.checkpointStages = Array.isArray(checkpointStages) ? checkpointStages : checkpointStages(this);
   }
 }

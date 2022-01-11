@@ -1,22 +1,30 @@
 import type { TranslatableText } from '../../../i18n/translatable-text';
-import type { Narration } from '../narration';
-import type { NarrationActionExecutionContext } from '../narration-action-execution-context';
-import type { NarrationActionOrder } from '../narration-action-order';
+import { NarrationActionOrder } from '../narration-action-order';
+import type { NarrationSequence } from '../narration-sequence/narration-sequence';
+import type { NarrationSequenceStage } from '../narration-sequence/narration-sequence-stage';
 
-export abstract class NarrationAction {
-  abstract get order(): NarrationActionOrder;
+export class NarrationAction {
+  readonly name: TranslatableText;
+  readonly order: NarrationActionOrder;
+  readonly narrationSequence: NarrationSequence;
+  readonly narrationStages: NarrationSequenceStage[];
 
-  getName(): TranslatableText {
-    const nameContext = this.getNameContext();
-    const baseName = this.getBaseName();
-    return nameContext ? (tc) => tc.join(['[', nameContext, '] ', baseName]) : baseName;
+  constructor({
+    name,
+    nameContext,
+    order,
+    narrationSequence,
+    narrationStages
+  }: {
+    name: TranslatableText;
+    nameContext?: TranslatableText;
+    order?: NarrationActionOrder;
+    narrationSequence: NarrationSequence;
+    narrationStages?: NarrationSequenceStage[];
+  }) {
+    this.name = nameContext ? (tc) => tc.join(['[', nameContext, '] ', name]) : name;
+    this.order = order || NarrationActionOrder.CUSTOM;
+    this.narrationSequence = narrationSequence;
+    this.narrationStages = narrationStages || narrationSequence.checkpointStages;
   }
-
-  protected abstract getBaseName(): TranslatableText;
-
-  protected getNameContext(): TranslatableText | undefined {
-    return undefined;
-  }
-
-  abstract execute(context: NarrationActionExecutionContext): Narration | undefined;
 }
