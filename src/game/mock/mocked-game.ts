@@ -1,7 +1,7 @@
 import { GiveLocationAction } from '../../action/model/actions/give-location-action';
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
-import { AttemptGoToPositionDetector } from '../../detector/service/detector-types/attempt-go-to-position-detector';
+import { AttemptGoToPositionDetector } from '../../detector/model/detector-types/attempt-go-to-position-detector';
 import { Law } from '../../law/model/law';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
