@@ -8,10 +8,10 @@ import { MapLocation } from '../../map/model/map-location';
 import { FieldPosition, TerrainObjectPosition } from '../../map/model/position';
 import { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import { TerrainObjectType } from '../../map/terrain-object/model/terrain-object-type';
-import { NarrationAction } from '../../narration/model/narration-actions/narration-action';
 import { NarrationDescription } from '../../narration/model/narration-description';
-import { NarrationSequence } from '../../narration/model/narration-sequence/narration-sequence';
 import { ActionNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/action-narration-sequence-stage';
+import { CheckpointNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/checkpoint-narration-sequence-stage';
+import { HookNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/hook-narration-sequence-stage';
 import { SceneNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/scene-narration-sequence-stage';
 import { SingleNarrationSequenceStory } from '../../story/model/stories/single-narration-sequence-story';
 import { GameState } from '../model/game-state';
@@ -58,42 +58,47 @@ export namespace MockedGame {
     };
 
     const story = new SingleNarrationSequenceStory({
-      actionName: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
-      actionNameContext: characters.ALICE,
-      narrationSequence: () =>
-        new NarrationSequence({
-          title: characters.ALICE.displayName,
-          checkpointStages: (narrationSequence) => [
-            new SceneNarrationSequenceStage(new NarrationDescription('DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', characters.ALICE), [
-              new NarrationAction({
-                name: 'DIALOGUE.TEXT.00001_YES',
-                narrationSequence,
-                narrationStages: [
-                  new ActionNarrationSequenceStage(
-                    (gameState) =>
-                      new GiveLocationAction({
-                        locationGiver: characters.ALICE,
-                        locationReceiver: gameState.player.character,
-                        location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
-                      })
-                  ),
-                  new SceneNarrationSequenceStage(
-                    new NarrationDescription('DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT', characters.ALICE)
-                  )
-                ]
-              }),
-              new NarrationAction({
-                name: 'DIALOGUE.TEXT.00002_NO',
-                narrationSequence,
-                narrationStages: [
-                  new SceneNarrationSequenceStage(
-                    new NarrationDescription('DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY', characters.ALICE)
-                  )
-                ]
+      prompt: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
+      promptNameContext: characters.ALICE,
+      title: characters.ALICE.displayName,
+      narrationStages: ({ setPrompt, finish, createNarrationAction }) => {
+        const learningAboutLocationOfTreasure = [
+          new ActionNarrationSequenceStage(
+            (gameState) =>
+              new GiveLocationAction({
+                locationGiver: characters.ALICE,
+                locationReceiver: gameState.player.character,
+                location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
               })
-            ])
-          ]
-        })
+          ),
+          new HookNarrationSequenceStage(() => finish()),
+          new SceneNarrationSequenceStage(new NarrationDescription('DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT', characters.ALICE))
+        ];
+
+        return [
+          new SceneNarrationSequenceStage(new NarrationDescription('DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', characters.ALICE), [
+            createNarrationAction({
+              name: 'DIALOGUE.TEXT.00001_YES',
+              narrationStages: learningAboutLocationOfTreasure
+            }),
+            createNarrationAction({
+              name: 'DIALOGUE.TEXT.00002_NO',
+              narrationStages: [
+                new HookNarrationSequenceStage(() =>
+                  setPrompt('DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE')
+                ),
+                new CheckpointNarrationSequenceStage({
+                  nextStages: [],
+                  checkpointStages: learningAboutLocationOfTreasure
+                }),
+                new SceneNarrationSequenceStage(
+                  new NarrationDescription('DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY', characters.ALICE)
+                )
+              ]
+            })
+          ])
+        ];
+      }
     });
 
     characters.ALICE.stories.push(story);

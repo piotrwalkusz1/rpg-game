@@ -1,7 +1,7 @@
 import { NarrationSequenceStage } from '../narration-sequence-stage';
 import type { NarrationSequenceStageExecutionResult } from '../narration-sequence-stage-execution-result';
 
-export class CheckpointNarrationSequenceStage extends NarrationSequenceStage {
+export class HookNarrationSequenceStage extends NarrationSequenceStage {
   constructor(private readonly hook: () => void) {
     super();
   }
