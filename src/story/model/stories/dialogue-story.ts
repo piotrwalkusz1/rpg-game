@@ -27,6 +27,7 @@ export class DialogueStory extends SingleNarrationSequenceStory {
     narrationStages: (context: DialogueStoryStagesProviderContext) => NarrationSequenceStage[];
   }) {
     super({
+      narrationProviderOwner: character,
       prompt,
       promptNameContext: character,
       title: character.displayName,

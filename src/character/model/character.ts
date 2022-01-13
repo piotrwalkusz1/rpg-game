@@ -6,7 +6,6 @@ import { PositionSet } from '../../map/model/position-set';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
 import type { NarrationProviderOwner } from '../../narration/model/narration-provider/narration-provider-owner';
-import type { Story } from '../../story/model/story';
 import { PositionBasedHearableTrait } from '../../trait/hearing/model/hearable-traits/position-based-hearable-trait';
 import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-traits/position-based-hearer-trait';
 import type { Trait } from '../../trait/model/trait';
@@ -31,31 +30,17 @@ export class Character implements TraitOwner, NarrationProviderOwner {
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
-  readonly stories: Story[];
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
 
-  constructor({
-    name,
-    race,
-    avatarUrl,
-    position,
-    stories
-  }: {
-    name?: string;
-    race: Race;
-    avatarUrl?: string;
-    position?: Position;
-    stories?: Story[];
-  }) {
+  constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;
     this.race = race;
     this.avatarUrl = avatarUrl;
     this.positionFK.value = position;
-    this.stories = stories || [];
     this.traits = [
       new PositionBasedObservatorTrait(() =>
         this.position instanceof TerrainObjectPosition

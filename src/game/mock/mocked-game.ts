@@ -97,8 +97,6 @@ export namespace MockedGame {
       }
     });
 
-    characters.ALICE.stories.push(story);
-
     terrainObjects.ALICE_HOUSE.laws.push(
       new Law({
         detector: new AttemptGoToPositionDetector({
@@ -114,6 +112,9 @@ export namespace MockedGame {
 
     const player = new Player(characters.PIOTR);
 
-    return new GameState({ player, world });
+    const gameState = new GameState({ player, world });
+    gameState.addStory(story);
+
+    return gameState;
   };
 }
