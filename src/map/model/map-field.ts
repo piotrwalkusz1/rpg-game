@@ -2,6 +2,8 @@ import { CharactersCollection } from '../../character/model/character';
 import { OneToManyCollection } from '../../common/cache-relationship-utils';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
+import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
+import type { NarrationProviderOwner } from '../../narration/model/narration-provider/narration-provider-owner';
 import type { TerrainObject } from '../terrain-object/model/terrain-object';
 import type { MapFieldKind } from './map-field-kind';
 import type { MapFieldType } from './map-field-type';
@@ -16,13 +18,14 @@ export class TerrainObjectsCollection extends OneToManyCollection<TerrainObject,
   override getForeignKey = (terrainObject: TerrainObject) => terrainObject.fieldFK;
 }
 
-export class MapField implements DetectorContext {
+export class MapField implements DetectorContext, NarrationProviderOwner {
   readonly fieldType: MapFieldType;
   readonly location: MapLocation;
   readonly subLocations: SubLocationsCollection = new SubLocationsCollection(this);
   readonly terrainObjects: TerrainObjectsCollection = new TerrainObjectsCollection(this);
   readonly characters: CharactersCollection = new CharactersCollection(new FieldPosition(this));
   readonly detectors: Detector[] = [];
+  readonly narrationProviders: NarrationProvider[] = [];
 
   constructor({ fieldType, location }: { fieldType: MapFieldType; location: MapLocation }) {
     this.fieldType = fieldType;

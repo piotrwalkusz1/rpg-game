@@ -2,17 +2,24 @@
   import { faBahai, faSearchMinus } from '@fortawesome/free-solid-svg-icons';
   import Fa from 'svelte-fa';
   import { gameState } from '../../common/store';
+  import { NarrationService } from '../../narration/service/narration-service';
 
   function goToPlayerLocation() {
     const playerLocation = $gameState.player.character.position?.field?.location;
     if (playerLocation) {
       $gameState.locationView = playerLocation;
+      $gameState.selectedField = $gameState.player.character.position?.field;
+      $gameState.narration = $gameState.selectedField
+        ? NarrationService.getNarrationForField($gameState.selectedField, $gameState)
+        : undefined;
     }
   }
 
   function zoomOut() {
     if ($gameState.locationView.parentField) {
       $gameState.locationView = $gameState.locationView.parentField.location;
+      $gameState.selectedField = undefined;
+      $gameState.narration = undefined;
     }
   }
 </script>

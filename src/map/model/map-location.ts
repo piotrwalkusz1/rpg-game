@@ -3,6 +3,8 @@ import { areSame } from '../../common/object-utils';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { TranslatableText } from '../../i18n/translatable-text';
+import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
+import type { NarrationProviderOwner } from '../../narration/model/narration-provider/narration-provider-owner';
 import { MapField, SubLocationsCollection } from './map-field';
 import type { MapFieldType } from './map-field-type';
 
@@ -11,7 +13,7 @@ class LocationParentFieldFK extends OneToManyForeignKey<MapLocation, SubLocation
   override areForeignKeysEqual = areSame;
 }
 
-export class MapLocation implements DetectorContext {
+export class MapLocation implements DetectorContext, NarrationProviderOwner {
   name: TranslatableText;
   readonly width: number;
   readonly height: number;
@@ -19,6 +21,7 @@ export class MapLocation implements DetectorContext {
   readonly startingField?: MapField;
   readonly parentFieldFK: LocationParentFieldFK = new LocationParentFieldFK(this);
   readonly detectors: Detector[] = [];
+  readonly narrationProviders: NarrationProvider[] = [];
 
   constructor({
     name,

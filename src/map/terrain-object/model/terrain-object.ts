@@ -5,6 +5,8 @@ import type { Detector } from '../../../detector/model/detector';
 import type { DetectorContext } from '../../../detector/model/detector-context';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { Law } from '../../../law/model/law';
+import type { NarrationProvider } from '../../../narration/model/narration-provider/narration-provider';
+import type { NarrationProviderOwner } from '../../../narration/model/narration-provider/narration-provider-owner';
 import type { Trait } from '../../../trait/model/trait';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
 import { ConstantObservableTrait } from '../../../trait/vision/model/observable-traits/constant-observable-trait';
@@ -21,13 +23,14 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
   override areForeignKeysEqual = areSame;
 }
 
-export class TerrainObject implements DetectorContext, TraitOwner {
+export class TerrainObject implements DetectorContext, TraitOwner, NarrationProviderOwner {
   readonly type: TerrainObjectType;
   readonly guards: Character[];
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
   readonly laws: Law[] = [];
   readonly traits: Trait[];
+  readonly narrationProviders: NarrationProvider[] = [];
 
   constructor({ type, field, guards, hidden }: { type: TerrainObjectType; field?: MapField; guards?: Character[]; hidden?: boolean }) {
     this.type = type;

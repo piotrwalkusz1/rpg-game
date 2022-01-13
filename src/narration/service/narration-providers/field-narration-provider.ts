@@ -1,41 +1,29 @@
 import type { GameState } from '../../../game/model/game-state';
-import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { MapField } from '../../../map/model/map-field';
 import { MapFieldKind } from '../../../map/model/map-field-kind';
 import { GoToFieldNarrationAction } from '../../model/narration-actions/go-to-field-narration-action';
 import type { TemplateNarrationAction } from '../../model/narration-actions/template-narration-action';
-import { SeeLocationNarrationAction } from '../../model/narration-actions/see-location-narration-action';
-import { NarrationProvider } from './narration-provider';
+import type { NarrationProvider } from '../../model/narration-provider/narration-provider';
+import type { NarrationProviderResult } from '../../model/narration-provider/narration-provider-result';
 
-interface Data {
-  field: MapField;
+export namespace FieldNarrationProvider {
+  export const create =
+    (field: MapField): NarrationProvider =>
+    ({ trigger, gameState }): NarrationProviderResult | undefined => {
+      if (trigger.type !== 'SELECTED_FIELD' || trigger.field !== field) {
+        return;
+      }
+      return {
+        title: { value: field.fieldType.name, order: 200 },
+        descriptions: [{ value: field.fieldType.description, order: 200 }],
+        actions: prepareGoAction(field, gameState)
+      };
+    };
 }
 
-export class FieldNarrationProvider extends NarrationProvider<Data> {
-  override getDataIfSupported(field: MapField): Data | undefined {
-    return { field };
+const prepareGoAction = (field: MapField, gameState: GameState): TemplateNarrationAction[] => {
+  if (field.kind !== MapFieldKind.FIELD || gameState.player.character.isOnField(field)) {
+    return [];
   }
-
-  override getTitle({ field }: Data): { title: TranslatableText; order: number } {
-    return { title: field.fieldType.name, order: 200 };
-  }
-
-  override getDescription({ field }: Data): { description: TranslatableText; order: number }[] {
-    return [{ description: field.fieldType.description, order: 200 }];
-  }
-
-  override getActions({ field }: Data, gameState: GameState): TemplateNarrationAction[] {
-    return [...this.prepareSeeLocationActions(field), this.prepareGoAction(field, gameState)].flatMap((action) => (action ? [action] : []));
-  }
-
-  private prepareSeeLocationActions(field: MapField): TemplateNarrationAction[] {
-    return field.subLocations.getArray().map((subLocation) => new SeeLocationNarrationAction(subLocation));
-  }
-
-  private prepareGoAction(field: MapField, gameState: GameState): TemplateNarrationAction | undefined {
-    if (field.kind !== MapFieldKind.FIELD || gameState.player.character.isOnField(field)) {
-      return;
-    }
-    return new GoToFieldNarrationAction(field);
-  }
-}
+  return [new GoToFieldNarrationAction(field)];
+};

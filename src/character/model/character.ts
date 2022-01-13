@@ -4,6 +4,8 @@ import type { MapField } from '../../map/model/map-field';
 import { Position, TerrainObjectPosition } from '../../map/model/position';
 import { PositionSet } from '../../map/model/position-set';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
+import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
+import type { NarrationProviderOwner } from '../../narration/model/narration-provider/narration-provider-owner';
 import type { Story } from '../../story/model/story';
 import { PositionBasedHearableTrait } from '../../trait/hearing/model/hearable-traits/position-based-hearable-trait';
 import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-traits/position-based-hearer-trait';
@@ -24,13 +26,14 @@ class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersColle
   override areForeignKeysEqual = Position.areEqual;
 }
 
-export class Character implements TraitOwner {
+export class Character implements TraitOwner, NarrationProviderOwner {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly stories: Story[];
   readonly traits: Trait[];
+  readonly narrationProviders: NarrationProvider[] = [];
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
