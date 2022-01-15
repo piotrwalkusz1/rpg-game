@@ -13,4 +13,13 @@ export namespace ArrayUtils {
     }
     return newArray;
   };
+
+  export const remove = <T>(array: T[], item: T): boolean => {
+    let index: number = array.findIndex((otherItem) => otherItem === item);
+    if (index !== -1) {
+      array.splice(index, 1);
+      return true;
+    }
+    return false;
+  };
 }

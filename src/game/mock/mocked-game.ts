@@ -12,6 +12,7 @@ import { ActionNarrationSequenceStage } from '../../narration/model/narration-se
 import { CheckpointNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/checkpoint-narration-sequence-stage';
 import { HookNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/hook-narration-sequence-stage';
 import { SceneNarrationSequenceStage } from '../../narration/model/narration-sequence/narration-sequence-stages/scene-narration-sequence-stage';
+import { CustomStory } from '../../story/model/stories/custom-story';
 import { DialogueStory } from '../../story/model/stories/dialogue-story';
 import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
@@ -53,10 +54,16 @@ export namespace MockedGame {
         race: Race.HUMAN,
         avatarUrl: 'images/character_002_avatar.png',
         position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
+      }),
+      ANASTASIA: new Character({
+        name: 'Anastasia',
+        race: Race.HUMAN,
+        avatarUrl: 'images/character_003_avatar.jpg',
+        position: new TerrainObjectPosition(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE)
       })
     };
 
-    const story = new DialogueStory({
+    const dialogueWithAlice = new DialogueStory({
       character: characters.ALICE,
       prompt: 'DIALOGUE.TEXT.10001_DO_YOU_KNOW_ANYTHING_INTERESTING_ABOUT_THIS_AREA',
       narrationStages: ({ setPrompt, finish, createNarrationAction, createNarrationDescription }) => {
@@ -97,6 +104,20 @@ export namespace MockedGame {
       }
     });
 
+    const cannotNearTreasureStory = new CustomStory({
+      laws: () => {
+        return [
+          {
+            lawContext: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE,
+            law: new Law({
+              detector: new AttemptGoToPositionDetector({ terrainObject: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE }),
+              guards: [characters.ANASTASIA]
+            })
+          }
+        ];
+      }
+    });
+
     terrainObjects.ALICE_HOUSE.laws.push(
       new Law({
         detector: new AttemptGoToPositionDetector({
@@ -113,7 +134,8 @@ export namespace MockedGame {
     const player = new Player(characters.PIOTR);
 
     const gameState = new GameState({ player, world });
-    gameState.addStory(story);
+    gameState.addStory(dialogueWithAlice);
+    gameState.addStory(cannotNearTreasureStory);
 
     return gameState;
   };
