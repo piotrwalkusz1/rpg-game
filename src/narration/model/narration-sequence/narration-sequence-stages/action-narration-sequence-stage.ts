@@ -1,4 +1,4 @@
-import { Action } from '../../../../action/model/actions/action';
+import { Action } from '../../../../action/model/action';
 import { ActionService } from '../../../../action/service/action-service';
 import type { GameState } from '../../../../game/model/game-state';
 import { NarrationAction } from '../../narration-actions/narration-action';
@@ -15,7 +15,7 @@ export class ActionNarrationSequenceStage extends NarrationSequenceStage {
   }
 
   override execute(context: NarrationSequenceStageExecutionContext): NarrationSequenceStageExecutionResult {
-    const result = ActionService.executeAction(this.action(context.getGameState()), context);
+    const result = ActionService.scheduleAction(this.action(context.gameContext.getGameState()), context.gameContext);
     switch (result.type) {
       case 'SUCCESS':
         return { type: 'NEXT_STAGE' };

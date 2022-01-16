@@ -76,3 +76,43 @@ export abstract class OneToManyForeignKey<Item, Collection extends OneToManyColl
 
   abstract getCollection(foreignKey: FK | undefined): Collection | undefined;
 }
+
+export abstract class ManyToManyCollection<Item, FK> {
+  private readonly foreignKey: FK;
+  private readonly items: Item[] = [];
+
+  constructor(foreignKey: FK) {
+    this.foreignKey = foreignKey;
+  }
+
+  add(item: Item) {
+    if (this.items.includes(item)) {
+      return;
+    }
+    this.items.push(item);
+    this.getCollection(item).add(this.foreignKey);
+  }
+
+  remove(item: Item) {
+    const itemIndex = this.items.findIndex((otherItem) => otherItem === item);
+    if (itemIndex === -1) {
+      return;
+    }
+    this.items.splice(itemIndex, 1);
+    this.getCollection(item).remove(this.foreignKey);
+  }
+
+  getArray(): readonly Item[] {
+    return this.items;
+  }
+
+  get(index: number): Item {
+    return this.items[index];
+  }
+
+  get length(): number {
+    return this.items.length;
+  }
+
+  abstract getCollection(item: Item): ManyToManyCollection<FK, Item>;
+}

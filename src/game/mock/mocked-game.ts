@@ -72,7 +72,7 @@ export namespace MockedGame {
           new ActionNarrationSequenceStage(
             (gameState) =>
               new GiveLocationAction({
-                locationGiver: characters.ALICE,
+                character: characters.ALICE,
                 locationReceiver: gameState.player.character,
                 location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
               })

@@ -10,7 +10,7 @@ export class GoToTerrainObjectNarrationAction extends ActionBasedNarrationAction
       id: 'GO_TO_TERRAIN_OBJECT',
       nameContext: terrainObject,
       order: NarrationActionOrder.GO_TO_TERRAIN_OBJECT,
-      action: new GoAction(new TerrainObjectPosition(terrainObject))
+      action: (gameState) => new GoAction({ character: gameState.player.character, position: new TerrainObjectPosition(terrainObject) })
     });
   }
 }

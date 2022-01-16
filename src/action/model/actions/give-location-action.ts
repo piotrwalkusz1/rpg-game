@@ -1,15 +1,15 @@
 import type { Character } from '../../../character/model/character';
+import type { WorldContext } from '../../../game/model/world-context';
 import type { Position } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
-import type { ActionExecutionContext } from '../action-execution-context';
-import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
+import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
 
-export class GiveLocationActionScheduledEvent extends ActionScheduledEvent {
+export class GiveLocationActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly position: Position;
 
-  constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: PositionSet.create() });
+  constructor({ position, character }: { position: Position; character: Character }) {
+    super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
 
@@ -18,11 +18,11 @@ export class GiveLocationActionScheduledEvent extends ActionScheduledEvent {
   }
 }
 
-export class GiveLocationActionResultEvent extends ActionResultEvent {
+export class GiveLocationActionResultEvent extends CharacterActionResultEvent {
   readonly position: Position;
 
-  constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: PositionSet.create() });
+  constructor({ position, character }: { position: Position; character: Character }) {
+    super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
 
@@ -31,37 +31,35 @@ export class GiveLocationActionResultEvent extends ActionResultEvent {
   }
 }
 
-export class GiveLocationAction extends Action {
-  readonly locationGiver: Character;
+export class GiveLocationAction extends CharacterAction {
   readonly locationReceiver: Character;
   readonly location: TraitOwner;
   readonly position: Position;
 
-  constructor({
-    locationGiver,
-    locationReceiver,
-    location
-  }: {
-    locationGiver: Character;
-    locationReceiver: Character;
-    location: TraitOwner;
-  }) {
-    super();
-    if (!locationGiver.position) {
+  constructor({ character, locationReceiver, location }: { character: Character; locationReceiver: Character; location: TraitOwner }) {
+    super({ character: character });
+    if (!character.position) {
       throw new Error('Location giver must have position');
     }
-    this.locationGiver = locationGiver;
     this.locationReceiver = locationReceiver;
     this.location = location;
-    this.position = locationGiver.position;
+    this.position = character.position;
   }
 
-  execute(actionExecutionContext: ActionExecutionContext): GiveLocationActionResultEvent {
-    actionExecutionContext.addKnownLocation(this.locationReceiver, this.location);
-    return new GiveLocationActionResultEvent({ position: this.position });
+  get waitingAfterAction(): Duration {
+    return {};
   }
 
-  getActionScheduledEvent(): ActionScheduledEvent | undefined {
-    return new GiveLocationActionScheduledEvent({ position: this.position });
+  get duration(): Duration {
+    return { seconds: 10 };
+  }
+
+  execute(context: WorldContext): GiveLocationActionResultEvent {
+    context.addKnownLocation(this.locationReceiver, this.location);
+    return new GiveLocationActionResultEvent({ position: this.position, character: this.character });
+  }
+
+  getActionScheduledEvent(): CharacterActionScheduledEvent | undefined {
+    return new GiveLocationActionScheduledEvent({ position: this.position, character: this.character });
   }
 }

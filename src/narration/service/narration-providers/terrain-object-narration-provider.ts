@@ -1,5 +1,5 @@
 import { ArrayUtils } from '../../../common/array-utils';
-import type { GameState } from '../../../game/model/game-state';
+import type { WorldState } from '../../../game/model/world-state';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { VisionService } from '../../../trait/vision/service/vision-service';
@@ -19,34 +19,34 @@ export namespace TerrainObjectNarrationProvider {
       }
       return {
         actions: ArrayUtils.filterNotNull([
-          getGoAction(terrainObject, gameState),
-          getLeaveAction(terrainObject, gameState),
-          ...getChangeTerrainObjectPlacementActions(terrainObject, gameState)
+          getGoAction(terrainObject, gameState.worldState),
+          getLeaveAction(terrainObject, gameState.worldState),
+          ...getChangeTerrainObjectPlacementActions(terrainObject, gameState.worldState)
         ])
       };
     };
 
-  const getGoAction = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined => {
+  const getGoAction = (terrainObject: TerrainObject, worldState: WorldState): TemplateNarrationAction | undefined => {
     if (
-      !gameState.player.character.isNearTerrainObject(terrainObject) &&
-      VisionService.isLocatable(terrainObject, gameState.player.character)
+      !worldState.player.character.isNearTerrainObject(terrainObject) &&
+      VisionService.isLocatable(terrainObject, worldState.player.character)
     ) {
       return new GoToTerrainObjectNarrationAction(terrainObject);
     }
   };
 
-  const getLeaveAction = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined => {
-    if (gameState.player.character.isNearTerrainObject(terrainObject)) {
+  const getLeaveAction = (terrainObject: TerrainObject, worldState: WorldState): TemplateNarrationAction | undefined => {
+    if (worldState.player.character.isNearTerrainObject(terrainObject)) {
       return new LeaveTerrainObjectNarrationAction(terrainObject);
     }
   };
 
-  const getChangeTerrainObjectPlacementActions = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] => {
-    if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
+  const getChangeTerrainObjectPlacementActions = (terrainObject: TerrainObject, worldState: WorldState): TemplateNarrationAction[] => {
+    if (!worldState.player.character.isNearTerrainObject(terrainObject)) {
       return [];
     }
     const playerTerrrainPositionPlacement =
-      gameState.player.character.position instanceof TerrainObjectPosition && gameState.player.character.position.placement;
+      worldState.player.character.position instanceof TerrainObjectPosition && worldState.player.character.position.placement;
     return terrainObject.type.placements
       .filter((placement) => placement !== playerTerrrainPositionPlacement)
       .map((placement) => new ChangeTerrainObjectPlacementNarrationAction(terrainObject, placement));

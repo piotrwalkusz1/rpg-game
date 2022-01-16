@@ -2,7 +2,8 @@ export namespace ArrayUtils {
   export const filterNotNull = <T>(array: (T | undefined | null)[]): T[] =>
     array.filter((item): item is T => item !== undefined && item !== null);
 
-  export const filterInstanceOf = <T>(array: unknown[], type: abstract new () => T): T[] =>
+  // tslint:disable-next-line: no-any
+  export const filterInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T[] =>
     array.filter((item): item is T => item instanceof type);
 
   export const getShuffledArray = <T>(array: T[]) => {

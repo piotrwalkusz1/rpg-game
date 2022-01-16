@@ -12,7 +12,7 @@ export namespace CharacterNarrationProvider {
   export const create =
     (character: Character): NarrationProvider =>
     ({ trigger, gameState }): NarrationProviderResult | undefined => {
-      if (character === gameState.player.character || !(character.position instanceof TerrainObjectPosition)) {
+      if (character === gameState.worldState.player.character || !(character.position instanceof TerrainObjectPosition)) {
         return;
       }
       const terrainObject = character.position.terrainObject;
@@ -20,9 +20,9 @@ export namespace CharacterNarrationProvider {
         trigger.type !== 'SELECTED_FIELD' ||
         !terrainObject ||
         !trigger.field.terrainObjects.getArray().includes(terrainObject) ||
-        !gameState.player.character.isNearTerrainObject(terrainObject) ||
-        gameState.player.character === character ||
-        !VisionService.isVisible(character, gameState.player.character)
+        !gameState.worldState.player.character.isNearTerrainObject(terrainObject) ||
+        gameState.worldState.player.character === character ||
+        !VisionService.isVisible(character, gameState.worldState.player.character)
       ) {
         return;
       }
@@ -34,11 +34,11 @@ export namespace CharacterNarrationProvider {
 
   const getAttackAction = (character: Character, gameState: GameState): TemplateNarrationAction | undefined => {
     if (
-      gameState.player.character !== character &&
-      gameState.player.character.position instanceof TerrainObjectPosition &&
+      gameState.worldState.player.character !== character &&
+      gameState.worldState.player.character.position instanceof TerrainObjectPosition &&
       character.position instanceof TerrainObjectPosition &&
-      character.position.terrainObject === gameState.player.character.position.terrainObject &&
-      VisionService.isVisible(character, gameState.player.character)
+      character.position.terrainObject === gameState.worldState.player.character.position.terrainObject &&
+      VisionService.isVisible(character, gameState.worldState.player.character)
     ) {
       return new AttackNarrationAction(character);
     }

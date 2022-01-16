@@ -1,4 +1,4 @@
-import type { Action } from '../../../action/model/actions/action';
+import type { Action } from '../../../action/model/action';
 import type { GameState } from '../../../game/model/game-state';
 import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationActionOrder } from '../narration-action-order';

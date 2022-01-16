@@ -9,7 +9,7 @@ export class GoToFieldNarrationAction extends ActionBasedNarrationAction {
     super({
       id: 'GO_TO_FIELD',
       order: NarrationActionOrder.GO_TO_FIELD,
-      action: new GoAction(new FieldPosition(field))
+      action: (gameState) => new GoAction({ character: gameState.player.character, position: new FieldPosition(field) })
     });
   }
 }

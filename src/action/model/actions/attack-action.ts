@@ -1,17 +1,14 @@
-import { Battle } from '../../../battle/model/battle';
-import { BattleParticipant } from '../../../battle/model/battle-participant';
-import { BattleTeam } from '../../../battle/model/battle-team';
 import type { Character } from '../../../character/model/character';
+import type { WorldContext } from '../../../game/model/world-context';
 import type { Position } from '../../../map/model/position';
-import type { ActionExecutionContext } from '../action-execution-context';
-import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
 import { PositionSet } from '../../../map/model/position-set';
+import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
 
-export class AttackActionScheduledEvent extends ActionScheduledEvent {
+export class AttackActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly position: Position;
 
-  constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: PositionSet.create() });
+  constructor({ position, character }: { position: Position; character: Character }) {
+    super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
 
@@ -20,11 +17,11 @@ export class AttackActionScheduledEvent extends ActionScheduledEvent {
   }
 }
 
-export class AttackActionResultEvent extends ActionResultEvent {
+export class AttackActionResultEvent extends CharacterActionResultEvent {
   readonly position: Position;
 
-  constructor({ position }: { position: Position }) {
-    super({ visibilityPositions: PositionSet.create() });
+  constructor({ position, character }: { position: Position; character: Character }) {
+    super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
 
@@ -33,32 +30,33 @@ export class AttackActionResultEvent extends ActionResultEvent {
   }
 }
 
-export class AttackAction extends Action {
-  readonly attacker: Character;
-  readonly victim: Character;
+export class AttackAction extends CharacterAction {
+  readonly target: Character;
   readonly position: Position;
 
-  constructor({ attacker, victim }: { attacker: Character; victim: Character }) {
-    super();
-    if (!victim.position) {
+  constructor({ character, target }: { character: Character; target: Character }) {
+    super({ character });
+    if (!target.position) {
       throw new Error('Attacked victim must have position');
     }
-    this.attacker = attacker;
-    this.victim = victim;
-    this.position = victim.position;
+    this.target = target;
+    this.position = target.position;
   }
 
-  execute(actionExecutionContext: ActionExecutionContext): AttackActionResultEvent {
-    actionExecutionContext.startBattle(
-      new Battle({
-        firstTeam: new BattleTeam({ participants: [new BattleParticipant({ character: this.attacker })] }),
-        secondTeam: new BattleTeam({ participants: [new BattleParticipant({ character: this.victim })] })
-      })
-    );
-    return new AttackActionResultEvent({ position: this.position });
+  override get waitingAfterAction(): Duration {
+    return {};
   }
 
-  getActionScheduledEvent(): ActionScheduledEvent | undefined {
-    return new AttackActionScheduledEvent({ position: this.position });
+  override get duration(): Duration {
+    return { seconds: 2 };
+  }
+
+  override execute(context: WorldContext): AttackActionResultEvent {
+    context.dealDamage(this.target, this.character.damage);
+    return new AttackActionResultEvent({ position: this.position, character: this.character });
+  }
+
+  override getActionScheduledEvent(): CharacterActionScheduledEvent | undefined {
+    return new AttackActionScheduledEvent({ position: this.position, character: this.character });
   }
 }

@@ -14,7 +14,8 @@ export class ChangeTerrainObjectPlacementNarrationAction extends ActionBasedNarr
       },
       nameContext: terrainObject,
       order: NarrationActionOrder.CHANGE_TERRAIN_OBJECT_PLACEMENT,
-      action: new GoAction(new TerrainObjectPosition(terrainObject, terrainObjectPlacement))
+      action: (gameState) =>
+        new GoAction({ character: gameState.player.character, position: new TerrainObjectPosition(terrainObject, terrainObjectPlacement) })
     });
   }
 }

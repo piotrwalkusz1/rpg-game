@@ -4,20 +4,23 @@ import type { MapLocation } from '../../map/model/map-location';
 import type { Narration } from '../../narration/model/narration';
 import type { Story } from '../../story/model/story';
 import type { Player } from './player';
+import { WorldState } from './world-state';
 
 export class GameState {
-  readonly player: Player;
-  readonly world: MapLocation;
+  readonly worldState: WorldState;
+  private readonly stories: Story[] = [];
   locationView: MapLocation;
   selectedField?: MapField;
   narration?: Narration;
   battle?: Battle;
-  private readonly stories: Story[] = [];
 
   constructor({ player, world }: { player: Player; world: MapLocation }) {
-    this.player = player;
-    this.world = world;
+    this.worldState = new WorldState({ player, world });
     this.locationView = player.character.field?.location || world;
+  }
+
+  get player(): Player {
+    return this.worldState.player;
   }
 
   addStory(story: Story): void {

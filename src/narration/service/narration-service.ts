@@ -1,9 +1,9 @@
 import { ArrayUtils } from '../../common/array-utils';
+import type { GameContext } from '../../game/model/game-context';
 import type { GameState } from '../../game/model/game-state';
 import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Narration } from '../model/narration';
-import type { NarrationActionExecutionContext } from '../model/narration-action-execution-context';
 import { NarrationAction } from '../model/narration-actions/narration-action';
 import { NarrationDescription } from '../model/narration-description';
 import type { NarrationProvider } from '../model/narration-provider/narration-provider';
@@ -62,21 +62,21 @@ export namespace NarrationService {
     return new Narration({ title, description: new NarrationDescription(description), actions });
   };
 
-  export const executeNarrationAction = (action: NarrationAction, context: NarrationActionExecutionContext): Narration | undefined => {
+  export const executeNarrationAction = (action: NarrationAction, context: GameContext): Narration | undefined => {
     return executeNarrationSequenceStages(action.narrationSequence, action.narrationStages, context);
   };
 
-  export const executeNarrationSequenceStages = (
+  const executeNarrationSequenceStages = (
     narrationSequence: NarrationSequence,
     narrationSequenceStages: NarrationSequenceStage[],
-    context: NarrationActionExecutionContext
+    context: GameContext
   ): Narration | undefined => {
     if (narrationSequenceStages.length === 0) {
       return undefined;
     }
     const [currentStage, ...nextStages] = narrationSequenceStages;
     const result = currentStage.execute({
-      ...context,
+      gameContext: context,
       narrationSequence
     });
     switch (result.type) {

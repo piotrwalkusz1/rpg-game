@@ -1,4 +1,5 @@
-import { OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
+import type { Activity } from '../../activity/model/activity';
+import { ManyToManyCollection, OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
 import { Position, TerrainObjectPosition } from '../../map/model/position';
@@ -25,6 +26,10 @@ class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersColle
   override areForeignKeysEqual = Position.areEqual;
 }
 
+class ActivitiesCollection extends ManyToManyCollection<Activity, Character> {
+  override getCollection = (activity: Activity) => activity.participants;
+}
+
 export class Character implements TraitOwner, NarrationProviderOwner {
   readonly name?: string;
   readonly race: Race;
@@ -32,6 +37,7 @@ export class Character implements TraitOwner, NarrationProviderOwner {
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
+  readonly activities: ActivitiesCollection = new ActivitiesCollection(this);
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
@@ -98,5 +104,13 @@ export class Character implements TraitOwner, NarrationProviderOwner {
 
   addKnownLocation(location: TraitOwner): void {
     VisionService.addKnownLocation(this, location);
+  }
+
+  addActivity(activity: Activity): void {
+    this.activities.add(activity);
+  }
+
+  removeActivity(activity: Activity): void {
+    this.activities.remove(activity);
   }
 }

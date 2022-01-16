@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { setContext } from 'svelte';
   import BattleView from './battle/component/battle-view.svelte';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
   import Dialog from './common/component/dialog.svelte';
   import { gameState } from './common/store';
   import Toolbox from './game/component/toolbox.svelte';
   import { MockedGame } from './game/mock/mocked-game';
+  import { GameContext } from './game/model/game-context';
   import TranslatableTextView from './i18n/translatable-text-view.svelte';
   import { initLocalizationContext } from './i18n/translation-service';
   import LocationNameView from './map/component/location-name-view.svelte';
@@ -15,7 +17,38 @@
   i18n.addResourceBundle('en', 'common', {});
   i18n.addResourceBundle('pl', 'common', {});
 
+  const gameContext = new GameContext({
+    getWorldState: () => $gameState.worldState,
+    changeCharacterPosition: (character, position) => {
+      character.position = position;
+      $gameState = $gameState;
+    },
+    addKnownLocation: (character, location) => {
+      character.addKnownLocation(location);
+      $gameState = $gameState;
+    },
+    addTimeEvent: (timeEvent) => {
+      $gameState.worldState.timeAxis.addEvent(timeEvent);
+      $gameState = $gameState;
+    },
+    popNextTimeEvent: () => {
+      const nextEvent = $gameState.worldState.timeAxis.popNextEvent();
+      $gameState = $gameState;
+      return nextEvent;
+    },
+    setCurrentTime: (time) => {
+      $gameState.worldState.currentTime = time;
+    },
+    dealDamage: (target, damage) => {
+      target.dealDamage(damage);
+      $gameState = $gameState;
+    },
+    changeLocationView: (newLocationView) => ($gameState.locationView = newLocationView),
+    getGameState: () => $gameState
+  });
+
   $: narration = $gameState.narration;
+  setContext(GameContext.KEY, gameContext);
 
   function repeatGame() {
     $gameState = MockedGame.createGameState();
@@ -23,7 +56,7 @@
 </script>
 
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
-  <CharacterProfileView character={$gameState.player.character} />
+  <CharacterProfileView character={$gameState.worldState.player.character} />
   <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
     <LocationNameView />
     <div class="flex grow divide-x-[2px] divide-black overflow-hidden">
@@ -48,7 +81,7 @@
   <BattleView bind:battle={$gameState.battle} />
 {/if}
 
-{#if $gameState.player.character.position === undefined}
+{#if $gameState.worldState.player.character.position === undefined}
   <Dialog>
     <div class="flex flex-col w-full justify-center items-center">
       <div class="text-[60px] font-bold"><TranslatableTextView text="GAME.MESSAGE.YOU_ARE_DEAD" /></div>

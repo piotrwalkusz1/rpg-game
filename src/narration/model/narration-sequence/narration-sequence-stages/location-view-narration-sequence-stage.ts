@@ -9,7 +9,7 @@ export class LocationViewNarrationSequenceStage extends NarrationSequenceStage {
   }
 
   override execute(context: NarrationSequenceStageExecutionContext): NarrationSequenceStageExecutionResult {
-    context.changeLocationView(this.location);
+    context.gameContext.changeLocationView(this.location);
     return { type: 'NEXT_STAGE' };
   }
 }

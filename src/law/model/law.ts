@@ -1,4 +1,4 @@
-import type { ActionScheduledEvent } from '../../action/model/actions/action';
+import type { CharacterActionScheduledEvent } from '../../action/model/character-action';
 import type { Character } from '../../character/model/character';
 import { Detector } from '../../detector/model/detector';
 import type { DetectorType } from '../../detector/model/detector-type';
@@ -7,7 +7,7 @@ import { NarrationDescription } from '../../narration/model/narration-descriptio
 import { VisionService } from '../../trait/vision/service/vision-service';
 
 export class Law {
-  private readonly lawViolationAttemptDetector: Detector<ActionScheduledEvent>;
+  private readonly lawViolationAttemptDetector: Detector<CharacterActionScheduledEvent>;
   private readonly guards: Character[];
   private readonly lawViolationPreventionDialogue?: TranslatableText;
 
@@ -16,7 +16,7 @@ export class Law {
     guards,
     lawViolationPreventionDialogue
   }: {
-    detector: DetectorType<ActionScheduledEvent>;
+    detector: DetectorType<CharacterActionScheduledEvent>;
     guards?: Character[];
     lawViolationPreventionDialogue?: TranslatableText;
   }) {
@@ -29,12 +29,12 @@ export class Law {
     return [this.lawViolationAttemptDetector] as Detector<unknown>[];
   }
 
-  private preventLawViolation(actionScheduledEvent: ActionScheduledEvent) {
+  private preventLawViolation(actionScheduledEvent: CharacterActionScheduledEvent) {
     const guard = this.guards.find((guard) => VisionService.isVisible(actionScheduledEvent, guard));
     if (guard && this.lawViolationPreventionDialogue) {
-      actionScheduledEvent.preventionNarrationDescription = new NarrationDescription(this.lawViolationPreventionDialogue, guard);
+      actionScheduledEvent.prevent(new NarrationDescription(this.lawViolationPreventionDialogue, guard));
     } else {
-      actionScheduledEvent.preventionNarrationDescription = new NarrationDescription('LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL');
+      actionScheduledEvent.prevent(new NarrationDescription('LAW.LAW_VIOLATION_PREVENTION.THIS_IS_ILLEGAL'));
     }
   }
 }

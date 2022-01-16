@@ -1,59 +1,87 @@
+import type { Character } from '../../../character/model/character';
 import { ArrayUtils } from '../../../common/array-utils';
+import type { WorldContext } from '../../../game/model/world-context';
 import type { Position } from '../../../map/model/position';
-import type { ActionExecutionContext } from '../action-execution-context';
-import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
+import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
 
-export class GoActionScheduledEvent extends ActionScheduledEvent {
-  constructor(readonly newPosition: Position, readonly oldPosition: Position | undefined) {
+export class GoActionScheduledEvent extends CharacterActionScheduledEvent {
+  readonly newPosition: Position;
+  readonly oldPosition: Position;
+
+  constructor({ character, newPosition, oldPosition }: { character: Character; newPosition: Position; oldPosition: Position }) {
     super({
+      character,
       visibilityPositions: PositionSet.create({
-        subSets: ArrayUtils.filterNotNull([newPosition, oldPosition]).flatMap((position) =>
-          position instanceof TerrainObjectPosition
-            ? [PositionSet.create({ terrainObject: position.terrainObject, placement: position.placement })]
-            : []
+        subSets: ArrayUtils.filterInstanceOf([newPosition, oldPosition], TerrainObjectPosition).flatMap((position) =>
+          PositionSet.create({ terrainObject: position.terrainObject, placement: position.placement })
         )
       })
     });
+    this.newPosition = newPosition;
+    this.oldPosition = oldPosition;
   }
 
   override get detectablePositions(): Position[] {
-    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]);
+    return [this.newPosition, this.oldPosition];
   }
 }
 
-export class GoActionResultEvent extends ActionResultEvent {
-  constructor(readonly newPosition: Position, readonly oldPosition: Position | undefined) {
+export class GoActionResultEvent extends CharacterActionResultEvent {
+  readonly newPosition: Position;
+  readonly oldPosition: Position;
+
+  constructor({ character, newPosition, oldPosition }: { character: Character; newPosition: Position; oldPosition: Position }) {
     super({
+      character,
       visibilityPositions: PositionSet.create({
-        subSets: ArrayUtils.filterNotNull([newPosition, oldPosition]).flatMap((position) =>
-          position instanceof TerrainObjectPosition
-            ? [PositionSet.create({ terrainObject: position.terrainObject, placement: position.placement })]
-            : []
+        subSets: ArrayUtils.filterInstanceOf([newPosition, oldPosition], TerrainObjectPosition).flatMap((position) =>
+          PositionSet.create({ terrainObject: position.terrainObject, placement: position.placement })
         )
       })
     });
+    this.newPosition = newPosition;
+    this.oldPosition = oldPosition;
   }
 
   override get detectablePositions(): Position[] {
-    return ArrayUtils.filterNotNull([this.newPosition, this.oldPosition]);
+    return [this.newPosition, this.oldPosition];
   }
 }
 
-export class GoAction extends Action {
-  constructor(readonly position: Position) {
-    super();
+export class GoAction extends CharacterAction {
+  readonly position: Position;
+
+  constructor({ character, position }: { character: Character; position: Position }) {
+    super({ character });
+    this.position = position;
   }
 
-  execute(actionExecutionContext: ActionExecutionContext): GoActionResultEvent {
-    const oldPosition = actionExecutionContext.getGameState().player.character.position;
-    actionExecutionContext.changePlayerPosition(this.position);
-    return new GoActionResultEvent(this.position, oldPosition);
+  get waitingAfterAction(): Duration {
+    return {};
   }
 
-  getActionScheduledEvent(actionExecutionContext: ActionExecutionContext): ActionScheduledEvent | undefined {
-    const oldPosition = actionExecutionContext.getGameState().player.character.position;
-    return new GoActionScheduledEvent(this.position, oldPosition);
+  get duration(): Duration {
+    return {
+      minutes: 1
+    };
+  }
+
+  override execute(context: WorldContext): GoActionResultEvent | undefined {
+    const oldPosition = this.character.position;
+    if (oldPosition === undefined) {
+      return;
+    }
+    context.changeCharacterPosition(this.character, this.position);
+    return new GoActionResultEvent({ character: this.character, newPosition: this.position, oldPosition });
+  }
+
+  override getActionScheduledEvent(_context: WorldContext): CharacterActionScheduledEvent | undefined {
+    const oldPosition = this.character.position;
+    if (oldPosition === undefined) {
+      return;
+    }
+    return new GoActionScheduledEvent({ character: this.character, newPosition: this.position, oldPosition });
   }
 }
