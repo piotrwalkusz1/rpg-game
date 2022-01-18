@@ -6,7 +6,7 @@
 
   function getFieldStyle(field: MapField): string {
     let style = 'w-[64px] h-[64px] hover:outline outline-[2px] outline-offset-[-2px] hover:outline-white';
-    if ($gameState.player.character.isOnField(field)) {
+    if ($gameState.player.isOnField(field)) {
       style += ' outline outline-blue-500';
     } else if ($gameState.selectedField === field) {
       style += ' outline outline-yellow-500';

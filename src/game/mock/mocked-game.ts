@@ -15,7 +15,6 @@ import { SceneNarrationSequenceStage } from '../../narration/model/narration-seq
 import { CustomStory } from '../../story/model/stories/custom-story';
 import { DialogueStory } from '../../story/model/stories/dialogue-story';
 import { GameState } from '../model/game-state';
-import { Player } from '../model/player';
 
 export namespace MockedGame {
   export const createGameState = (): GameState => {
@@ -73,7 +72,7 @@ export namespace MockedGame {
             (gameState) =>
               new GiveLocationAction({
                 character: characters.ALICE,
-                locationReceiver: gameState.player.character,
+                locationReceiver: gameState.player,
                 location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
               })
           ),
@@ -131,9 +130,7 @@ export namespace MockedGame {
 
     characters.ALICE.addKnownLocation(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE);
 
-    const player = new Player(characters.PIOTR);
-
-    const gameState = new GameState({ player, world });
+    const gameState = new GameState({ player: characters.PIOTR, world });
     gameState.addStory(dialogueWithAlice);
     gameState.addStory(cannotNearTreasureStory);
 

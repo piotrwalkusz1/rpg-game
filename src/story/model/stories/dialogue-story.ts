@@ -44,6 +44,6 @@ export class DialogueStory extends SingleNarrationSequenceStory {
   }
 
   override getNarrationActions(gameState: GameState): NarrationAction[] {
-    return HearingService.canTalk(this.character, gameState.player.character) ? super.getNarrationActions(gameState) : [];
+    return HearingService.canTalk(this.character, gameState.player) ? super.getNarrationActions(gameState) : [];
   }
 }

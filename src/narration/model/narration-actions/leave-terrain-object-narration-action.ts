@@ -14,7 +14,7 @@ export class LeaveTerrainObjectNarrationAction extends ActionBasedNarrationActio
         if (!terrainObject.field) {
           throw new Error('Cannot leave terrain object that has no parent field');
         }
-        return new GoAction({ character: gameState.player.character, position: new FieldPosition(terrainObject.field) });
+        return new GoAction({ character: gameState.player, position: new FieldPosition(terrainObject.field) });
       }
     });
   }

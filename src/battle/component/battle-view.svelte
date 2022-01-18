@@ -112,7 +112,7 @@
   }
 
   function getPlayerCharacter(): Character {
-    return $gameState.player.character;
+    return $gameState.player;
   }
 </script>
 

@@ -5,10 +5,10 @@
   import { NarrationService } from '../../narration/service/narration-service';
 
   function goToPlayerLocation() {
-    const playerLocation = $gameState.player.character.position?.field?.location;
+    const playerLocation = $gameState.player.position?.field?.location;
     if (playerLocation) {
       $gameState.locationView = playerLocation;
-      $gameState.selectedField = $gameState.player.character.position?.field;
+      $gameState.selectedField = $gameState.player.position?.field;
       $gameState.narration = $gameState.selectedField
         ? NarrationService.getNarrationForField($gameState.selectedField, $gameState)
         : undefined;

@@ -16,7 +16,7 @@ export namespace TimeService {
       }
       case 'PLAYER_TURN':
         {
-          const pendingNarrationSequence = context.getGameState().player.pendingNarrationSequence;
+          const pendingNarrationSequence = context.getGameState().pendingNarrationSequence;
           if (pendingNarrationSequence) {
             NarrationService.continuePendingNarrationSequence(pendingNarrationSequence, context);
           }

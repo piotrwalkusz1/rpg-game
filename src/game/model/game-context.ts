@@ -58,7 +58,7 @@ export class GameContext {
   }
 
   getPlayerCharacter(): Character {
-    return this.getGameState().player.character;
+    return this.getGameState().player;
   }
 
   getPlayerPosition(): Position | undefined {

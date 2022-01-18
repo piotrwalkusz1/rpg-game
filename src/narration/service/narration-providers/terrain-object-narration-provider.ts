@@ -28,25 +28,25 @@ export namespace TerrainObjectNarrationProvider {
 
   const getGoAction = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined => {
     if (
-      !gameState.player.character.isNearTerrainObject(terrainObject) &&
-      VisionService.isLocatable(terrainObject, gameState.player.character)
+      !gameState.player.isNearTerrainObject(terrainObject) &&
+      VisionService.isLocatable(terrainObject, gameState.player)
     ) {
       return new GoToTerrainObjectNarrationAction(terrainObject);
     }
   };
 
   const getLeaveAction = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction | undefined => {
-    if (gameState.player.character.isNearTerrainObject(terrainObject)) {
+    if (gameState.player.isNearTerrainObject(terrainObject)) {
       return new LeaveTerrainObjectNarrationAction(terrainObject);
     }
   };
 
   const getChangeTerrainObjectPlacementActions = (terrainObject: TerrainObject, gameState: GameState): TemplateNarrationAction[] => {
-    if (!gameState.player.character.isNearTerrainObject(terrainObject)) {
+    if (!gameState.player.isNearTerrainObject(terrainObject)) {
       return [];
     }
     const playerTerrrainPositionPlacement =
-      gameState.player.character.position instanceof TerrainObjectPosition && gameState.player.character.position.placement;
+      gameState.player.position instanceof TerrainObjectPosition && gameState.player.position.placement;
     return terrainObject.type.placements
       .filter((placement) => placement !== playerTerrrainPositionPlacement)
       .map((placement) => new ChangeTerrainObjectPlacementNarrationAction(terrainObject, placement));

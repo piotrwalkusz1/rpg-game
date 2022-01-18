@@ -45,7 +45,7 @@
     setNarration: (narration) => ($gameState.narration = narration),
     changeLocationView: (newLocationView) => ($gameState.locationView = newLocationView),
     getGameState: () => $gameState,
-    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.player.pendingNarrationSequence = pendingNarrationSequence)
+    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.pendingNarrationSequence = pendingNarrationSequence)
   });
 
   $: narration = $gameState.narration;
@@ -57,7 +57,7 @@
 </script>
 
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
-  <CharacterProfileView character={$gameState.player.character} />
+  <CharacterProfileView character={$gameState.player} />
   <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
     <LocationNameView />
     <div class="flex grow divide-x-[2px] divide-black overflow-hidden">
@@ -82,7 +82,7 @@
   <BattleView bind:battle={$gameState.battle} />
 {/if}
 
-{#if $gameState.player.character.position === undefined}
+{#if $gameState.player.position === undefined}
   <Dialog>
     <div class="flex flex-col w-full justify-center items-center">
       <div class="text-[60px] font-bold"><TranslatableTextView text="GAME.MESSAGE.YOU_ARE_DEAD" /></div>

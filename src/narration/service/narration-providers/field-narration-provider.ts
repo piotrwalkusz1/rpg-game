@@ -22,7 +22,7 @@ export namespace FieldNarrationProvider {
 }
 
 const prepareGoAction = (field: MapField, gameState: GameState): TemplateNarrationAction[] => {
-  if (field.kind !== MapFieldKind.FIELD || gameState.player.character.isOnField(field)) {
+  if (field.kind !== MapFieldKind.FIELD || gameState.player.isOnField(field)) {
     return [];
   }
   return [new GoToFieldNarrationAction(field)];
