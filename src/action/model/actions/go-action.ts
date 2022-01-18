@@ -1,10 +1,10 @@
 import type { Character } from '../../../character/model/character';
 import { ArrayUtils } from '../../../common/array-utils';
-import type { WorldContext } from '../../../game/model/world-context';
 import type { Position } from '../../../map/model/position';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
+import type { GameContext } from '../../../game/model/game-context';
 
 export class GoActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly newPosition: Position;
@@ -68,7 +68,7 @@ export class GoAction extends CharacterAction {
     };
   }
 
-  override execute(context: WorldContext): GoActionResultEvent | undefined {
+  override execute(context: GameContext): GoActionResultEvent | undefined {
     const oldPosition = this.character.position;
     if (oldPosition === undefined) {
       return;
@@ -77,7 +77,7 @@ export class GoAction extends CharacterAction {
     return new GoActionResultEvent({ character: this.character, newPosition: this.position, oldPosition });
   }
 
-  override getActionScheduledEvent(_context: WorldContext): CharacterActionScheduledEvent | undefined {
+  override getActionScheduledEvent(_context: GameContext): CharacterActionScheduledEvent | undefined {
     const oldPosition = this.character.position;
     if (oldPosition === undefined) {
       return;

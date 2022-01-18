@@ -18,7 +18,6 @@
   i18n.addResourceBundle('pl', 'common', {});
 
   const gameContext = new GameContext({
-    getWorldState: () => $gameState.worldState,
     changeCharacterPosition: (character, position) => {
       character.position = position;
       $gameState = $gameState;
@@ -28,16 +27,16 @@
       $gameState = $gameState;
     },
     addTimeEvent: (timeEvent) => {
-      $gameState.worldState.timeAxis.addEvent(timeEvent);
+      $gameState.timeAxis.addEvent(timeEvent);
       $gameState = $gameState;
     },
     popNextTimeEvent: () => {
-      const nextEvent = $gameState.worldState.timeAxis.popNextEvent();
+      const nextEvent = $gameState.timeAxis.popNextEvent();
       $gameState = $gameState;
       return nextEvent;
     },
     setCurrentTime: (time) => {
-      $gameState.worldState.currentTime = time;
+      $gameState.currentTime = time;
     },
     dealDamage: (target, damage) => {
       target.dealDamage(damage);
@@ -58,7 +57,7 @@
 </script>
 
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
-  <CharacterProfileView character={$gameState.worldState.player.character} />
+  <CharacterProfileView character={$gameState.player.character} />
   <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
     <LocationNameView />
     <div class="flex grow divide-x-[2px] divide-black overflow-hidden">
@@ -83,7 +82,7 @@
   <BattleView bind:battle={$gameState.battle} />
 {/if}
 
-{#if $gameState.worldState.player.character.position === undefined}
+{#if $gameState.player.character.position === undefined}
   <Dialog>
     <div class="flex flex-col w-full justify-center items-center">
       <div class="text-[60px] font-bold"><TranslatableTextView text="GAME.MESSAGE.YOU_ARE_DEAD" /></div>

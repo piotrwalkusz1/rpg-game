@@ -1,5 +1,5 @@
 import type { Character } from '../../../character/model/character';
-import type { WorldContext } from '../../../game/model/world-context';
+import type { GameContext } from '../../../game/model/game-context';
 import type { Position } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
@@ -51,7 +51,7 @@ export class AttackAction extends CharacterAction {
     return { seconds: 2 };
   }
 
-  override execute(context: WorldContext): AttackActionResultEvent {
+  override execute(context: GameContext): AttackActionResultEvent {
     context.dealDamage(this.target, this.character.damage);
     return new AttackActionResultEvent({ position: this.position, character: this.character });
   }

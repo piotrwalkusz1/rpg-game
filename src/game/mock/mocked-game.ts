@@ -18,7 +18,7 @@ import { GameState } from '../model/game-state';
 import { Player } from '../model/player';
 
 export namespace MockedGame {
-  export const createGameState = () => {
+  export const createGameState = (): GameState => {
     const createRegion = (): MapLocation =>
       new MapLocation({ name: { literal: 'Region' }, width: 10, height: 10, fieldType: MapFieldType.MEADOW });
     const createWorld = (): MapLocation => {

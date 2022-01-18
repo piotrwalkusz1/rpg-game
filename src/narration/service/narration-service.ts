@@ -3,7 +3,6 @@ import type { GameContext } from '../../game/model/game-context';
 import type { GameState } from '../../game/model/game-state';
 import { createTranslatableTextFromArray } from '../../i18n/translatable-text';
 import type { MapField } from '../../map/model/map-field';
-import { TimeService } from '../../time/service/time-service';
 import { Narration } from '../model/narration';
 import { NarrationAction } from '../model/narration-actions/narration-action';
 import { NarrationDescription } from '../model/narration-description';

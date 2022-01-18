@@ -1,5 +1,5 @@
 import type { Character } from '../../../character/model/character';
-import type { WorldContext } from '../../../game/model/world-context';
+import type { GameContext } from '../../../game/model/game-context';
 import type { Position } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
@@ -54,7 +54,7 @@ export class GiveLocationAction extends CharacterAction {
     return { seconds: 10 };
   }
 
-  execute(context: WorldContext): GiveLocationActionResultEvent {
+  execute(context: GameContext): GiveLocationActionResultEvent {
     context.addKnownLocation(this.locationReceiver, this.location);
     return new GiveLocationActionResultEvent({ position: this.position, character: this.character });
   }

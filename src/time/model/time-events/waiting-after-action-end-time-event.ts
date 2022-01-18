@@ -1,6 +1,6 @@
 import { AIService } from '../../../ai/service/ai-service';
 import type { Character } from '../../../character/model/character';
-import type { WorldContext } from '../../../game/model/world-context';
+import type { GameContext } from '../../../game/model/game-context';
 import { TimeEvent } from '../time-event';
 import type { TimeEventHandleResult } from '../time-event-handle-result';
 
@@ -12,7 +12,7 @@ export class WaitingAfterActionEndTimeEvent extends TimeEvent {
     this.character = character;
   }
 
-  override handle(context: WorldContext): TimeEventHandleResult {
+  override handle(context: GameContext): TimeEventHandleResult {
     this.character.currentAction = undefined;
     if (this.character === context.getPlayerCharacter()) {
       return { type: 'PLAYER_TURN' };

@@ -6,5 +6,5 @@
 <div class="text-center font-bold py-[5px]">
   <TranslatableTextView text={$gameState.locationView.name} />
   -
-  <div>{$gameState.worldState.currentTime}</div>
+  <div>{$gameState.currentTime}</div>
 </div>

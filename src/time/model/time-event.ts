@@ -1,4 +1,4 @@
-import type { WorldContext } from '../../game/model/world-context';
+import type { GameContext } from '../../game/model/game-context';
 import type { TimeEventHandleResult } from './time-event-handle-result';
 
 export abstract class TimeEvent {
@@ -8,5 +8,5 @@ export abstract class TimeEvent {
     this.time = time;
   }
 
-  abstract handle(context: WorldContext): TimeEventHandleResult;
+  abstract handle(context: GameContext): TimeEventHandleResult;
 }

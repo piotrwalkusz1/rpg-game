@@ -1,13 +1,13 @@
 import { DetectorService } from '../../detector/service/detector-service';
-import type { WorldContext } from '../../game/model/world-context';
 import { ExecuteActionTimeEvent } from '../../time/model/time-events/execute-action-time-event';
 import { WaitingAfterActionEndTimeEvent } from '../../time/model/time-events/waiting-after-action-end-time-event';
 import type { Action } from '../model/action';
 import type { ActionExecutionResult } from '../model/action-execution-result';
 import { CharacterAction, CharacterActionScheduledEvent } from '../model/character-action';
+import type { GameContext } from '../../game/model/game-context';
 
 export namespace ActionService {
-  export const scheduleAction = (action: Action, context: WorldContext): ActionExecutionResult => {
+  export const scheduleAction = (action: Action, context: GameContext): ActionExecutionResult => {
     const scheduledEvent = action.getActionScheduledEvent(context);
     if (action instanceof CharacterAction && scheduledEvent instanceof CharacterActionScheduledEvent) {
       const character = action.character;
@@ -23,7 +23,7 @@ export namespace ActionService {
     return { type: 'SUCCESS' };
   };
 
-  export const executeAction = (action: Action, context: WorldContext): void => {
+  export const executeAction = (action: Action, context: GameContext): void => {
     action.execute(context);
     if (action instanceof CharacterAction) {
       context.addTimeEvent(
