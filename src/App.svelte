@@ -5,8 +5,8 @@
   import Dialog from './common/component/dialog.svelte';
   import { gameState } from './common/store';
   import Toolbox from './game/component/toolbox.svelte';
-  import { MockedGame } from './game/mock/mocked-game';
   import { GameContext } from './game/model/game-context';
+  import { MockedGame } from './game/service/mocked-game';
   import TranslatableTextView from './i18n/translatable-text-view.svelte';
   import { initLocalizationContext } from './i18n/translation-service';
   import LocationNameView from './map/component/location-name-view.svelte';
