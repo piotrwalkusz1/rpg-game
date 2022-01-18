@@ -4,17 +4,17 @@ import type { MapLocation } from '../../map/model/map-location';
 import type { Position } from '../../map/model/position';
 import type { Narration } from '../../narration/model/narration';
 import type { PendingNarrationSequence } from '../../narration/model/narration-sequence/pending-narration-sequence';
-import type { TimeEvent } from '../../time/model/time-event';
 import type { TraitOwner } from '../../trait/model/trait-owner';
 import type { GameState } from './game-state';
+import type { GameEvent } from './game-event';
 
 export class GameContext {
   static KEY = Symbol();
 
   readonly changeCharacterPosition: (character: Character, position: Position) => void;
   readonly addKnownLocation: (character: Character, location: TraitOwner) => void;
-  readonly addTimeEvent: (timeEvent: TimeEvent) => void;
-  readonly popNextTimeEvent: () => TimeEvent | undefined;
+  readonly addGameEvent: (event: GameEvent) => void;
+  readonly popNextGameEvent: () => GameEvent | undefined;
   readonly setCurrentTime: (time: Date) => void;
   readonly dealDamage: (target: Character, damage: number) => void;
   readonly getGameState: () => GameState;
@@ -25,8 +25,8 @@ export class GameContext {
   constructor({
     changeCharacterPosition,
     addKnownLocation,
-    addTimeEvent,
-    popNextTimeEvent,
+    addGameEvent,
+    popNextGameEvent,
     setCurrentTime,
     dealDamage,
     getGameState,
@@ -36,8 +36,8 @@ export class GameContext {
   }: {
     changeCharacterPosition: (character: Character, position: Position) => void;
     addKnownLocation: (character: Character, location: TraitOwner) => void;
-    addTimeEvent: (timeEvent: TimeEvent) => void;
-    popNextTimeEvent: () => TimeEvent | undefined;
+    addGameEvent: (event: GameEvent) => void;
+    popNextGameEvent: () => GameEvent | undefined;
     setCurrentTime: (time: Date) => void;
     dealDamage: (target: Character, damage: number) => void;
     getGameState: () => GameState;
@@ -47,8 +47,8 @@ export class GameContext {
   }) {
     this.changeCharacterPosition = changeCharacterPosition;
     this.addKnownLocation = addKnownLocation;
-    this.addTimeEvent = addTimeEvent;
-    this.popNextTimeEvent = popNextTimeEvent;
+    this.addGameEvent = addGameEvent;
+    this.popNextGameEvent = popNextGameEvent;
     this.setCurrentTime = setCurrentTime;
     this.dealDamage = dealDamage;
     this.getGameState = getGameState;

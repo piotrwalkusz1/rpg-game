@@ -2,8 +2,8 @@
   import { getContext } from 'svelte';
   import { gameState } from '../../common/store';
   import { GameContext } from '../../game/model/game-context';
+  import { GameLoopService } from '../../game/service/game-loop-service';
   import TranslatableTextView from '../../i18n/translatable-text-view.svelte';
-  import { TimeService } from '../../time/service/time-service';
   import type { NarrationAction } from '../model/narration-actions/narration-action';
   import { NarrationService } from '../service/narration-service';
 
@@ -13,7 +13,7 @@
 
   function executeNarrationAction(narrationAction: NarrationAction) {
     NarrationService.executeNarrationAction(narrationAction, gameContext);
-    TimeService.handleNextTimeEvent(gameContext);
+    GameLoopService.processNextEvent(gameContext);
   }
 </script>
 

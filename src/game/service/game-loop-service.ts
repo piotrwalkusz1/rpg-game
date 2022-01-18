@@ -1,17 +1,17 @@
-import type { GameContext } from '../../game/model/game-context';
 import { NarrationService } from '../../narration/service/narration-service';
+import type { GameContext } from '../model/game-context';
 
-export namespace TimeService {
-  export const handleNextTimeEvent = (context: GameContext): void => {
-    const event = context.popNextTimeEvent();
+export namespace GameLoopService {
+  export const processNextEvent = (context: GameContext): void => {
+    const event = context.popNextGameEvent();
     if (!event) {
       return;
     }
     context.setCurrentTime(event.time);
-    const result = event.handle(context);
+    const result = event.process(context);
     switch (result.type) {
-      case 'HANDLE_NEXT_EVENT': {
-        handleNextTimeEvent(context);
+      case 'PROCESS_NEXT_EVENT': {
+        processNextEvent(context);
         break;
       }
       case 'PLAYER_TURN':

@@ -26,12 +26,12 @@
       character.addKnownLocation(location);
       $gameState = $gameState;
     },
-    addTimeEvent: (timeEvent) => {
-      $gameState.timeAxis.addEvent(timeEvent);
+    addGameEvent: (event) => {
+      $gameState.eventQueue.addEvent(event);
       $gameState = $gameState;
     },
-    popNextTimeEvent: () => {
-      const nextEvent = $gameState.timeAxis.popNextEvent();
+    popNextGameEvent: () => {
+      const nextEvent = $gameState.eventQueue.popNextEvent();
       $gameState = $gameState;
       return nextEvent;
     },

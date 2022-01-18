@@ -1,9 +1,9 @@
-import type { TimeEvent } from './time-event';
+import type { GameEvent } from './game-event';
 
-export class TimeAxis {
-  private readonly _events: TimeEvent[] = [];
+export class GameEventQueue {
+  private readonly _events: GameEvent[] = [];
 
-  addEvent(event: TimeEvent): void {
+  addEvent(event: GameEvent): void {
     this._events.push(event);
     this._events.sort(function (firstEvent, secondEvent) {
       if (firstEvent > secondEvent) {
@@ -16,7 +16,7 @@ export class TimeAxis {
     });
   }
 
-  popNextEvent(): TimeEvent | undefined {
+  popNextEvent(): GameEvent | undefined {
     return this._events.shift();
   }
 }

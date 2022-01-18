@@ -6,7 +6,7 @@ import type { Position } from '../../map/model/position';
 import type { Narration } from '../../narration/model/narration';
 import type { PendingNarrationSequence } from '../../narration/model/narration-sequence/pending-narration-sequence';
 import type { Story } from '../../story/model/story';
-import { TimeAxis } from '../../time/model/time-axis';
+import { GameEventQueue } from './game-event-queue';
 
 export class GameState {
   private readonly stories: Story[] = [];
@@ -16,7 +16,7 @@ export class GameState {
   battle?: Battle;
   readonly world: MapLocation;
   currentTime: Date = new Date(2000, 5, 1, 8, 0, 0, 0);
-  readonly timeAxis: TimeAxis = new TimeAxis();
+  readonly eventQueue: GameEventQueue = new GameEventQueue();
   readonly player: Character;
   pendingNarrationSequence?: PendingNarrationSequence;
 

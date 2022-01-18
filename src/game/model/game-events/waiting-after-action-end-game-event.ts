@@ -1,10 +1,10 @@
 import { AIService } from '../../../ai/service/ai-service';
 import type { Character } from '../../../character/model/character';
-import type { GameContext } from '../../../game/model/game-context';
-import { TimeEvent } from '../time-event';
-import type { TimeEventHandleResult } from '../time-event-handle-result';
+import type { GameContext } from '../game-context';
+import { GameEvent } from '../game-event';
+import type { GameEventHandleResult } from '../game-event-handle-result';
 
-export class WaitingAfterActionEndTimeEvent extends TimeEvent {
+export class WaitingAfterActionEndGameEvent extends GameEvent {
   readonly character: Character;
 
   constructor({ time, character }: { time: Date; character: Character }) {
@@ -12,13 +12,13 @@ export class WaitingAfterActionEndTimeEvent extends TimeEvent {
     this.character = character;
   }
 
-  override handle(context: GameContext): TimeEventHandleResult {
+  override process(context: GameContext): GameEventHandleResult {
     this.character.currentAction = undefined;
     if (this.character === context.getPlayerCharacter()) {
       return { type: 'PLAYER_TURN' };
     } else {
       AIService.executeTurn(this.character, context);
-      return { type: 'HANDLE_NEXT_EVENT' };
+      return { type: 'PROCESS_NEXT_EVENT' };
     }
   }
 }
