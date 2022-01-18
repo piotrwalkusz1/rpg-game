@@ -33,6 +33,7 @@ type Translations = { [key in TranslationKey]: string };
 
 const defaultTranslations = {
   'NARRATION.COMMON.OK': 'Ok',
+  'NARRATION.WAITING_FOR_END_OF_ACTION': 'Waiting for the end of the action...',
   'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Go',
   'NARRATION.ACTION.GO_TO_FIELD': 'Go',
   'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Leave',
@@ -79,6 +80,7 @@ const defaultTranslations = {
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
   'NARRATION.COMMON.OK': 'Ok',
+  'NARRATION.WAITING_FOR_END_OF_ACTION': 'Oczekiwanie na zakończenie akcji...',
   'NARRATION.ACTION.GO_TO_TERRAIN_OBJECT': 'Idź',
   'NARRATION.ACTION.GO_TO_FIELD': 'Idź',
   'NARRATION.ACTION.LEAVE_TERRAIN_OBJECT': 'Opuść',

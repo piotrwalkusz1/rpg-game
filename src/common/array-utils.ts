@@ -2,7 +2,7 @@ export namespace ArrayUtils {
   export const filterNotNull = <T>(array: (T | undefined | null)[]): T[] =>
     array.filter((item): item is T => item !== undefined && item !== null);
 
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export const filterInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T[] =>
     array.filter((item): item is T => item instanceof type);
 
@@ -16,7 +16,7 @@ export namespace ArrayUtils {
   };
 
   export const remove = <T>(array: T[], item: T): boolean => {
-    let index: number = array.findIndex((otherItem) => otherItem === item);
+    const index: number = array.findIndex((otherItem) => otherItem === item);
     if (index !== -1) {
       array.splice(index, 1);
       return true;

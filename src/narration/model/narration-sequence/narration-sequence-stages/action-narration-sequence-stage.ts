@@ -1,7 +1,9 @@
 import { Action } from '../../../../action/model/action';
+import { CharacterAction } from '../../../../action/model/character-action';
 import { ActionService } from '../../../../action/service/action-service';
 import type { GameState } from '../../../../game/model/game-state';
 import { NarrationAction } from '../../narration-actions/narration-action';
+import { NarrationDescription } from '../../narration-description';
 import { NarrationSequenceStage } from '../narration-sequence-stage';
 import type { NarrationSequenceStageExecutionContext } from '../narration-sequence-stage-execution-context';
 import type { NarrationSequenceStageExecutionResult } from '../narration-sequence-stage-execution-result';
@@ -15,10 +17,19 @@ export class ActionNarrationSequenceStage extends NarrationSequenceStage {
   }
 
   override execute(context: NarrationSequenceStageExecutionContext): NarrationSequenceStageExecutionResult {
-    const result = ActionService.scheduleAction(this.action(context.gameContext.getGameState()), context.gameContext);
+    const action = this.action(context.gameContext.getGameState());
+    const result = ActionService.scheduleAction(action, context.gameContext);
     switch (result.type) {
       case 'SUCCESS':
-        return { type: 'NEXT_STAGE' };
+        if (action instanceof CharacterAction) {
+          return {
+            type: 'WAIT',
+            condition: () => action.character.currentAction === undefined,
+            waitingScene: { description: new NarrationDescription('NARRATION.WAITING_FOR_END_OF_ACTION') }
+          };
+        } else {
+          return { type: 'NEXT_STAGE' };
+        }
       case 'PREVENTION':
         return {
           type: 'SCENE',

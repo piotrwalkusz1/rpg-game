@@ -13,6 +13,7 @@ export class WaitingAfterActionEndTimeEvent extends TimeEvent {
   }
 
   override handle(context: WorldContext): TimeEventHandleResult {
+    this.character.currentAction = undefined;
     if (this.character === context.getPlayerCharacter()) {
       return { type: 'PLAYER_TURN' };
     } else {

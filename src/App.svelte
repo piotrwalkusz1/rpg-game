@@ -43,8 +43,10 @@
       target.dealDamage(damage);
       $gameState = $gameState;
     },
+    setNarration: (narration) => ($gameState.narration = narration),
     changeLocationView: (newLocationView) => ($gameState.locationView = newLocationView),
-    getGameState: () => $gameState
+    getGameState: () => $gameState,
+    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.player.pendingNarrationSequence = pendingNarrationSequence)
   });
 
   $: narration = $gameState.narration;

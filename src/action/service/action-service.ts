@@ -9,11 +9,15 @@ import { CharacterAction, CharacterActionScheduledEvent } from '../model/charact
 export namespace ActionService {
   export const scheduleAction = (action: Action, context: WorldContext): ActionExecutionResult => {
     const scheduledEvent = action.getActionScheduledEvent(context);
-    if (scheduledEvent instanceof CharacterActionScheduledEvent && scheduledEvent.character === context.getPlayerCharacter()) {
-      DetectorService.runDetectors(scheduledEvent);
-      if (scheduledEvent.preventionNarrationDescription) {
-        return { type: 'PREVENTION', description: scheduledEvent.preventionNarrationDescription };
+    if (action instanceof CharacterAction && scheduledEvent instanceof CharacterActionScheduledEvent) {
+      const character = action.character;
+      if (character === context.getPlayerCharacter()) {
+        DetectorService.runDetectors(scheduledEvent);
+        if (scheduledEvent.preventionNarrationDescription) {
+          return { type: 'PREVENTION', description: scheduledEvent.preventionNarrationDescription };
+        }
       }
+      character.currentAction = action;
     }
     context.addTimeEvent(new ExecuteActionTimeEvent({ time: context.getCurrentTimePlusDuration(action.duration), action }));
     return { type: 'SUCCESS' };

@@ -12,8 +12,7 @@
   $: narration = $gameState.narration;
 
   function executeNarrationAction(narrationAction: NarrationAction) {
-    const newNarration = NarrationService.executeNarrationAction(narrationAction, gameContext);
-    $gameState.narration = newNarration || NarrationService.getNarrationSelectedField($gameState);
+    NarrationService.executeNarrationAction(narrationAction, gameContext);
     TimeService.handleNextTimeEvent(gameContext);
   }
 </script>

@@ -4,8 +4,8 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationActionOrder } from '../narration-action-order';
 import { NarrationSequence } from '../narration-sequence/narration-sequence';
 import { ActionNarrationSequenceStage } from '../narration-sequence/narration-sequence-stages/action-narration-sequence-stage';
-import { NarrationActionId, TemplateNarrationAction } from './template-narration-action';
 import type { NarrationActionNameContext } from './narration-action-name-context';
+import { NarrationActionId, TemplateNarrationAction } from './template-narration-action';
 
 export abstract class ActionBasedNarrationAction extends TemplateNarrationAction {
   constructor({
