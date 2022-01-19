@@ -5,15 +5,13 @@
   import { GameLoopService } from '../../game/service/game-loop-service';
   import TranslatableTextView from '../../i18n/translatable-text-view.svelte';
   import type { NarrationAction } from '../model/narration-actions/narration-action';
-  import { NarrationService } from '../service/narration-service';
 
   const gameContext: GameContext = getContext(GameContext.KEY);
 
   $: narration = $gameState.narration;
 
   function executeNarrationAction(narrationAction: NarrationAction) {
-    NarrationService.executeNarrationAction(narrationAction, gameContext);
-    GameLoopService.processNextEvent(gameContext);
+    GameLoopService.executePlayerTurn(narrationAction, gameContext);
   }
 </script>
 

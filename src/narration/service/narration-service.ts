@@ -64,70 +64,55 @@ export namespace NarrationService {
     return new Narration({ title, description: new NarrationDescription(description), actions });
   };
 
-  export const executeNarrationAction = (action: NarrationAction, context: GameContext): void => {
+  export const executeNarrationAction = (action: NarrationAction, context: GameContext): PendingNarrationSequence | undefined => {
     return executeNarrationSequenceStages(action.narrationSequence, action.narrationStages, context);
-  };
-
-  export const continuePendingNarrationSequence = (pendingNarrationSequence: PendingNarrationSequence, context: GameContext): void => {
-    if (pendingNarrationSequence.condition(context.getGameState())) {
-      context.setPendingNarrationSequence(undefined);
-      executeNarrationSequenceStages(pendingNarrationSequence.narrationSequence, pendingNarrationSequence.narrationStages, context);
-    } else {
-      setSceneAsNarration(
-        pendingNarrationSequence.scene,
-        pendingNarrationSequence.narrationSequence,
-        pendingNarrationSequence.narrationStages,
-        context
-      );
-    }
   };
 
   const executeNarrationSequenceStages = (
     narrationSequence: NarrationSequence,
     narrationSequenceStages: NarrationSequenceStage[],
     context: GameContext
-  ): void => {
+  ): PendingNarrationSequence | undefined => {
     if (narrationSequenceStages.length === 0) {
-      context.setNarration(getNarrationForSelectedField(context.getGameState()));
-      return;
+      return undefined;
     }
     const [currentStage, ...nextStages] = narrationSequenceStages;
-    const result = currentStage.execute({
-      gameContext: context,
-      narrationSequence
+    return executeNarrationSequenceStage(narrationSequence, currentStage, nextStages, context);
+  };
+
+  export const executeNarrationSequenceStage = (
+    narrationSequence: NarrationSequence,
+    narrationSequenceStage: NarrationSequenceStage,
+    nextNarrationSequenceStages: NarrationSequenceStage[],
+    context: GameContext
+  ): PendingNarrationSequence | undefined => {
+    const result = narrationSequenceStage.execute({
+      narrationSequence,
+      context
     });
     switch (result.type) {
       case 'NEXT_STAGE':
-        executeNarrationSequenceStages(narrationSequence, result.nextStages || nextStages, context);
-        break;
-      case 'SCENE': {
-        setSceneAsNarration(result.scene, narrationSequence, nextStages, context);
-        break;
+        return executeNarrationSequenceStages(narrationSequence, result.nextStages || nextNarrationSequenceStages, context);
+      case 'PLAYER_TURN': {
+        return { scene: result.scene, narrationSequence, narrationStages: nextNarrationSequenceStages };
       }
       case 'WAIT':
-        if (result.condition(context.getGameState())) {
-          executeNarrationSequenceStages(narrationSequence, nextStages, context);
-        } else {
-          context.setPendingNarrationSequence({
-            condition: result.condition,
-            scene: result.waitingScene,
-            narrationSequence,
-            narrationStages: nextStages
-          });
-          setSceneAsNarration(result.waitingScene, narrationSequence, nextStages, context);
-        }
-        break;
+        return {
+          pendingStage: result.pendingStage,
+          scene: result.scene,
+          narrationSequence,
+          narrationStages: nextNarrationSequenceStages
+        };
     }
   };
 
-  const setSceneAsNarration = (
+  export const convertSceneToNarration = (
     scene: NarrationSequenceScene,
     narrationSequence: NarrationSequence,
-    nextStages: NarrationSequenceStage[],
-    context: GameContext
-  ): void => {
+    nextStages: NarrationSequenceStage[]
+  ): Narration => {
     const actions = NarrationSequenceSceneAction.getNarrationActions(scene.actions || [], nextStages);
-    const narration = new Narration({
+    return new Narration({
       title: narrationSequence.title,
       description: scene.description,
       actions:
@@ -136,6 +121,5 @@ export namespace NarrationService {
           : [new NarrationAction({ name: 'NARRATION.COMMON.OK', narrationSequence, narrationStages: nextStages })],
       isActionRequired: true
     });
-    context.setNarration(narration);
   };
 }

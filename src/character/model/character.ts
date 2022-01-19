@@ -42,7 +42,7 @@ export class Character implements TraitOwner, NarrationProviderOwner {
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
-  currentAction: CharacterAction | undefined;
+  pendingAction: CharacterAction | undefined;
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;

@@ -1,6 +1,6 @@
-import type { NarrationSequenceStageExecutionContext } from './narration-sequence-stage-execution-context';
 import type { NarrationSequenceStageExecutionResult } from './narration-sequence-stage-execution-result';
+import type { NarrationSequenceStageExecutionParams } from './narration-sequence-stage-execution-params';
 
-export abstract class NarrationSequenceStage {
-  abstract execute(context: NarrationSequenceStageExecutionContext): NarrationSequenceStageExecutionResult;
+export interface NarrationSequenceStage {
+  execute(params: NarrationSequenceStageExecutionParams): NarrationSequenceStageExecutionResult;
 }

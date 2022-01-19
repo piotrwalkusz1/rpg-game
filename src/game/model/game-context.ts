@@ -5,8 +5,8 @@ import type { Position } from '../../map/model/position';
 import type { Narration } from '../../narration/model/narration';
 import type { PendingNarrationSequence } from '../../narration/model/narration-sequence/pending-narration-sequence';
 import type { TraitOwner } from '../../trait/model/trait-owner';
-import type { GameState } from './game-state';
 import type { GameEvent } from './game-event';
+import type { GameState } from './game-state';
 
 export class GameContext {
   static KEY = Symbol();
@@ -57,19 +57,35 @@ export class GameContext {
     this.setPendingNarrationSequence = setPendingNarrationSequence;
   }
 
-  getPlayerCharacter(): Character {
-    return this.getGameState().player;
+  get gameState(): GameState {
+    return this.getGameState();
   }
 
-  getPlayerPosition(): Position | undefined {
-    return this.getGameState().getPlayerPosition();
+  get player(): Character {
+    return this.gameState.player;
   }
 
-  getCurrentTime(): Date {
-    return this.getGameState().currentTime;
+  get currentTime(): Date {
+    return this.gameState.currentTime;
+  }
+
+  set currentTime(currentTime: Date) {
+    this.setCurrentTime(currentTime);
+  }
+
+  get pendingNarrationSequence(): PendingNarrationSequence | undefined {
+    return this.gameState.pendingNarrationSequence;
+  }
+
+  set pendingNarrationSequence(pendingNarrationSequence: PendingNarrationSequence | undefined) {
+    this.setPendingNarrationSequence(pendingNarrationSequence);
+  }
+
+  set narration(narration: Narration | undefined) {
+    this.setNarration(narration);
   }
 
   getCurrentTimePlusDuration(duration: Duration): Date {
-    return add(this.getCurrentTime(), duration);
+    return add(this.currentTime, duration);
   }
 }
