@@ -12,6 +12,7 @@
   import LocationNameView from './map/component/location-name-view.svelte';
   import LocationView from './map/component/location-view.svelte';
   import NarrationPanel from './narration/component/narration-panel.svelte';
+  import TimeView from './time/component/time-view.svelte';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
@@ -59,7 +60,15 @@
 <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
   <CharacterProfileView character={$gameState.player} />
   <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
-    <LocationNameView />
+    <div class="flex items-center">
+      <div class="flex-1">
+        <div class="px-[10%]">
+          <TimeView />
+        </div>
+      </div>
+      <LocationNameView />
+      <div class="flex-1" />
+    </div>
     <div class="flex grow divide-x-[2px] divide-black overflow-hidden">
       <Toolbox />
       <LocationView />
