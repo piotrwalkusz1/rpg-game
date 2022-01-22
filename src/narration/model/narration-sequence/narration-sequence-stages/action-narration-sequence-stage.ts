@@ -39,6 +39,20 @@ export class ActionNarrationSequenceStage implements NarrationSequenceStage {
             ]
           }
         };
+      case 'CANNOT_EXECUTE':
+        return {
+          type: 'PLAYER_TURN',
+          scene: {
+            description: new NarrationDescription('NARRATION.ACTION_CANNOT_BE_PERFORMED'),
+            actions: [
+              new NarrationAction({
+                name: 'NARRATION.COMMON.OK',
+                narrationSequence,
+                narrationStages: []
+              })
+            ]
+          }
+        };
     }
   }
 

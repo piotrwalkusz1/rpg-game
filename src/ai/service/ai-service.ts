@@ -12,7 +12,15 @@ export namespace AIService {
       const enemy: Character | undefined = battle.participants.getArray().filter((participant) => participant !== character)[0];
       if (enemy) {
         const action = new AttackAction({ character, target: enemy });
-        ActionService.scheduleAction(action, context);
+        const scheduleActionResult = ActionService.scheduleAction(action, context);
+        switch (scheduleActionResult.type) {
+          case 'SUCCESS':
+          case 'PREVENTION':
+          case 'CANNOT_EXECUTE':
+            break;
+        }
+      } else {
+        character.activities.remove(battle);
       }
     }
   };

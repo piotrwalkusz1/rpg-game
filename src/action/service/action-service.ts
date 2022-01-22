@@ -4,10 +4,14 @@ import { ExecuteActionGameEvent } from '../../game/model/game-events/execute-act
 import { NextActionPossibleGameEvent } from '../../game/model/game-events/next-action-possible-game-event';
 import type { Action } from '../model/action';
 import type { ActionExecutionResult } from '../model/action-execution-result';
+import type { ActionScheduleResult } from '../model/action-schedule-result';
 import { CharacterAction, CharacterActionScheduledEvent } from '../model/character-action';
 
 export namespace ActionService {
-  export const scheduleAction = (action: Action, context: GameContext): ActionExecutionResult => {
+  export const scheduleAction = (action: Action, context: GameContext): ActionScheduleResult => {
+    if (action instanceof CharacterAction && (action.character.pendingAction || !action.canExecute(context))) {
+      return { type: 'CANNOT_EXECUTE' };
+    }
     const scheduledEvent = action.getActionScheduledEvent(context);
     if (action instanceof CharacterAction && scheduledEvent instanceof CharacterActionScheduledEvent) {
       const character = action.character;
@@ -23,7 +27,21 @@ export namespace ActionService {
     return { type: 'SUCCESS' };
   };
 
-  export const executeAction = (action: Action, context: GameContext): void => {
+  export const executeAction = (action: Action, context: GameContext): ActionExecutionResult => {
+    if (action instanceof CharacterAction) {
+      if (action.character.pendingAction !== action) {
+        return { type: 'CANNOT_EXECUTE' };
+      }
+      if (!action.canExecute(context)) {
+        context.addGameEvent(
+          new NextActionPossibleGameEvent({
+            time: context.currentTime,
+            character: action.character
+          })
+        );
+        return { type: 'CANNOT_EXECUTE' };
+      }
+    }
     action.execute(context);
     if (action instanceof CharacterAction) {
       context.addGameEvent(
@@ -33,5 +51,6 @@ export namespace ActionService {
         })
       );
     }
+    return { type: 'SUCCESS' };
   };
 }

@@ -1,10 +1,10 @@
 import type { Character } from '../../../character/model/character';
 import { ArrayUtils } from '../../../common/array-utils';
+import type { GameContext } from '../../../game/model/game-context';
 import type { Position } from '../../../map/model/position';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
-import type { GameContext } from '../../../game/model/game-context';
 
 export class GoActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly newPosition: Position;
@@ -66,6 +66,10 @@ export class GoAction extends CharacterAction {
     return {
       minutes: 1
     };
+  }
+
+  override canExecute(): boolean {
+    return this.character.healthPoints > 0;
   }
 
   override execute(context: GameContext): GoActionResultEvent | undefined {

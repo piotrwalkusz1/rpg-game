@@ -1,6 +1,6 @@
 import type { Character } from '../../../character/model/character';
 import type { GameContext } from '../../../game/model/game-context';
-import type { Position } from '../../../map/model/position';
+import { Position, TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
 
@@ -49,6 +49,15 @@ export class AttackAction extends CharacterAction {
 
   override get duration(): Duration {
     return { seconds: 2 };
+  }
+
+  override canExecute(): boolean {
+    return (
+      this.character.healthPoints > 0 &&
+      this.target.healthPoints > 0 &&
+      this.character.position instanceof TerrainObjectPosition &&
+      Position.areEqual(this.character.position, this.target.position)
+    );
   }
 
   override execute(context: GameContext): AttackActionResultEvent {

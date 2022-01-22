@@ -1,6 +1,6 @@
 import type { Character } from '../../../character/model/character';
 import type { GameContext } from '../../../game/model/game-context';
-import type { Position } from '../../../map/model/position';
+import { Position, TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
@@ -54,12 +54,21 @@ export class GiveLocationAction extends CharacterAction {
     return { seconds: 10 };
   }
 
-  execute(context: GameContext): GiveLocationActionResultEvent {
+  override canExecute(): boolean {
+    return (
+      this.character.healthPoints > 0 &&
+      this.locationReceiver.healthPoints > 0 &&
+      this.character.position instanceof TerrainObjectPosition &&
+      Position.areEqual(this.character.position, this.locationReceiver.position)
+    );
+  }
+
+  override execute(context: GameContext): GiveLocationActionResultEvent {
     context.addKnownLocation(this.locationReceiver, this.location);
     return new GiveLocationActionResultEvent({ position: this.position, character: this.character });
   }
 
-  getActionScheduledEvent(): CharacterActionScheduledEvent | undefined {
+  override getActionScheduledEvent(): CharacterActionScheduledEvent | undefined {
     return new GiveLocationActionScheduledEvent({ position: this.position, character: this.character });
   }
 }

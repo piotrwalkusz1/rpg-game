@@ -1,8 +1,8 @@
 import type { Character } from '../../character/model/character';
+import type { GameContext } from '../../game/model/game-context';
 import type { PositionSet } from '../../map/model/position-set';
 import type { NarrationDescription } from '../../narration/model/narration-description';
 import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
-import type { GameContext } from '../../game/model/game-context';
 
 export abstract class CharacterActionScheduledEvent extends ActionScheduledEvent {
   readonly character: Character;
@@ -42,6 +42,8 @@ export abstract class CharacterAction extends Action {
   }
 
   abstract get waitingAfterAction(): Duration;
+
+  abstract canExecute(context: GameContext): boolean;
 
   abstract execute(context: GameContext): CharacterActionResultEvent | undefined;
 
