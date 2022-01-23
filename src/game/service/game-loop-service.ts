@@ -1,31 +1,41 @@
+import { BattleActivity } from '../../activity/battle/model/battle-activity';
+import { BattleNarration } from '../../activity/battle/model/battle-narration';
+import { ActivityService } from '../../activity/service/activity-service';
+import type { Narration } from '../../narration/model/narration';
 import type { NarrationAction } from '../../narration/model/narration-actions/narration-action';
 import { NarrationService } from '../../narration/service/narration-service';
 import type { GameContext } from '../model/game-context';
 
 export namespace GameLoopService {
-  export const processNextEvent = (context: GameContext): void => {
+  export const processNextEvent = async (context: GameContext): Promise<void> => {
     const event = context.popNextGameEvent();
     if (!event) {
       return;
     }
     context.currentTime = event.time;
-    event.process(context);
-    executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
+    await event.process(context);
+    await executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
   };
 
-  export const executePlayerTurn = (narrationAction: NarrationAction, context: GameContext): void => {
+  export const executePlayerTurn = async (narrationAction: NarrationAction, context: GameContext): Promise<void> => {
     context.pendingNarrationSequence = NarrationService.executeNarrationAction(narrationAction, context);
-    executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
+    await executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
   };
 
-  const executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired = (context: GameContext): void => {
-    const { playerActionRequired: playerActionRequired } = executePlayerTurnAutomatically(context);
-    if (!playerActionRequired) {
-      processNextEvent(context);
+  const executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired = async (context: GameContext): Promise<void> => {
+    const result = executePlayerTurnAutomatically(context);
+    if (result.playerActionRequired) {
+      context.narration = result.narration;
+      context.battle = result.battle;
+      context.refresh();
+    } else {
+      await processNextEvent(context);
     }
   };
 
-  const executePlayerTurnAutomatically = (context: GameContext): { playerActionRequired: boolean } => {
+  const executePlayerTurnAutomatically = (
+    context: GameContext
+  ): { playerActionRequired: true; narration?: Narration; battle?: BattleNarration } | { playerActionRequired: false } => {
     if (context.pendingNarrationSequence) {
       const { pendingStage, scene, narrationSequence, narrationStages } = context.pendingNarrationSequence;
       if (pendingStage) {
@@ -41,14 +51,23 @@ export namespace GameLoopService {
           return executePlayerTurnAutomatically(context);
         }
       } else {
-        context.narration = NarrationService.convertSceneToNarration(scene, narrationSequence, narrationStages);
-        return { playerActionRequired: true };
+        return {
+          playerActionRequired: true,
+          narration: NarrationService.convertSceneToNarration(scene, narrationSequence, narrationStages)
+        };
       }
     }
     if (context.player.pendingAction) {
       return { playerActionRequired: false };
     }
-    context.narration = NarrationService.getNarrationForSelectedField(context.gameState);
-    return { playerActionRequired: true };
+    const battle = ActivityService.getActivityByType(context.player, BattleActivity);
+    if (battle) {
+      if (battle.isEnded(context.player)) {
+        context.removeActivity(context.player, battle);
+        return executePlayerTurnAutomatically(context);
+      }
+      return { playerActionRequired: true, battle: new BattleNarration({ battleActivity: battle }) };
+    }
+    return { playerActionRequired: true, narration: NarrationService.getNarrationForSelectedField(context.gameState) };
   };
 }

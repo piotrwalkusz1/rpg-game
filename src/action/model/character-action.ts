@@ -41,11 +41,9 @@ export abstract class CharacterAction extends Action {
     this.character = character;
   }
 
-  abstract get waitingAfterAction(): Duration;
-
   abstract canExecute(context: GameContext): boolean;
 
-  abstract execute(context: GameContext): CharacterActionResultEvent | undefined;
+  abstract execute(context: GameContext): Promise<CharacterActionResultEvent | undefined>;
 
   abstract getActionScheduledEvent(context: GameContext): CharacterActionScheduledEvent | undefined;
 }

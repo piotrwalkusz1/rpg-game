@@ -7,5 +7,5 @@ export abstract class GameEvent {
     this.time = time;
   }
 
-  abstract process(context: GameContext): void;
+  abstract process(context: GameContext): Promise<void>;
 }

@@ -46,10 +46,6 @@ export class GiveLocationAction extends CharacterAction {
     this.position = character.position;
   }
 
-  get waitingAfterAction(): Duration {
-    return {};
-  }
-
   get duration(): Duration {
     return { seconds: 10 };
   }
@@ -63,7 +59,7 @@ export class GiveLocationAction extends CharacterAction {
     );
   }
 
-  override execute(context: GameContext): GiveLocationActionResultEvent {
+  override async execute(context: GameContext): Promise<GiveLocationActionResultEvent> {
     context.addKnownLocation(this.locationReceiver, this.location);
     return new GiveLocationActionResultEvent({ position: this.position, character: this.character });
   }

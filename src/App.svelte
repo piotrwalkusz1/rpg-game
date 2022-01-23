@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { format } from 'date-fns';
   import { setContext } from 'svelte';
-  import BattleView from './battle/component/battle-view.svelte';
+  import BattleView from './activity/battle/component/battle-view.svelte';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
+  import BlockedBackground from './common/component/blocked-background.svelte';
   import Dialog from './common/component/dialog.svelte';
   import { gameState } from './common/store';
   import Toolbox from './game/component/toolbox.svelte';
@@ -44,9 +46,20 @@
       $gameState = $gameState;
     },
     setNarration: (narration) => ($gameState.narration = narration),
+    setBattle: (battle) => ($gameState.battle = battle),
     changeLocationView: (newLocationView) => ($gameState.locationView = newLocationView),
     getGameState: () => $gameState,
-    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.pendingNarrationSequence = pendingNarrationSequence)
+    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.pendingNarrationSequence = pendingNarrationSequence),
+    addActivity: (character, activity) => {
+      character.addActivity(activity);
+      $gameState = $gameState;
+    },
+    removeActivity: (character, activity) => {
+      character.removeActivity(activity);
+      $gameState = $gameState;
+    },
+    setBlockedScreen: (blockedScreen) => ($gameState.blockedScreen = blockedScreen),
+    refresh: () => ($gameState = $gameState)
   });
 
   $: narration = $gameState.narration;
@@ -65,6 +78,9 @@
         <div class="px-[10%]">
           <TimeView />
         </div>
+      </div>
+      <div class="px-[10px]">
+        {format($gameState.currentTime, 'HH:mm:ss')}
       </div>
       <LocationNameView />
       <div class="flex-1" />
@@ -100,6 +116,10 @@
       </div>
     </div>
   </Dialog>
+{/if}
+
+{#if $gameState.blockedScreen}
+  <BlockedBackground z={3000} />
 {/if}
 
 <style lang="postcss" global>

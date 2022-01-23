@@ -58,10 +58,6 @@ export class GoAction extends CharacterAction {
     this.position = position;
   }
 
-  get waitingAfterAction(): Duration {
-    return {};
-  }
-
   get duration(): Duration {
     return {
       minutes: 1
@@ -72,7 +68,7 @@ export class GoAction extends CharacterAction {
     return this.character.healthPoints > 0;
   }
 
-  override execute(context: GameContext): GoActionResultEvent | undefined {
+  override async execute(context: GameContext): Promise<GoActionResultEvent | undefined> {
     const oldPosition = this.character.position;
     if (oldPosition === undefined) {
       return;

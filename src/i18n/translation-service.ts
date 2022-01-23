@@ -14,7 +14,14 @@ export class I18NextTranslationService implements TranslationService {
   public translate: Readable<TType>;
 
   constructor(i18n: I18nService) {
-    i18n.initialize();
+    i18n.initialize().then(
+      () => {
+        /* Do nothing */
+      },
+      () => {
+        /* Do nothing */
+      }
+    );
     this.locale = this.createLocale(i18n);
     this.translate = this.createTranslate(i18n);
   }
@@ -28,14 +35,28 @@ export class I18NextTranslationService implements TranslationService {
     const { subscribe, set, update } = writable<string>(i18n.i18n.language);
 
     const setLocale = (newLocale: string) => {
-      i18n.changeLanguage(newLocale);
+      i18n.changeLanguage(newLocale).then(
+        () => {
+          /* Do nothing */
+        },
+        () => {
+          /* Do nothing */
+        }
+      );
       set(newLocale);
     };
 
     const updateLocale = (updater: (value: string) => string) => {
       update((currentValue) => {
         const nextLocale = updater(currentValue);
-        i18n.changeLanguage(nextLocale);
+        i18n.changeLanguage(nextLocale).then(
+          () => {
+            /* Do nothing */
+          },
+          () => {
+            /* Do nothing */
+          }
+        );
         return nextLocale;
       });
     };

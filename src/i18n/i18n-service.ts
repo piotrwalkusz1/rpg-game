@@ -7,8 +7,22 @@ export class I18nService {
   i18n: i18n;
   constructor() {
     this.i18n = i18next;
-    this.initialize();
-    this.changeLanguage(INITIAL_LANGUAGE);
+    this.initialize().then(
+      () => {
+        /* Do nothing */
+      },
+      () => {
+        /* Do nothing */
+      }
+    );
+    this.changeLanguage(INITIAL_LANGUAGE).then(
+      () => {
+        /* Do nothing */
+      },
+      () => {
+        /* Do nothing */
+      }
+    );
   }
 
   t(key: string, replacements?: Record<string, unknown>): string {
@@ -16,7 +30,7 @@ export class I18nService {
   }
 
   initialize() {
-    this.i18n.init({
+    return this.i18n.init({
       lng: INITIAL_LANGUAGE,
       fallbackLng: 'en',
       debug: false,
@@ -30,7 +44,7 @@ export class I18nService {
   }
 
   changeLanguage(language: string) {
-    this.i18n.changeLanguage(language);
+    return this.i18n.changeLanguage(language);
   }
 
   addResourceBundle(language: string, namespace: string, resources: unknown) {

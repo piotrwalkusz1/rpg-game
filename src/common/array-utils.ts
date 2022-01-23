@@ -6,6 +6,10 @@ export namespace ArrayUtils {
   export const filterInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T[] =>
     array.filter((item): item is T => item instanceof type);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const findFirstInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T | undefined =>
+    array.find((item): item is T => item instanceof type);
+
   export const getShuffledArray = <T>(array: T[]) => {
     const newArray = array.slice();
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -23,4 +27,6 @@ export namespace ArrayUtils {
     }
     return false;
   };
+
+  export const distinct = <T>(array: T[]): T[] => [...new Set(array)];
 }

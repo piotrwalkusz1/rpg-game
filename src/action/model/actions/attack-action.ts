@@ -1,3 +1,7 @@
+import { BattleNarration } from '../../../activity/battle/model/battle-narration';
+import { BattleService } from '../../../activity/battle/service/battle-service';
+import { AIService } from '../../../ai/service/ai-service';
+import { AnimationService } from '../../../animation/service/animation-service';
 import type { Character } from '../../../character/model/character';
 import type { GameContext } from '../../../game/model/game-context';
 import { Position, TerrainObjectPosition } from '../../../map/model/position';
@@ -43,10 +47,6 @@ export class AttackAction extends CharacterAction {
     this.position = target.position;
   }
 
-  override get waitingAfterAction(): Duration {
-    return {};
-  }
-
   override get duration(): Duration {
     return { seconds: 2 };
   }
@@ -60,8 +60,20 @@ export class AttackAction extends CharacterAction {
     );
   }
 
-  override execute(context: GameContext): AttackActionResultEvent {
+  override async execute(context: GameContext): Promise<AttackActionResultEvent> {
+    const battleActivity = BattleService.setCommonBattleActivity([this.character, this.target]);
+    const shouldDisplayAnimation = this.character === context.player || this.target === context.player;
+    if (shouldDisplayAnimation) {
+      context.battle = new BattleNarration({ battleActivity, currentParticipant: this.character });
+      await AnimationService.wait({ seconds: 1 }, context);
+    }
     context.dealDamage(this.target, this.character.damage);
+    if (shouldDisplayAnimation) {
+      await AnimationService.wait({ seconds: 1 }, context);
+    }
+    if (this.target !== context.player) {
+      AIService.executeTurn(this.target, context);
+    }
     return new AttackActionResultEvent({ position: this.position, character: this.character });
   }
 
