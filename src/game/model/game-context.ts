@@ -27,6 +27,7 @@ export class GameContext {
   readonly addActivity: (character: Character, activity: Activity) => void;
   readonly removeActivity: (character: Character, activity: Activity) => void;
   readonly setBlockedScreen: (blockedScreen: boolean) => void;
+  readonly changeTime: (newTime: Date, duration: number) => Promise<void>;
   readonly refresh: () => void;
 
   constructor({
@@ -44,6 +45,7 @@ export class GameContext {
     addActivity,
     removeActivity,
     setBlockedScreen,
+    changeTime,
     refresh
   }: {
     changeCharacterPosition: (character: Character, position: Position) => void;
@@ -60,6 +62,7 @@ export class GameContext {
     addActivity: (character: Character, activity: Activity) => void;
     removeActivity: (character: Character, activity: Activity) => void;
     setBlockedScreen: (blockedScreen: boolean) => void;
+    changeTime: (newTime: Date, duration: number) => Promise<void>;
     refresh: () => void;
   }) {
     this.changeCharacterPosition = changeCharacterPosition;
@@ -76,6 +79,7 @@ export class GameContext {
     this.addActivity = addActivity;
     this.removeActivity = removeActivity;
     this.setBlockedScreen = setBlockedScreen;
+    this.changeTime = changeTime;
     this.refresh = refresh;
   }
 

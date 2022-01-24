@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { format } from 'date-fns';
+  import { add, format } from 'date-fns';
   import { setContext } from 'svelte';
   import BattleView from './activity/battle/component/battle-view.svelte';
   import CharacterProfileView from './character/component/character-profile-view.svelte';
   import BlockedBackground from './common/component/blocked-background.svelte';
   import Dialog from './common/component/dialog.svelte';
-  import { gameState } from './common/store';
+  import { animatedCurrentTime, gameState } from './common/store';
   import Toolbox from './game/component/toolbox.svelte';
   import { GameContext } from './game/model/game-context';
   import { MockedGame } from './game/service/mocked-game';
@@ -40,6 +40,7 @@
     },
     setCurrentTime: (time) => {
       $gameState.currentTime = time;
+      animatedCurrentTime.set(time, 0);
     },
     dealDamage: (target, damage) => {
       target.dealDamage(damage);
@@ -59,6 +60,12 @@
       $gameState = $gameState;
     },
     setBlockedScreen: (blockedScreen) => ($gameState.blockedScreen = blockedScreen),
+    changeTime: async (newTime, duration) => {
+      $gameState.blockedScreen = true;
+      $gameState.currentTime = newTime;
+      await animatedCurrentTime.set(newTime, duration);
+      $gameState.blockedScreen = false;
+    },
     refresh: () => ($gameState = $gameState)
   });
 
@@ -82,6 +89,8 @@
       <div class="px-[10px]">
         {format($gameState.currentTime, 'HH:mm:ss')}
       </div>
+      <div>{new Date(2000, 1, 0, 0, 0, 0, 150).valueOf()}-</div>
+      <div>{add(new Date(2000, 1, 0, 0, 0, 0, 150), { seconds: 1 }).valueOf()}</div>
       <LocationNameView />
       <div class="flex-1" />
     </div>

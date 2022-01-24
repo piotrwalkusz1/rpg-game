@@ -1,3 +1,4 @@
+import { differenceInMilliseconds } from 'date-fns';
 import { BattleActivity } from '../../activity/battle/model/battle-activity';
 import { BattleNarration } from '../../activity/battle/model/battle-narration';
 import { ActivityService } from '../../activity/service/activity-service';
@@ -12,7 +13,7 @@ export namespace GameLoopService {
     if (!event) {
       return;
     }
-    context.currentTime = event.time;
+    await animateFlowOfTime(event.time, context);
     await event.process(context);
     await executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
   };
@@ -27,7 +28,6 @@ export namespace GameLoopService {
     if (result.playerActionRequired) {
       context.narration = result.narration;
       context.battle = result.battle;
-      context.refresh();
     } else {
       await processNextEvent(context);
     }
@@ -69,5 +69,11 @@ export namespace GameLoopService {
       return { playerActionRequired: true, battle: new BattleNarration({ battleActivity: battle }) };
     }
     return { playerActionRequired: true, narration: NarrationService.getNarrationForSelectedField(context.gameState) };
+  };
+
+  const animateFlowOfTime = async (newTime: Date, context: GameContext): Promise<void> => {
+    const durationInGame = differenceInMilliseconds(newTime, context.currentTime);
+    const duration = ActivityService.getActivityByType(context.player, BattleActivity) ? durationInGame : 0;
+    await context.changeTime(newTime, duration);
   };
 }

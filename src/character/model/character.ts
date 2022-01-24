@@ -1,4 +1,4 @@
-import type { CharacterAction } from '../../action/model/character-action';
+import type { PendingAction } from '../../action/model/pending-action';
 import type { Activity } from '../../activity/model/activity';
 import { ManyToManyCollection, OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
@@ -42,7 +42,7 @@ export class Character implements TraitOwner, NarrationProviderOwner {
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
-  pendingAction: CharacterAction | undefined;
+  pendingAction: PendingAction | undefined;
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
     this.name = name;
