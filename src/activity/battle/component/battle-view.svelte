@@ -29,7 +29,7 @@
   function onParticipantClick(participant: Character): void {
     if (isEnemyOfPlayer(participant) && battleActivity.canStillFight(participant)) {
       const narrationAction = new AttackNarrationAction(participant);
-      GameLoopService.executePlayerTurn(narrationAction, gameContext);
+      GameLoopService.executeNarrationAction(narrationAction, gameContext);
     }
   }
 

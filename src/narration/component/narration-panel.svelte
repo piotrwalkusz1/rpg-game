@@ -11,7 +11,7 @@
   $: narration = $gameState.narration;
 
   function executeNarrationAction(narrationAction: NarrationAction) {
-    GameLoopService.executePlayerTurn(narrationAction, gameContext);
+    GameLoopService.executeNarrationAction(narrationAction, gameContext);
   }
 </script>
 

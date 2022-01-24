@@ -1,11 +1,15 @@
 import type { DetectableEvent } from '../model/detectable-event';
 import type { Detector } from '../model/detector';
 import type { DetectorContext } from '../model/detector-context';
+import type { GameContext } from '../../game/model/game-context';
 
 export namespace DetectorService {
-  export const runDetectors = (detectableEvent: DetectableEvent): void => {
+  export const runDetectors = (detectableEvent: DetectableEvent | undefined, context: GameContext): void => {
+    if (!detectableEvent) {
+      return;
+    }
     const detectors = getDetectorsFromDetectableEvent(detectableEvent);
-    detectors.forEach((detector) => detector.run(detectableEvent));
+    detectors.forEach((detector) => detector.run(detectableEvent, context));
   };
 
   export const getDetectorsFromDetectableEvent = (detectableEvent: DetectableEvent): Detector[] => {

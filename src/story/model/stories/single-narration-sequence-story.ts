@@ -27,7 +27,7 @@ export class SingleNarrationSequenceStory extends Story {
     narrationStages
   }: {
     narrationProviderOwner: NarrationProviderOwner;
-    prompt: TranslatableText;
+    prompt?: TranslatableText;
     promptNameContext?: NarrationActionNameContext;
     title?: TranslatableText;
     narrationStages: (context: SingleNarrationSequenceStoryStagesProviderContext) => NarrationSequenceStage[];
@@ -53,15 +53,26 @@ export class SingleNarrationSequenceStory extends Story {
     }));
   }
 
-  protected getNarrationActions(_gameState: GameState): NarrationAction[] {
-    return this.prompt
+  protected getNarrationActions(gameState: GameState): NarrationAction[] {
+    const narrationSequence = this.getNarrationSequenceIfPossibleToExecute(gameState);
+    return this.prompt && narrationSequence
       ? [
           new NarrationAction({
             name: this.prompt,
             nameContext: this.promptNameContext,
-            narrationSequence: this.narrationSequence
+            narrationSequence
           })
         ]
       : [];
+  }
+
+  getNarrationSequenceIfPossibleToExecute(gameState: GameState): NarrationSequence | undefined {
+    if (this.isNarrationSequencePossibleToExecute(gameState)) {
+      return this.narrationSequence;
+    }
+  }
+
+  protected isNarrationSequencePossibleToExecute(_gameState: GameState): boolean {
+    return true;
   }
 }

@@ -1,4 +1,5 @@
 import { CharactersCollection } from '../../character/model/character';
+import { ArrayUtils } from '../../common/array-utils';
 import { OneToManyCollection } from '../../common/cache-relationship-utils';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
@@ -42,5 +43,13 @@ export class MapField implements DetectorContext, NarrationProviderOwner {
 
   getParentDetectorContext(): DetectorContext | undefined {
     return this.location;
+  }
+
+  addDetector(detector: Detector): void {
+    this.detectors.push(detector);
+  }
+
+  removeDetector(detector: Detector): void {
+    ArrayUtils.remove(this.detectors, detector);
   }
 }

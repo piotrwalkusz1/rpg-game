@@ -24,7 +24,7 @@ export class CustomStory extends Story {
     narrationProviders?: (
       gameState: GameState
     ) => { narrationProviderOwner: NarrationProviderOwner; narrationProvider: NarrationProvider }[];
-    detectors?: (gameState: GameState) => { detectorContext: DetectorContext; detector: Detector }[];
+    detectors?: (gameState: GameState) => { detectorContext: DetectorContext; detector: Detector<any> }[];
     laws?: (gameState: GameState) => { lawContext: LawContext; law: Law }[];
     subStories?: Story[];
   }) {

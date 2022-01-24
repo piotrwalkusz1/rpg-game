@@ -1,4 +1,5 @@
-import { Character, CharactersCollection } from '../../../character/model/character';
+import { CharactersCollection } from '../../../character/model/character';
+import { ArrayUtils } from '../../../common/array-utils';
 import { OneToManyForeignKey } from '../../../common/cache-relationship-utils';
 import { areSame } from '../../../common/object-utils';
 import type { Detector } from '../../../detector/model/detector';
@@ -26,16 +27,15 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
 
 export class TerrainObject implements DetectorContext, TraitOwner, NarrationProviderOwner, LawContext {
   readonly type: TerrainObjectType;
-  readonly guards: Character[];
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
   readonly characters: CharactersCollection;
   readonly laws: Law[] = [];
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
+  private readonly customDetectors: Detector[] = [];
 
-  constructor({ type, field, guards, hidden }: { type: TerrainObjectType; field?: MapField; guards?: Character[]; hidden?: boolean }) {
+  constructor({ type, field, hidden }: { type: TerrainObjectType; field?: MapField; hidden?: boolean }) {
     this.type = type;
-    this.guards = guards || [];
     this.fieldFK.value = field;
     this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
     this.traits = [
@@ -64,7 +64,15 @@ export class TerrainObject implements DetectorContext, TraitOwner, NarrationProv
     return this.field;
   }
 
-  get detectors(): Detector[] {
-    return this.laws.flatMap((law) => law.detectors);
+  get detectors(): readonly Detector[] {
+    return [...this.laws.flatMap((law) => law.detectors), ...this.customDetectors];
+  }
+
+  addDetector(detector: Detector): void {
+    this.customDetectors.push(detector);
+  }
+
+  removeDetector(detector: Detector): void {
+    ArrayUtils.remove(this.customDetectors, detector);
   }
 }

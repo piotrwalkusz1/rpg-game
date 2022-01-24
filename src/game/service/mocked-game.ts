@@ -1,7 +1,10 @@
+import { AttackAction } from '../../action/model/actions/attack-action';
 import { GiveLocationAction } from '../../action/model/actions/give-location-action';
 import { Character } from '../../character/model/character';
 import { Race } from '../../character/model/race';
+import { Detector } from '../../detector/model/detector';
 import { AttemptGoToPositionDetector } from '../../detector/model/detector-types/attempt-go-to-position-detector';
+import { GoToPositionDetector } from '../../detector/model/detector-types/go-to-position-detector';
 import { Law } from '../../law/model/law';
 import { MapFieldType } from '../../map/model/map-field-type';
 import { MapLocation } from '../../map/model/map-location';
@@ -57,7 +60,7 @@ export namespace MockedGame {
       ANASTASIA: new Character({
         name: 'Anastasia',
         race: Race.HUMAN,
-        avatarUrl: 'images/character_003_avatar.jpg',
+        avatarUrl: 'images/character_003_avatar.jpeg',
         position: new TerrainObjectPosition(terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE)
       })
     };
@@ -76,7 +79,11 @@ export namespace MockedGame {
                 location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
               })
           ),
-          new HookNarrationSequenceStage(() => finish())
+          new HookNarrationSequenceStage(() => finish()),
+          new CheckpointNarrationSequenceStage({
+            nextStages: [],
+            checkpointStages: []
+          })
         ];
 
         return [
@@ -103,15 +110,28 @@ export namespace MockedGame {
       }
     });
 
+    const anastasiaDialoague = new DialogueStory({
+      character: characters.ANASTASIA,
+      narrationStages: ({ createNarrationDescription }) => [
+        new SceneNarrationSequenceStage(createNarrationDescription('DIALOGUE.TEXT.10007_IT_IS_TOO_BAD_YOU_FOUND_THIS_PLACE')),
+        new ActionNarrationSequenceStage((gameState) => new AttackAction({ character: characters.ANASTASIA, target: gameState.player }))
+      ]
+    });
+
     const cannotNearTreasureStory = new CustomStory({
-      laws: () => {
+      detectors: () => {
         return [
           {
-            lawContext: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE,
-            law: new Law({
-              detector: new AttemptGoToPositionDetector({ terrainObject: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE }),
-              guards: [characters.ANASTASIA]
-            })
+            detectorContext: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE,
+            detector: new Detector(
+              new GoToPositionDetector({ terrainObject: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE }),
+              (_event, context) => {
+                const narrationSequence = anastasiaDialoague.getNarrationSequenceIfPossibleToExecute(context.gameState);
+                if (narrationSequence) {
+                  gameState.scheduledNarrationSequences.push(narrationSequence);
+                }
+              }
+            )
           }
         ];
       }

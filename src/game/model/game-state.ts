@@ -7,6 +7,7 @@ import type { Narration } from '../../narration/model/narration';
 import type { PendingNarrationSequence } from '../../narration/model/narration-sequence/pending-narration-sequence';
 import type { Story } from '../../story/model/story';
 import { GameEventQueue } from './game-event-queue';
+import type { NarrationSequence } from '../../narration/model/narration-sequence/narration-sequence';
 
 export class GameState {
   private readonly stories: Story[] = [];
@@ -19,6 +20,7 @@ export class GameState {
   readonly eventQueue: GameEventQueue = new GameEventQueue();
   readonly player: Character;
   pendingNarrationSequence?: PendingNarrationSequence;
+  scheduledNarrationSequences: NarrationSequence[] = [];
   blockedScreen = false;
 
   constructor({ player, world }: { player: Character; world: MapLocation }) {

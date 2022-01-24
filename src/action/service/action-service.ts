@@ -13,11 +13,11 @@ export namespace ActionService {
       return { type: 'CANNOT_EXECUTE' };
     }
     const scheduledEvent = action.getActionScheduledEvent(context);
+    DetectorService.runDetectors(scheduledEvent, context);
     const executionEvent = new ExecuteActionGameEvent({ time: context.getCurrentTimePlusDuration(action.duration), action });
     if (action instanceof CharacterAction && scheduledEvent instanceof CharacterActionScheduledEvent) {
       const character = action.character;
       if (character === context.player) {
-        DetectorService.runDetectors(scheduledEvent);
         if (scheduledEvent.preventionNarrationDescription) {
           return { type: 'PREVENTION', description: scheduledEvent.preventionNarrationDescription };
         }
@@ -34,7 +34,8 @@ export namespace ActionService {
         return { type: 'CANNOT_EXECUTE' };
       }
     }
-    await action.execute(context);
+    const executionResult = await action.execute(context);
+    DetectorService.runDetectors(executionResult, context);
     return { type: 'SUCCESS' };
   };
 }

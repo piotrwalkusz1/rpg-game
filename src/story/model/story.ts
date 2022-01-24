@@ -10,7 +10,7 @@ import type { NarrationProviderOwner } from '../../narration/model/narration-pro
 export abstract class Story {
   private readonly cleanUpOperations: (() => void)[] = [];
 
-  abstract initialize(gameState: GameState): void;
+  abstract initialize(_gameState: GameState): void;
 
   destroy(): void {
     this.cleanUpOperations.forEach((operation) => operation());
@@ -22,8 +22,8 @@ export abstract class Story {
   }
 
   protected addDetector(detectorContext: DetectorContext, detector: Detector): void {
-    detectorContext.detectors.push(detector);
-    this.cleanUpOperations.push(() => ArrayUtils.remove(detectorContext.detectors, detector));
+    detectorContext.addDetector(detector);
+    this.cleanUpOperations.push(() => detectorContext.removeDetector(detector));
   }
 
   protected addLaw(lawContext: LawContext, law: Law): void {

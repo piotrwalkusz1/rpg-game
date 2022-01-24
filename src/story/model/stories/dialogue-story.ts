@@ -23,7 +23,7 @@ export class DialogueStory extends SingleNarrationSequenceStory {
     narrationStages
   }: {
     character: Character;
-    prompt: TranslatableText;
+    prompt?: TranslatableText;
     narrationStages: (context: DialogueStoryStagesProviderContext) => NarrationSequenceStage[];
   }) {
     super({
@@ -43,7 +43,7 @@ export class DialogueStory extends SingleNarrationSequenceStory {
     this.character = character;
   }
 
-  override getNarrationActions(gameState: GameState): NarrationAction[] {
-    return HearingService.canTalk(this.character, gameState.player) ? super.getNarrationActions(gameState) : [];
+  protected override isNarrationSequencePossibleToExecute(gameState: GameState): boolean {
+    return HearingService.canTalk(this.character, gameState.player);
   }
 }

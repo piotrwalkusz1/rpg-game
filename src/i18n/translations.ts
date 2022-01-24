@@ -76,7 +76,8 @@ const defaultTranslations = {
   'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY': '"Reasonably. No one has found it yet anyway."',
   'DIALOGUE.TEXT.10005_I_KNOW_NOTHING': `"Unfortunately. I don't know anything about that."`,
   'DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE':
-    'On second thought, I want to know the location of the treasure.'
+    'On second thought, I want to know the location of the treasure.',
+  'DIALOGUE.TEXT.10007_IT_IS_TOO_BAD_YOU_FOUND_THIS_PLACE': `"It's too bad you found this place. Apparently, fate is not in your favor."`
 };
 const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
@@ -123,7 +124,8 @@ const plTranslations: Translations = {
   'DIALOGUE.TEXT.10003_JUST_DONT_FORGET_TO_SHARE_IT': `"Tylko nie zapomnij się nim podzielić, gdy już go znajdziesz."`,
   'DIALOGUE.TEXT.10004_NO_ONE_HAS_FOUND_IT_YET_ANYWAY': '"Rozsądnie. I tak go jeszcze nikt nie znalazł."',
   'DIALOGUE.TEXT.10005_I_KNOW_NOTHING': '"Niestety. Nic nie wiem na ten temat."',
-  'DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE': 'Po namyśle, chcę poznać lokalizację skarbu.'
+  'DIALOGUE.TEXT.10006_ON_SECOND_THOUGHT_I_WANT_TO_KNOW_THE_LOCATION_OF_THE_TREASURE': 'Po namyśle, chcę poznać lokalizację skarbu.',
+  'DIALOGUE.TEXT.10007_IT_IS_TOO_BAD_YOU_FOUND_THIS_PLACE': `"Źle się stało, że znalazłeś to miejsce. Widocznie los tobie nie sprzyja."`
 };
 
 export default {

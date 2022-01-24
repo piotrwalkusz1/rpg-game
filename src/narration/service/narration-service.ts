@@ -64,11 +64,7 @@ export namespace NarrationService {
     return new Narration({ title, description: new NarrationDescription(description), actions });
   };
 
-  export const executeNarrationAction = (action: NarrationAction, context: GameContext): PendingNarrationSequence | undefined => {
-    return executeNarrationSequenceStages(action.narrationSequence, action.narrationStages, context);
-  };
-
-  const executeNarrationSequenceStages = (
+  export const executeNarrationSequenceStages = (
     narrationSequence: NarrationSequence,
     narrationSequenceStages: NarrationSequenceStage[],
     context: GameContext

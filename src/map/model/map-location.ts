@@ -1,3 +1,4 @@
+import { ArrayUtils } from '../../common/array-utils';
 import { OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import { areSame } from '../../common/object-utils';
 import type { Detector } from '../../detector/model/detector';
@@ -69,6 +70,14 @@ export class MapLocation implements DetectorContext, NarrationProviderOwner {
 
   set parentField(parentField: MapField | undefined) {
     this.parentFieldFK.value = parentField;
+  }
+
+  addDetector(detector: Detector): void {
+    this.detectors.push(detector);
+  }
+
+  removeDetector(detector: Detector): void {
+    ArrayUtils.remove(this.detectors, detector);
   }
 
   getParentDetectorContext(): DetectorContext | undefined {
