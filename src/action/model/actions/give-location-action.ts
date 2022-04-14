@@ -2,7 +2,7 @@ import type { Character } from '../../../character/model/character';
 import type { GameContext } from '../../../game/model/game-context';
 import { Position, TerrainObjectPosition } from '../../../map/model/position';
 import { PositionSet } from '../../../map/model/position-set';
-import type { TraitOwner } from '../../../trait/model/trait-owner';
+import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../character-action';
 
 export class GiveLocationActionScheduledEvent extends CharacterActionScheduledEvent {
@@ -33,16 +33,24 @@ export class GiveLocationActionResultEvent extends CharacterActionResultEvent {
 
 export class GiveLocationAction extends CharacterAction {
   readonly locationReceiver: Character;
-  readonly location: TraitOwner;
+  readonly terrainObject: TerrainObject;
   readonly position: Position;
 
-  constructor({ character, locationReceiver, location }: { character: Character; locationReceiver: Character; location: TraitOwner }) {
+  constructor({
+    character,
+    locationReceiver,
+    terrainObject
+  }: {
+    character: Character;
+    locationReceiver: Character;
+    terrainObject: TerrainObject;
+  }) {
     super({ character: character });
     if (!character.position) {
       throw new Error('Location giver must have position');
     }
     this.locationReceiver = locationReceiver;
-    this.location = location;
+    this.terrainObject = terrainObject;
     this.position = character.position;
   }
 
@@ -60,7 +68,7 @@ export class GiveLocationAction extends CharacterAction {
   }
 
   override async execute(context: GameContext): Promise<GiveLocationActionResultEvent> {
-    context.addKnownLocation(this.locationReceiver, this.location);
+    context.addKnownLocation(this.locationReceiver, this.terrainObject);
     return new GiveLocationActionResultEvent({ position: this.position, character: this.character });
   }
 

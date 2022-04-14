@@ -2,6 +2,9 @@ import type { PendingAction } from '../../action/model/pending-action';
 import type { Activity } from '../../activity/model/activity';
 import { ManyToManyCollection, OneToManyCollection, OneToManyForeignKey } from '../../common/cache-relationship-utils';
 import type { TranslatableText } from '../../i18n/translatable-text';
+import type { Information } from '../../information/model/information';
+import type { InformationOwner } from '../../information/model/information-owner';
+import { InformationUtils } from '../../information/service/information-utils';
 import type { MapField } from '../../map/model/map-field';
 import { Position, TerrainObjectPosition } from '../../map/model/position';
 import { PositionSet } from '../../map/model/position-set';
@@ -13,10 +16,10 @@ import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-trait
 import type { Trait } from '../../trait/model/trait';
 import type { TraitOwner } from '../../trait/model/trait-owner';
 import { PositionBasedObservableTrait } from '../../trait/vision/model/observable-traits/position-based-observable-trait';
-import { KnownLocationObservatorTrait } from '../../trait/vision/model/observator-traits/known-location-observator-trait';
 import { PositionBasedObservatorTrait } from '../../trait/vision/model/observator-traits/position-based-observator-trait';
-import { VisionService } from '../../trait/vision/service/vision-service';
+import { TerrainObjectKnownLocationObservatorTrait } from '../../trait/vision/model/observator-traits/terrain-object-known-location-observator-trait';
 import type { Race } from './race';
+import { TerrainObjectLocationInformation } from '../../information/model/informations/terrain-object-location-information';
 
 export class CharactersCollection extends OneToManyCollection<Character, Position> {
   override getForeignKey = (character: Character) => character.positionFK;
@@ -31,13 +34,14 @@ class ActivitiesCollection extends ManyToManyCollection<Activity, Character> {
   override getCollection = (activity: Activity) => activity.participants;
 }
 
-export class Character implements TraitOwner, NarrationProviderOwner {
+export class Character implements TraitOwner, NarrationProviderOwner, InformationOwner {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
   readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
+  readonly informations: Information[] = [];
   readonly activities: ActivitiesCollection = new ActivitiesCollection(this);
   healthPoints = 100;
   maxHealthPoints = 100;
@@ -55,7 +59,7 @@ export class Character implements TraitOwner, NarrationProviderOwner {
           ? PositionSet.create({ terrainObject: this.position.terrainObject })
           : PositionSet.create()
       ),
-      new KnownLocationObservatorTrait(),
+      new TerrainObjectKnownLocationObservatorTrait(this),
       new PositionBasedObservableTrait(() =>
         this.position instanceof TerrainObjectPosition
           ? PositionSet.create({ terrainObject: this.position.terrainObject, placement: this.position.placement })
@@ -104,8 +108,8 @@ export class Character implements TraitOwner, NarrationProviderOwner {
     this.position?.characters.remove(this);
   }
 
-  addKnownLocation(location: TraitOwner): void {
-    VisionService.addKnownLocation(this, location);
+  addKnownLocation(terrainObject: TerrainObject): void {
+    InformationUtils.addInformation(this, new TerrainObjectLocationInformation(terrainObject));
   }
 
   addActivity(activity: Activity): void {

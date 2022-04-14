@@ -1,5 +1,4 @@
 import { differenceInMilliseconds } from 'date-fns';
-import { tr } from 'date-fns/locale';
 import { BattleActivity } from '../../activity/battle/model/battle-activity';
 import { BattleNarration } from '../../activity/battle/model/battle-narration';
 import { ActivityService } from '../../activity/service/activity-service';

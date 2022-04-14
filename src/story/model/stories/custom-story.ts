@@ -24,6 +24,7 @@ export class CustomStory extends Story {
     narrationProviders?: (
       gameState: GameState
     ) => { narrationProviderOwner: NarrationProviderOwner; narrationProvider: NarrationProvider }[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     detectors?: (gameState: GameState) => { detectorContext: DetectorContext; detector: Detector<any> }[];
     laws?: (gameState: GameState) => { lawContext: LawContext; law: Law }[];
     subStories?: Story[];

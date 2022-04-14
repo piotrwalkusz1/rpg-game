@@ -25,8 +25,8 @@
       character.position = position;
       $gameState = $gameState;
     },
-    addKnownLocation: (character, location) => {
-      character.addKnownLocation(location);
+    addKnownLocation: (character, terrainObject) => {
+      character.addKnownLocation(terrainObject);
       $gameState = $gameState;
     },
     addGameEvent: (event) => {

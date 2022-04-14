@@ -76,7 +76,7 @@ export namespace MockedGame {
               new GiveLocationAction({
                 character: characters.ALICE,
                 locationReceiver: gameState.player,
-                location: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
+                terrainObject: terrainObjects.HIDDEN_TREASURE_NEAR_ALICE_HOUSE
               })
           ),
           new HookNarrationSequenceStage(() => finish()),

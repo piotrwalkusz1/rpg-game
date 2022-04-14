@@ -12,7 +12,7 @@ import type { NarrationProviderOwner } from '../../../narration/model/narration-
 import type { Trait } from '../../../trait/model/trait';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
 import { ConstantObservableTrait } from '../../../trait/vision/model/observable-traits/constant-observable-trait';
-import { KnownLocationObservableTrait } from '../../../trait/vision/model/observable-traits/known-location-observable-trait';
+import { TerrainObjectKnownLocationObservableTrait } from '../../../trait/vision/model/observable-traits/terrain-object-known-location-observable-trait';
 import { PositionBasedObservableTrait } from '../../../trait/vision/model/observable-traits/position-based-observable-trait';
 import { VisibilityLevel } from '../../../trait/vision/model/visibility-level';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
@@ -40,7 +40,7 @@ export class TerrainObject implements DetectorContext, TraitOwner, NarrationProv
     this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
     this.traits = [
       new PositionBasedObservableTrait(() => PositionSet.create({ terrainObject: this })),
-      hidden ? new KnownLocationObservableTrait() : new ConstantObservableTrait(VisibilityLevel.LOCATABLE)
+      hidden ? new TerrainObjectKnownLocationObservableTrait(this) : new ConstantObservableTrait(VisibilityLevel.LOCATABLE)
     ];
   }
 
