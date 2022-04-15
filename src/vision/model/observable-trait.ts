@@ -1,4 +1,4 @@
-import { ActiveTrait } from '../../model/active-trait';
+import { ActiveTrait } from '../../trait/model/active-trait';
 import type { ObservatorTrait } from './observator-trait';
 import type { VisibilityLevel } from './visibility-level';
 

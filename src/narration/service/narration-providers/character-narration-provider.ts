@@ -2,7 +2,7 @@ import type { Character } from '../../../character/model/character';
 import { ArrayUtils } from '../../../common/array-utils';
 import type { GameState } from '../../../game/model/game-state';
 import { TerrainObjectPosition } from '../../../map/model/position';
-import { VisionService } from '../../../trait/vision/service/vision-service';
+import { VisionService } from '../../../vision/service/vision-service';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
 import type { TemplateNarrationAction } from '../../model/narration-actions/template-narration-action';
 import type { NarrationProvider } from '../../model/narration-provider/narration-provider';

@@ -1,4 +1,4 @@
-import type { Position } from '../../../../map/model/position';
+import type { Position } from '../../../map/model/position';
 import { HearerTrait } from '../hearer-trait';
 
 export class PositionBasedHearerTrait extends HearerTrait {

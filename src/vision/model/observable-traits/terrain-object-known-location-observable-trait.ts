@@ -1,6 +1,6 @@
-import { TerrainObjectLocationInformation } from '../../../../information/model/informations/terrain-object-location-information';
-import { InformationUtils } from '../../../../information/service/information-utils';
-import type { TerrainObject } from '../../../../map/terrain-object/model/terrain-object';
+import { TerrainObjectLocationInformation } from '../../../information/model/informations/terrain-object-location-information';
+import { InformationUtils } from '../../../information/service/information-utils';
+import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
 import { ObservableTrait } from '../observable-trait';
 import type { ObservatorTrait } from '../observator-trait';
 import { TerrainObjectKnownLocationObservatorTrait } from '../observator-traits/terrain-object-known-location-observator-trait';

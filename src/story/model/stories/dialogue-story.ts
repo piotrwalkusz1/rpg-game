@@ -4,7 +4,7 @@ import type { TranslatableText } from '../../../i18n/translatable-text';
 import type { NarrationAction } from '../../../narration/model/narration-actions/narration-action';
 import { NarrationDescription } from '../../../narration/model/narration-description';
 import type { NarrationSequenceStage } from '../../../narration/model/narration-sequence/narration-sequence-stage';
-import { HearingService } from '../../../trait/hearing/service/hearing-service';
+import { HearingService } from '../../../hearing/service/hearing-service';
 import { SingleNarrationSequenceStory } from './single-narration-sequence-story';
 
 interface DialogueStoryStagesProviderContext {

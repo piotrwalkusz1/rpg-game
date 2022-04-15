@@ -1,7 +1,7 @@
 import { ArrayUtils } from '../../../common/array-utils';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import type { TerrainObject } from '../../../map/terrain-object/model/terrain-object';
-import { VisionService } from '../../../trait/vision/service/vision-service';
+import { VisionService } from '../../../vision/service/vision-service';
 import { ChangeTerrainObjectPlacementNarrationAction } from '../../model/narration-actions/change-terrain-object-placement-narration-action';
 import { GoToTerrainObjectNarrationAction } from '../../model/narration-actions/go-to-terrain-object-narration-action';
 import { LeaveTerrainObjectNarrationAction } from '../../model/narration-actions/leave-terrain-object-narration-action';

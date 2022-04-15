@@ -11,10 +11,10 @@ import type { NarrationProvider } from '../../../narration/model/narration-provi
 import type { NarrationProviderOwner } from '../../../narration/model/narration-provider/narration-provider-owner';
 import type { Trait } from '../../../trait/model/trait';
 import type { TraitOwner } from '../../../trait/model/trait-owner';
-import { ConstantObservableTrait } from '../../../trait/vision/model/observable-traits/constant-observable-trait';
-import { TerrainObjectKnownLocationObservableTrait } from '../../../trait/vision/model/observable-traits/terrain-object-known-location-observable-trait';
-import { PositionBasedObservableTrait } from '../../../trait/vision/model/observable-traits/position-based-observable-trait';
-import { VisibilityLevel } from '../../../trait/vision/model/visibility-level';
+import { ConstantObservableTrait } from '../../../vision/model/observable-traits/constant-observable-trait';
+import { TerrainObjectKnownLocationObservableTrait } from '../../../vision/model/observable-traits/terrain-object-known-location-observable-trait';
+import { PositionBasedObservableTrait } from '../../../vision/model/observable-traits/position-based-observable-trait';
+import { VisibilityLevel } from '../../../vision/model/visibility-level';
 import type { MapField, TerrainObjectsCollection } from '../../model/map-field';
 import { TerrainObjectPosition } from '../../model/position';
 import { PositionSet } from '../../model/position-set';

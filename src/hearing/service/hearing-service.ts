@@ -1,5 +1,5 @@
-import type { TraitOwner } from '../../model/trait-owner';
-import { TraitService } from '../../service/trait-service';
+import type { TraitOwner } from '../../trait/model/trait-owner';
+import { TraitService } from '../../trait/service/trait-service';
 import { HearableTrait } from '../model/hearable-trait';
 import { HearerTrait } from '../model/hearer-trait';
 import { HearingLevel } from '../model/hearing-level';

@@ -1,4 +1,4 @@
-import type { PositionPredicate } from '../../../../map/model/position-predicate';
+import type { PositionPredicate } from '../../../map/model/position-predicate';
 import { HearableTrait } from '../hearable-trait';
 import type { HearerTrait } from '../hearer-trait';
 import { PositionBasedHearerTrait } from '../hearer-traits/position-based-hearer-trait';

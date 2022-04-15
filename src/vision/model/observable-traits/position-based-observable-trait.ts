@@ -1,4 +1,4 @@
-import { PositionSet } from '../../../../map/model/position-set';
+import { PositionSet } from '../../../map/model/position-set';
 import { ObservableTrait } from '../observable-trait';
 import type { ObservatorTrait } from '../observator-trait';
 import { PositionBasedObservatorTrait } from '../observator-traits/position-based-observator-trait';

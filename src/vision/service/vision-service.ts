@@ -1,5 +1,5 @@
-import type { TraitOwner } from '../../model/trait-owner';
-import { TraitService } from '../../service/trait-service';
+import type { TraitOwner } from '../../trait/model/trait-owner';
+import { TraitService } from '../../trait/service/trait-service';
 import { ObservableTrait } from '../model/observable-trait';
 import { ObservatorTrait } from '../model/observator-trait';
 import { VisibilityLevel } from '../model/visibility-level';

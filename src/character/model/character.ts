@@ -11,13 +11,13 @@ import { PositionSet } from '../../map/model/position-set';
 import type { TerrainObject } from '../../map/terrain-object/model/terrain-object';
 import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
 import type { NarrationProviderOwner } from '../../narration/model/narration-provider/narration-provider-owner';
-import { PositionBasedHearableTrait } from '../../trait/hearing/model/hearable-traits/position-based-hearable-trait';
-import { PositionBasedHearerTrait } from '../../trait/hearing/model/hearer-traits/position-based-hearer-trait';
+import { PositionBasedHearableTrait } from '../../hearing/model/hearable-traits/position-based-hearable-trait';
+import { PositionBasedHearerTrait } from '../../hearing/model/hearer-traits/position-based-hearer-trait';
 import type { Trait } from '../../trait/model/trait';
 import type { TraitOwner } from '../../trait/model/trait-owner';
-import { PositionBasedObservableTrait } from '../../trait/vision/model/observable-traits/position-based-observable-trait';
-import { PositionBasedObservatorTrait } from '../../trait/vision/model/observator-traits/position-based-observator-trait';
-import { TerrainObjectKnownLocationObservatorTrait } from '../../trait/vision/model/observator-traits/terrain-object-known-location-observator-trait';
+import { PositionBasedObservableTrait } from '../../vision/model/observable-traits/position-based-observable-trait';
+import { PositionBasedObservatorTrait } from '../../vision/model/observator-traits/position-based-observator-trait';
+import { TerrainObjectKnownLocationObservatorTrait } from '../../vision/model/observator-traits/terrain-object-known-location-observator-trait';
 import type { Race } from './race';
 import { TerrainObjectLocationInformation } from '../../information/model/informations/terrain-object-location-information';
 
