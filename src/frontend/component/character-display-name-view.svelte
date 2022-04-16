@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Character } from '../../engine/core/character/model/character';
+  import type { Actor } from '../../engine/core/actor/model/actor';
   import TranslatableTextView from '../../i18n/translatable-text-view.svelte';
 
-  export let character: Character;
+  export let character: Actor;
 </script>
 
 <span class="font-bold"><TranslatableTextView text={character.displayName} /></span>

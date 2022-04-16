@@ -1,6 +1,6 @@
 import { ArrayUtils } from '../../../../../utils/array-utils';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../../../../core/action/model/character-action';
-import type { Character } from '../../../../core/character/model/character';
+import type { Actor } from '../../../../core/actor/model/actor';
 import type { GameContext } from '../../../../core/game/model/game-context';
 import type { Position } from '../../../../core/map/model/position';
 import { TerrainObjectPosition } from '../../../../core/map/model/position';
@@ -10,7 +10,7 @@ export class GoActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly newPosition: Position;
   readonly oldPosition: Position;
 
-  constructor({ character, newPosition, oldPosition }: { character: Character; newPosition: Position; oldPosition: Position }) {
+  constructor({ character, newPosition, oldPosition }: { character: Actor; newPosition: Position; oldPosition: Position }) {
     super({
       character,
       visibilityPositions: PositionSet.create({
@@ -32,7 +32,7 @@ export class GoActionResultEvent extends CharacterActionResultEvent {
   readonly newPosition: Position;
   readonly oldPosition: Position;
 
-  constructor({ character, newPosition, oldPosition }: { character: Character; newPosition: Position; oldPosition: Position }) {
+  constructor({ character, newPosition, oldPosition }: { character: Actor; newPosition: Position; oldPosition: Position }) {
     super({
       character,
       visibilityPositions: PositionSet.create({
@@ -53,7 +53,7 @@ export class GoActionResultEvent extends CharacterActionResultEvent {
 export class GoAction extends CharacterAction {
   readonly position: Position;
 
-  constructor({ character, position }: { character: Character; position: Position }) {
+  constructor({ character, position }: { character: Actor; position: Position }) {
     super({ character });
     this.position = position;
   }

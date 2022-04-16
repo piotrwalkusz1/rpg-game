@@ -1,6 +1,6 @@
 import { ArrayUtils } from '../../../../utils/array-utils';
 import { OneToManyCollection } from '../../../../utils/cache-relationship-utils';
-import { CharactersCollection } from '../../character/model/character';
+import { ActorsCollection } from '../../actor/model/actor';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
@@ -24,7 +24,7 @@ export class MapField implements DetectorContext, NarrationProviderOwner {
   readonly location: MapLocation;
   readonly subLocations: SubLocationsCollection = new SubLocationsCollection(this);
   readonly terrainObjects: TerrainObjectsCollection = new TerrainObjectsCollection(this);
-  readonly characters: CharactersCollection = new CharactersCollection(new FieldPosition(this));
+  readonly characters: ActorsCollection = new ActorsCollection(new FieldPosition(this));
   readonly detectors: Detector[] = [];
   readonly narrationProviders: NarrationProvider[] = [];
 

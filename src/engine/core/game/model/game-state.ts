@@ -1,5 +1,5 @@
 import type { BattleNarration } from '../../../modules/battle/model/battle-narration';
-import type { Character } from '../../character/model/character';
+import type { Actor } from '../../actor/model/actor';
 import type { MapField } from '../../map/model/map-field';
 import type { MapLocation } from '../../map/model/map-location';
 import type { Position } from '../../map/model/position';
@@ -18,12 +18,12 @@ export class GameState {
   readonly world: MapLocation;
   currentTime: Date = new Date(2000, 5, 1, 8, 0, 0, 0);
   readonly eventQueue: GameEventQueue = new GameEventQueue();
-  readonly player: Character;
+  readonly player: Actor;
   pendingNarrationSequence?: PendingNarrationSequence;
   scheduledNarrationSequences: NarrationSequence[] = [];
   blockedScreen = false;
 
-  constructor({ player, world }: { player: Character; world: MapLocation }) {
+  constructor({ player, world }: { player: Actor; world: MapLocation }) {
     this.player = player;
     this.world = world;
     this.locationView = player.field?.location || world;

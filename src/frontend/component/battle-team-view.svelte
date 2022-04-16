@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Character } from '../../engine/core/character/model/character';
+  import type { Actor } from '../../engine/core/actor/model/actor';
   import BattleParticipantView from './battle-participant-view.svelte';
 
-  export let members: Character[];
-  export let getParticipantStyle: (participant: Character) => string | undefined;
-  export let onParticipantClick: ((participant: Character) => void) | undefined = undefined;
+  export let members: Actor[];
+  export let getParticipantStyle: (participant: Actor) => string | undefined;
+  export let onParticipantClick: ((participant: Actor) => void) | undefined = undefined;
 </script>
 
 <div class="flex flex-col border-[2px] border-black p-[15px] overflow-auto">

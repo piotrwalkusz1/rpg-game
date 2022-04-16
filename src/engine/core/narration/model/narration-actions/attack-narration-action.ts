@@ -1,10 +1,10 @@
 import { AttackAction } from '../../../../modules/battle/model/actions/attack-action';
-import type { Character } from '../../../character/model/character';
+import type { Actor } from '../../../actor/model/actor';
 import { NarrationActionOrder } from '../narration-action-order';
 import { ActionBasedNarrationAction } from './action-based-narration-action';
 
 export class AttackNarrationAction extends ActionBasedNarrationAction {
-  constructor(victim: Character) {
+  constructor(victim: Actor) {
     super({
       id: 'ATTACK_CHARACTER',
       nameContext: victim,

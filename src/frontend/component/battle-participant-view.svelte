@@ -1,11 +1,11 @@
 <script lang="ts">
   import { differenceInMilliseconds } from 'date-fns';
-  import type { Character } from '../../engine/core/character/model/character';
+  import type { Actor } from '../../engine/core/actor/model/actor';
   import { animatedCurrentTime } from '../store';
   import CharacterAvatarView from './character-avatar-view.svelte';
 
-  export let participant: Character;
-  export let getParticipantStyle: (participant: Character) => string | undefined;
+  export let participant: Actor;
+  export let getParticipantStyle: (participant: Actor) => string | undefined;
   export let onClick: (() => void) | undefined = undefined;
 
   const baseStyle = 'border-[2px] border-black';

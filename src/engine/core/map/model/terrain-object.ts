@@ -8,7 +8,7 @@ import { ConstantObservableTrait } from '../../../modules/vision/model/observabl
 import { PositionBasedObservableTrait } from '../../../modules/vision/model/observable-traits/position-based-observable-trait';
 import { TerrainObjectKnownLocationObservableTrait } from '../../../modules/vision/model/observable-traits/terrain-object-known-location-observable-trait';
 import { VisibilityLevel } from '../../../modules/vision/model/visibility-level';
-import { CharactersCollection } from '../../character/model/character';
+import { ActorsCollection } from '../../actor/model/actor';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
@@ -28,7 +28,7 @@ class TerrainObjectFieldFK extends OneToManyForeignKey<TerrainObject, TerrainObj
 export class TerrainObject implements DetectorContext, TraitOwner, NarrationProviderOwner, LawContext {
   readonly type: TerrainObjectType;
   readonly fieldFK: TerrainObjectFieldFK = new TerrainObjectFieldFK(this);
-  readonly characters: CharactersCollection;
+  readonly characters: ActorsCollection;
   readonly laws: Law[] = [];
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
@@ -37,7 +37,7 @@ export class TerrainObject implements DetectorContext, TraitOwner, NarrationProv
   constructor({ type, field, hidden }: { type: TerrainObjectType; field?: MapField; hidden?: boolean }) {
     this.type = type;
     this.fieldFK.value = field;
-    this.characters = new CharactersCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
+    this.characters = new ActorsCollection(new TerrainObjectPosition(this, this.type.defaultCharacterPlacement));
     this.traits = [
       new PositionBasedObservableTrait(() => PositionSet.create({ terrainObject: this })),
       hidden ? new TerrainObjectKnownLocationObservableTrait(this) : new ConstantObservableTrait(VisibilityLevel.LOCATABLE)

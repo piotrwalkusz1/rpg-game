@@ -1,4 +1,4 @@
-import type { CharactersCollection } from '../../character/model/character';
+import type { ActorsCollection } from '../../actor/model/actor';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { MapField } from './map-field';
 import type { TerrainObject } from './terrain-object';
@@ -17,7 +17,7 @@ export abstract class Position {
 
   abstract get field(): MapField | undefined;
 
-  abstract get characters(): CharactersCollection;
+  abstract get characters(): ActorsCollection;
 
   abstract equals(position: Position): boolean;
 
@@ -39,7 +39,7 @@ export class FieldPosition extends Position {
     return this._field;
   }
 
-  override get characters(): CharactersCollection {
+  override get characters(): ActorsCollection {
     return this._field.characters;
   }
 
@@ -68,7 +68,7 @@ export class TerrainObjectPosition extends Position {
     return this.terrainObject.field;
   }
 
-  override get characters(): CharactersCollection {
+  override get characters(): ActorsCollection {
     return this.terrainObject.characters;
   }
 

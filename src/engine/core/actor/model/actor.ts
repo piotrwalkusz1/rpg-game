@@ -21,24 +21,24 @@ import type { Trait } from '../../trait/model/trait';
 import type { TraitOwner } from '../../trait/model/trait-owner';
 import type { Race } from './race';
 
-export class CharactersCollection extends OneToManyCollection<Character, Position> {
-  override getForeignKey = (character: Character) => character.positionFK;
+export class ActorsCollection extends OneToManyCollection<Actor, Position> {
+  override getForeignKey = (character: Actor) => character.positionFK;
 }
 
-class CharacterPositionFK extends OneToManyForeignKey<Character, CharactersCollection, Position> {
+class ActorPositionFK extends OneToManyForeignKey<Actor, ActorsCollection, Position> {
   override getCollection = (position: Position | undefined) => position?.characters;
   override areForeignKeysEqual = Position.areEqual;
 }
 
-class ActivitiesCollection extends ManyToManyCollection<Activity, Character> {
+class ActivitiesCollection extends ManyToManyCollection<Activity, Actor> {
   override getCollection = (activity: Activity) => activity.participants;
 }
 
-export class Character implements TraitOwner, NarrationProviderOwner, InformationOwner {
+export class Actor implements TraitOwner, NarrationProviderOwner, InformationOwner {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
-  readonly positionFK: CharacterPositionFK = new CharacterPositionFK(this);
+  readonly positionFK: ActorPositionFK = new ActorPositionFK(this);
   readonly traits: Trait[];
   readonly narrationProviders: NarrationProvider[] = [];
   readonly informations: Information[] = [];

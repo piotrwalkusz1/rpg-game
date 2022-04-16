@@ -1,5 +1,5 @@
-import { Character } from '../engine/core/character/model/character';
-import { Race } from '../engine/core/character/model/race';
+import { Actor } from '../engine/core/actor/model/actor';
+import { Race } from '../engine/core/actor/model/race';
 import { Detector } from '../engine/core/detector/model/detector';
 import { GameState } from '../engine/core/game/model/game-state';
 import { MapFieldType } from '../engine/core/map/model/map-field-type';
@@ -45,19 +45,19 @@ export namespace MockedGame {
     };
 
     const characters = {
-      PIOTR: new Character({
+      PIOTR: new Actor({
         name: 'Piotr',
         race: Race.HUMAN,
         avatarUrl: 'images/character_001_avatar.png',
         position: new FieldPosition(locations.REGION_WHERE_ALICE_LIVE.fields[2][2])
       }),
-      ALICE: new Character({
+      ALICE: new Actor({
         name: 'Alice',
         race: Race.HUMAN,
         avatarUrl: 'images/character_002_avatar.png',
         position: new TerrainObjectPosition(terrainObjects.ALICE_HOUSE)
       }),
-      ANASTASIA: new Character({
+      ANASTASIA: new Actor({
         name: 'Anastasia',
         race: Race.HUMAN,
         avatarUrl: 'images/character_003_avatar.jpeg',

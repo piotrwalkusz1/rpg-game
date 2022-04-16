@@ -1,14 +1,14 @@
-import type { Character } from '../../character/model/character';
+import type { Actor } from '../../actor/model/actor';
 import type { GameContext } from '../../game/model/game-context';
 import type { PositionSet } from '../../map/model/position-set';
 import type { NarrationDescription } from '../../narration/model/narration-description';
 import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
 
 export abstract class CharacterActionScheduledEvent extends ActionScheduledEvent {
-  readonly character: Character;
+  readonly character: Actor;
   private _preventionNarrationDescription?: NarrationDescription;
 
-  constructor({ character, visibilityPositions }: { character: Character; visibilityPositions: PositionSet }) {
+  constructor({ character, visibilityPositions }: { character: Actor; visibilityPositions: PositionSet }) {
     super({ visibilityPositions });
     this.character = character;
   }
@@ -25,18 +25,18 @@ export abstract class CharacterActionScheduledEvent extends ActionScheduledEvent
 }
 
 export abstract class CharacterActionResultEvent extends ActionResultEvent {
-  readonly character: Character;
+  readonly character: Actor;
 
-  constructor({ character, visibilityPositions }: { character: Character; visibilityPositions: PositionSet }) {
+  constructor({ character, visibilityPositions }: { character: Actor; visibilityPositions: PositionSet }) {
     super({ visibilityPositions });
     this.character = character;
   }
 }
 
 export abstract class CharacterAction extends Action {
-  readonly character: Character;
+  readonly character: Actor;
 
-  constructor({ character }: { character: Character }) {
+  constructor({ character }: { character: Actor }) {
     super();
     this.character = character;
   }

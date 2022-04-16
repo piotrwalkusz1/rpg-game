@@ -1,7 +1,7 @@
 import { add } from 'date-fns';
 import type { BattleNarration } from '../../../modules/battle/model/battle-narration';
 import type { Activity } from '../../activity/model/activity';
-import type { Character } from '../../character/model/character';
+import type { Actor } from '../../actor/model/actor';
 import type { MapLocation } from '../../map/model/map-location';
 import type { Position } from '../../map/model/position';
 import type { TerrainObject } from '../../map/model/terrain-object';
@@ -13,19 +13,19 @@ import type { GameState } from './game-state';
 export class GameContext {
   static KEY = Symbol();
 
-  readonly changeCharacterPosition: (character: Character, position: Position) => void;
-  readonly addKnownLocation: (character: Character, terrainObject: TerrainObject) => void;
+  readonly changeCharacterPosition: (character: Actor, position: Position) => void;
+  readonly addKnownLocation: (character: Actor, terrainObject: TerrainObject) => void;
   readonly addGameEvent: (event: GameEvent) => void;
   readonly popNextGameEvent: () => GameEvent | undefined;
   readonly setCurrentTime: (time: Date) => void;
-  readonly dealDamage: (target: Character, damage: number) => void;
+  readonly dealDamage: (target: Actor, damage: number) => void;
   readonly getGameState: () => GameState;
   readonly setNarration: (narration: Narration | undefined) => void;
   readonly setBattle: (battle: BattleNarration | undefined) => void;
   readonly changeLocationView: (newLocationView: MapLocation) => void;
   readonly setPendingNarrationSequence: (pendingNarrationSequence: PendingNarrationSequence | undefined) => void;
-  readonly addActivity: (character: Character, activity: Activity) => void;
-  readonly removeActivity: (character: Character, activity: Activity) => void;
+  readonly addActivity: (character: Actor, activity: Activity) => void;
+  readonly removeActivity: (character: Actor, activity: Activity) => void;
   readonly setBlockedScreen: (blockedScreen: boolean) => void;
   readonly changeTime: (newTime: Date, duration: number) => Promise<void>;
   readonly refresh: () => void;
@@ -48,19 +48,19 @@ export class GameContext {
     changeTime,
     refresh
   }: {
-    changeCharacterPosition: (character: Character, position: Position) => void;
-    addKnownLocation: (character: Character, terrainObject: TerrainObject) => void;
+    changeCharacterPosition: (character: Actor, position: Position) => void;
+    addKnownLocation: (character: Actor, terrainObject: TerrainObject) => void;
     addGameEvent: (event: GameEvent) => void;
     popNextGameEvent: () => GameEvent | undefined;
     setCurrentTime: (time: Date) => void;
-    dealDamage: (target: Character, damage: number) => void;
+    dealDamage: (target: Actor, damage: number) => void;
     getGameState: () => GameState;
     setNarration: (narration: Narration | undefined) => void;
     setBattle: (battle: BattleNarration | undefined) => void;
     changeLocationView: (newLocationView: MapLocation) => void;
     setPendingNarrationSequence: (pendingNarrationSequence: PendingNarrationSequence | undefined) => void;
-    addActivity: (character: Character, activity: Activity) => void;
-    removeActivity: (character: Character, activity: Activity) => void;
+    addActivity: (character: Actor, activity: Activity) => void;
+    removeActivity: (character: Actor, activity: Activity) => void;
     setBlockedScreen: (blockedScreen: boolean) => void;
     changeTime: (newTime: Date, duration: number) => Promise<void>;
     refresh: () => void;
@@ -87,7 +87,7 @@ export class GameContext {
     return this.getGameState();
   }
 
-  get player(): Character {
+  get player(): Actor {
     return this.gameState.player;
   }
 

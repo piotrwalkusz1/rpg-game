@@ -1,5 +1,5 @@
 import type { TranslatableText } from '../../../../i18n/translatable-text';
-import type { Character } from '../../character/model/character';
+import type { Actor } from '../../actor/model/actor';
 
 export type TerrainObjectPlacementId = `OUTSIDE` | `INSIDE` | `NEAR`;
 
@@ -14,7 +14,7 @@ export class TerrainObjectPlacement {
     return `MAP.TERRAIN_OBJECT_PLACEMENT.${this.id}.MOVEMENT_ACTIVITY`;
   }
 
-  getCharacterDescription(character: Character): TranslatableText {
+  getCharacterDescription(character: Actor): TranslatableText {
     return {
       translationKey: `MAP.TERRAIN_OBJECT_PLACEMENT.${this.id}.CHARACTER_DESCRIPTION`,
       properties: {

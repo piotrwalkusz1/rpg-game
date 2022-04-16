@@ -1,6 +1,6 @@
 import type { TranslatableText } from '../../../../../i18n/translatable-text';
 import { HearingService } from '../../../../modules/hearing/service/hearing-service';
-import type { Character } from '../../../character/model/character';
+import type { Actor } from '../../../actor/model/actor';
 import type { GameState } from '../../../game/model/game-state';
 import type { NarrationAction } from '../../../narration/model/narration-actions/narration-action';
 import { NarrationDescription } from '../../../narration/model/narration-description';
@@ -15,14 +15,14 @@ interface DialogueStoryStagesProviderContext {
 }
 
 export class DialogueStory extends SingleNarrationSequenceStory {
-  private readonly character: Character;
+  private readonly character: Actor;
 
   constructor({
     character,
     prompt,
     narrationStages
   }: {
-    character: Character;
+    character: Actor;
     prompt?: TranslatableText;
     narrationStages: (context: DialogueStoryStagesProviderContext) => NarrationSequenceStage[];
   }) {

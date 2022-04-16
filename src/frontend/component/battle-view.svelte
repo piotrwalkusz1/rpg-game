@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getContext } from 'svelte';
-  import type { Character } from '../../engine/core/character/model/character';
+  import type { Actor } from '../../engine/core/actor/model/actor';
   import { GameContext } from '../../engine/core/game/model/game-context';
   import { GameLoopService } from '../../engine/core/game/service/game-loop-service';
   import { AttackNarrationAction } from '../../engine/core/narration/model/narration-actions/attack-narration-action';
@@ -17,7 +17,7 @@
   $: allies = battleActivity.getAllies($gameState.player);
   $: enemies = battleActivity.getEnemies($gameState.player);
 
-  function getParticipantStyle(participant: Character): string | undefined {
+  function getParticipantStyle(participant: Actor): string | undefined {
     if (participant === battle.currentParticipant) {
       return 'shadow-[0_0_7px_2px_blue]';
     }
@@ -26,14 +26,14 @@
     }
   }
 
-  function onParticipantClick(participant: Character): void {
+  function onParticipantClick(participant: Actor): void {
     if (isEnemyOfPlayer(participant) && battleActivity.canStillFight(participant)) {
       const narrationAction = new AttackNarrationAction(participant);
       GameLoopService.executeNarrationAction(narrationAction, gameContext);
     }
   }
 
-  function isEnemyOfPlayer(participant: Character): boolean {
+  function isEnemyOfPlayer(participant: Actor): boolean {
     return battleActivity.areEnemies($gameState.player, participant);
   }
 </script>

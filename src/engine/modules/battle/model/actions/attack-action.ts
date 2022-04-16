@@ -1,7 +1,7 @@
 import { AnimationService } from '../../../../../frontend/animation/service/animation-service';
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../../../../core/action/model/character-action';
 import { AIService } from '../../../../core/ai/service/ai-service';
-import type { Character } from '../../../../core/character/model/character';
+import type { Actor } from '../../../../core/actor/model/actor';
 import type { GameContext } from '../../../../core/game/model/game-context';
 import { Position, TerrainObjectPosition } from '../../../../core/map/model/position';
 import { PositionSet } from '../../../../core/map/model/position-set';
@@ -11,7 +11,7 @@ import { BattleNarration } from '../battle-narration';
 export class AttackActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly position: Position;
 
-  constructor({ position, character }: { position: Position; character: Character }) {
+  constructor({ position, character }: { position: Position; character: Actor }) {
     super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
@@ -24,7 +24,7 @@ export class AttackActionScheduledEvent extends CharacterActionScheduledEvent {
 export class AttackActionResultEvent extends CharacterActionResultEvent {
   readonly position: Position;
 
-  constructor({ position, character }: { position: Position; character: Character }) {
+  constructor({ position, character }: { position: Position; character: Actor }) {
     super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
@@ -35,10 +35,10 @@ export class AttackActionResultEvent extends CharacterActionResultEvent {
 }
 
 export class AttackAction extends CharacterAction {
-  readonly target: Character;
+  readonly target: Actor;
   readonly position: Position;
 
-  constructor({ character, target }: { character: Character; target: Character }) {
+  constructor({ character, target }: { character: Actor; target: Actor }) {
     super({ character });
     if (!target.position) {
       throw new Error('Attacked victim must have position');

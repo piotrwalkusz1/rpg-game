@@ -1,4 +1,4 @@
-import type { RaceId } from '../engine/core/character/model/race';
+import type { RaceId } from '../engine/core/actor/model/race';
 import type { FieldTypeId } from '../engine/core/map/model/map-field-type';
 import type { TerrainObjectPlacementId } from '../engine/core/map/model/terrain-object-placement';
 import type { TerrainObjectTypeId } from '../engine/core/map/model/terrain-object-type';

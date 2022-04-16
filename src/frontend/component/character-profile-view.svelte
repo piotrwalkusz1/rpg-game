@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Character } from '../../engine/core/character/model/character';
+  import type { Actor } from '../../engine/core/actor/model/actor';
   import CharacterAvatarView from './character-avatar-view.svelte';
   import CharacterDisplayNameView from './character-display-name-view.svelte';
 
-  export let character: Character;
+  export let character: Actor;
 </script>
 
 <div class="flex divide-x-[2px] divide-black">

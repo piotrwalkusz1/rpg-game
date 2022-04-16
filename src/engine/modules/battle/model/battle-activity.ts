@@ -1,32 +1,32 @@
 import { Activity } from '../../../core/activity/model/activity';
-import type { Character } from '../../../core/character/model/character';
+import type { Actor } from '../../../core/actor/model/actor';
 
 export class BattleActivity extends Activity {
-  isEnded(character: Character): boolean {
+  isEnded(character: Actor): boolean {
     return this.getEnemiesThatCanStillFight(character).length === 0;
   }
 
-  getEnemiesThatCanStillFight(character: Character): Character[] {
+  getEnemiesThatCanStillFight(character: Actor): Actor[] {
     return this.getParticipantsThatCanStillFight().filter((participant) => this.areEnemies(character, participant));
   }
 
-  getEnemies(character: Character): Character[] {
+  getEnemies(character: Actor): Actor[] {
     return this.participants.getArray().filter((participant) => this.areEnemies(character, participant));
   }
 
-  getAllies(character: Character): Character[] {
+  getAllies(character: Actor): Actor[] {
     return this.participants.getArray().filter((participant) => !this.areEnemies(character, participant));
   }
 
-  areEnemies(firstParticipant: Character, secondParticipant: Character): boolean {
+  areEnemies(firstParticipant: Actor, secondParticipant: Actor): boolean {
     return firstParticipant !== secondParticipant;
   }
 
-  private getParticipantsThatCanStillFight(): Character[] {
+  private getParticipantsThatCanStillFight(): Actor[] {
     return this.participants.getArray().filter((participant) => participant.healthPoints > 0);
   }
 
-  canStillFight(participant: Character): boolean {
+  canStillFight(participant: Actor): boolean {
     return participant.healthPoints > 0;
   }
 }

@@ -1,5 +1,5 @@
 import { CharacterAction, CharacterActionResultEvent, CharacterActionScheduledEvent } from '../../../../core/action/model/character-action';
-import type { Character } from '../../../../core/character/model/character';
+import type { Actor } from '../../../../core/actor/model/actor';
 import type { GameContext } from '../../../../core/game/model/game-context';
 import { Position, TerrainObjectPosition } from '../../../../core/map/model/position';
 import { PositionSet } from '../../../../core/map/model/position-set';
@@ -8,7 +8,7 @@ import type { TerrainObject } from '../../../../core/map/model/terrain-object';
 export class GiveLocationActionScheduledEvent extends CharacterActionScheduledEvent {
   readonly position: Position;
 
-  constructor({ position, character }: { position: Position; character: Character }) {
+  constructor({ position, character }: { position: Position; character: Actor }) {
     super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
@@ -21,7 +21,7 @@ export class GiveLocationActionScheduledEvent extends CharacterActionScheduledEv
 export class GiveLocationActionResultEvent extends CharacterActionResultEvent {
   readonly position: Position;
 
-  constructor({ position, character }: { position: Position; character: Character }) {
+  constructor({ position, character }: { position: Position; character: Actor }) {
     super({ visibilityPositions: PositionSet.create(), character });
     this.position = position;
   }
@@ -32,7 +32,7 @@ export class GiveLocationActionResultEvent extends CharacterActionResultEvent {
 }
 
 export class GiveLocationAction extends CharacterAction {
-  readonly locationReceiver: Character;
+  readonly locationReceiver: Actor;
   readonly terrainObject: TerrainObject;
   readonly position: Position;
 
@@ -41,8 +41,8 @@ export class GiveLocationAction extends CharacterAction {
     locationReceiver,
     terrainObject
   }: {
-    character: Character;
-    locationReceiver: Character;
+    character: Actor;
+    locationReceiver: Actor;
     terrainObject: TerrainObject;
   }) {
     super({ character: character });

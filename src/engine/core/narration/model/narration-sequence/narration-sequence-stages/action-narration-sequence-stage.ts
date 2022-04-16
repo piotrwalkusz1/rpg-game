@@ -1,7 +1,7 @@
 import { Action } from '../../../../action/model/action';
 import { CharacterAction } from '../../../../action/model/character-action';
 import { ActionService } from '../../../../action/service/action-service';
-import type { Character } from '../../../../character/model/character';
+import type { Actor } from '../../../../actor/model/actor';
 import type { GameState } from '../../../../game/model/game-state';
 import { NarrationAction } from '../../narration-actions/narration-action';
 import { NarrationDescription } from '../../narration-description';
@@ -56,7 +56,7 @@ export class ActionNarrationSequenceStage implements NarrationSequenceStage {
     }
   }
 
-  private waitUntilNextActionPossible(character: Character): NarrationSequenceStageExecutionResult {
+  private waitUntilNextActionPossible(character: Actor): NarrationSequenceStageExecutionResult {
     if (character.pendingAction === undefined) {
       return { type: 'NEXT_STAGE' };
     } else {

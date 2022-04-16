@@ -1,6 +1,6 @@
 import type { TranslatableText } from '../../../../i18n/translatable-text';
-import type { Character } from '../../character/model/character';
+import type { Actor } from '../../actor/model/actor';
 
 export class NarrationDescription {
-  constructor(readonly text: TranslatableText, readonly character?: Character) {}
+  constructor(readonly text: TranslatableText, readonly character?: Actor) {}
 }

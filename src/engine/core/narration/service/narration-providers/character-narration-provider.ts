@@ -1,6 +1,6 @@
 import { ArrayUtils } from '../../../../../utils/array-utils';
 import { VisionService } from '../../../../modules/vision/service/vision-service';
-import type { Character } from '../../../character/model/character';
+import type { Actor } from '../../../actor/model/actor';
 import type { GameState } from '../../../game/model/game-state';
 import { TerrainObjectPosition } from '../../../map/model/position';
 import { AttackNarrationAction } from '../../model/narration-actions/attack-narration-action';
@@ -10,7 +10,7 @@ import type { NarrationProviderResult } from '../../model/narration-provider/nar
 
 export namespace CharacterNarrationProvider {
   export const create =
-    (character: Character): NarrationProvider =>
+    (character: Actor): NarrationProvider =>
     ({ trigger, gameState }): NarrationProviderResult | undefined => {
       if (character === gameState.player || !(character.position instanceof TerrainObjectPosition)) {
         return;
@@ -32,7 +32,7 @@ export namespace CharacterNarrationProvider {
       };
     };
 
-  const getAttackAction = (character: Character, gameState: GameState): TemplateNarrationAction | undefined => {
+  const getAttackAction = (character: Actor, gameState: GameState): TemplateNarrationAction | undefined => {
     if (
       gameState.player !== character &&
       gameState.player.position instanceof TerrainObjectPosition &&
