@@ -1,7 +1,7 @@
-import type { Actor } from '../../actor/model/actor';
-import type { GameContext } from '../../game/model/game-context';
-import type { PositionSet } from '../../map/model/position-set';
-import type { NarrationDescription } from '../../narration/model/narration-description';
+import type { Actor } from 'engine/core/actor/model/actor';
+import type { GameContext } from 'engine/core/game/model/game-context';
+import type { PositionSet } from 'engine/core/map/model/position-set';
+import type { NarrationDescription } from 'engine/core/narration/model/narration-description';
 import { Action, ActionResultEvent, ActionScheduledEvent } from './action';
 
 export abstract class CharacterActionScheduledEvent extends ActionScheduledEvent {
