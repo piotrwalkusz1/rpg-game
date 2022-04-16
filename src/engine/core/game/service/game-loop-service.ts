@@ -16,7 +16,7 @@ export namespace GameLoopService {
       return;
     }
     await animateFlowOfTime(event.time, context);
-    await event.process(context);
+    await context.engine.processEvent(event);
     await executePlayerTurnAutomaticallyAndProcessNextEventIfPlayerActionIsNotRequired(context);
   };
 

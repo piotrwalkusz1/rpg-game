@@ -1,6 +1,7 @@
 import type { PendingAction } from 'engine/core/action/model/pending-action';
 import type { Activity } from 'engine/core/activity/model/activity';
 import type { Race } from 'engine/core/actor/model/race';
+import { Entity } from 'engine/core/ecs';
 import type { MapField } from 'engine/core/map/model/map-field';
 import { Position, TerrainObjectPosition } from 'engine/core/map/model/position';
 import { PositionSet } from 'engine/core/map/model/position-set';
@@ -20,6 +21,7 @@ import { PositionBasedObservatorTrait } from 'engine/modules/vision/model/observ
 import { TerrainObjectKnownLocationObservatorTrait } from 'engine/modules/vision/model/observator-traits/terrain-object-known-location-observator-trait';
 import type { TranslatableText } from 'i18n/translatable-text';
 import { ManyToManyCollection, OneToManyCollection, OneToManyForeignKey } from 'utils/cache-relationship-utils';
+import { ActionPerformer } from '../../action/model/action-performer';
 
 export class ActorsCollection extends OneToManyCollection<Actor, Position> {
   override getForeignKey = (character: Actor) => character.positionFK;
@@ -34,7 +36,7 @@ class ActivitiesCollection extends ManyToManyCollection<Activity, Actor> {
   override getCollection = (activity: Activity) => activity.participants;
 }
 
-export class Actor implements TraitOwner, NarrationProviderOwner, InformationOwner {
+export class Actor extends Entity implements TraitOwner, NarrationProviderOwner, InformationOwner {
   readonly name?: string;
   readonly race: Race;
   readonly avatarUrl?: string;
@@ -43,12 +45,14 @@ export class Actor implements TraitOwner, NarrationProviderOwner, InformationOwn
   readonly narrationProviders: NarrationProvider[] = [];
   readonly informations: Information[] = [];
   readonly activities: ActivitiesCollection = new ActivitiesCollection(this);
+  readonly actionPerformer: ActionPerformer = new ActionPerformer();
   healthPoints = 100;
   maxHealthPoints = 100;
   damage = 10;
-  pendingAction: PendingAction | undefined;
 
   constructor({ name, race, avatarUrl, position }: { name?: string; race: Race; avatarUrl?: string; position?: Position }) {
+    super();
+    this.addComponent(this.actionPerformer);
     this.name = name;
     this.race = race;
     this.avatarUrl = avatarUrl;
@@ -118,5 +122,13 @@ export class Actor implements TraitOwner, NarrationProviderOwner, InformationOwn
 
   removeActivity(activity: Activity): void {
     this.activities.remove(activity);
+  }
+
+  get pendingAction(): PendingAction | undefined {
+    return this.actionPerformer.pendingAction;
+  }
+
+  set pendingAction(pendingAction) {
+    this.actionPerformer.pendingAction = pendingAction;
   }
 }

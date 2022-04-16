@@ -14,7 +14,11 @@ export namespace ActionService {
     }
     const scheduledEvent = action.getActionScheduledEvent(context);
     DetectorService.runDetectors(scheduledEvent, context);
-    const executionEvent = new ExecuteActionGameEvent({ time: context.getCurrentTimePlusDuration(action.duration), action });
+    const executionEvent = new ExecuteActionGameEvent({
+      action,
+      time: context.getCurrentTimePlusDuration(action.duration),
+      gameContext: context
+    });
     if (action instanceof CharacterAction && scheduledEvent instanceof CharacterActionScheduledEvent) {
       const character = action.character;
       if (character === context.player) {

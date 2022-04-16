@@ -1,18 +1,20 @@
 import { add } from 'date-fns';
-import type { BattleNarration } from '../../../modules/battle/model/battle-narration';
-import type { Activity } from '../../activity/model/activity';
-import type { Actor } from '../../actor/model/actor';
-import type { MapLocation } from '../../map/model/map-location';
-import type { Position } from '../../map/model/position';
-import type { TerrainObject } from '../../map/model/terrain-object';
-import type { Narration } from '../../narration/model/narration';
-import type { PendingNarrationSequence } from '../../narration/model/narration-sequence/pending-narration-sequence';
-import type { GameEvent } from './game-event';
-import type { GameState } from './game-state';
+import { ActionSystem } from 'engine/core/action';
+import type { Activity } from 'engine/core/activity/model/activity';
+import type { Actor } from 'engine/core/actor/model/actor';
+import { Engine } from 'engine/core/ecs';
+import type { GameEvent, GameState } from 'engine/core/game';
+import type { MapLocation } from 'engine/core/map/model/map-location';
+import type { Position } from 'engine/core/map/model/position';
+import type { TerrainObject } from 'engine/core/map/model/terrain-object';
+import type { Narration } from 'engine/core/narration/model/narration';
+import type { PendingNarrationSequence } from 'engine/core/narration/model/narration-sequence/pending-narration-sequence';
+import type { BattleNarration } from 'engine/modules/battle/model/battle-narration';
 
 export class GameContext {
   static KEY = Symbol();
 
+  readonly engine: Engine = new Engine();
   readonly changeCharacterPosition: (character: Actor, position: Position) => void;
   readonly addKnownLocation: (character: Actor, terrainObject: TerrainObject) => void;
   readonly addGameEvent: (event: GameEvent) => void;
@@ -81,6 +83,8 @@ export class GameContext {
     this.setBlockedScreen = setBlockedScreen;
     this.changeTime = changeTime;
     this.refresh = refresh;
+
+    this.engine.addSystem(new ActionSystem());
   }
 
   get gameState(): GameState {
