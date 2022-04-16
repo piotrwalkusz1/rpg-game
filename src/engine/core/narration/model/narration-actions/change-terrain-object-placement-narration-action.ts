@@ -1,0 +1,21 @@
+import { GoAction } from '../../../../modules/movement/model/actions/go-action';
+import { TerrainObjectPosition } from '../../../map/model/position';
+import type { TerrainObject } from '../../../map/model/terrain-object';
+import type { TerrainObjectPlacement } from '../../../map/model/terrain-object-placement';
+import { NarrationActionOrder } from '../narration-action-order';
+import { ActionBasedNarrationAction } from './action-based-narration-action';
+
+export class ChangeTerrainObjectPlacementNarrationAction extends ActionBasedNarrationAction {
+  constructor(terrainObject: TerrainObject, terrainObjectPlacement: TerrainObjectPlacement) {
+    super({
+      id: 'CHANGE_TERRAIN_OBJECT_PLACEMENT',
+      nameTranslationProperties: {
+        terrainObjectPlacementMovementActivity: terrainObjectPlacement.getMovementActivityName()
+      },
+      nameContext: terrainObject,
+      order: NarrationActionOrder.CHANGE_TERRAIN_OBJECT_PLACEMENT,
+      action: (gameState) =>
+        new GoAction({ character: gameState.player, position: new TerrainObjectPosition(terrainObject, terrainObjectPlacement) })
+    });
+  }
+}

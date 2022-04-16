@@ -1,8 +1,8 @@
-import type { RaceId } from '../character/model/race';
-import type { FieldTypeId } from '../map/model/map-field-type';
-import type { TerrainObjectPlacementId } from '../map/terrain-object/model/terrain-object-placement';
-import type { TerrainObjectTypeId } from '../map/terrain-object/model/terrain-object-type';
-import type { NarrationActionId } from '../narration/model/narration-actions/template-narration-action';
+import type { RaceId } from '../engine/core/character/model/race';
+import type { FieldTypeId } from '../engine/core/map/model/map-field-type';
+import type { TerrainObjectPlacementId } from '../engine/core/map/model/terrain-object-placement';
+import type { TerrainObjectTypeId } from '../engine/core/map/model/terrain-object-type';
+import type { NarrationActionId } from '../engine/core/narration/model/narration-actions/template-narration-action';
 
 export type DialogueId =
   | '00001_YES'
