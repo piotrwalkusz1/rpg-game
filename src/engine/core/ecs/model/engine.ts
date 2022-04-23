@@ -1,4 +1,4 @@
-import type { ECSEvent, Entity, System } from 'engine/core/ecs';
+import type { Component, ECSEvent, Entity, System } from 'engine/core/ecs';
 
 export class Engine {
   private readonly entities: Entity[] = [];
@@ -6,6 +6,10 @@ export class Engine {
 
   getEntities(): readonly Entity[] {
     return this.entities;
+  }
+
+  addEntity(entity: Entity): void {
+    this.entities.push(entity);
   }
 
   getSystems(): readonly System[] {
@@ -16,9 +20,19 @@ export class Engine {
     this.systems.push(system);
   }
 
+  getComponent<T extends Component>(componentType: abstract new (...args: any[]) => T): T | undefined {
+    for (const entity of this.entities) {
+      const component = entity.getComponent(componentType);
+      if (component) {
+        return component;
+      }
+    }
+    return undefined;
+  }
+
   async processEvent(event: ECSEvent): Promise<void> {
     for (const system of this.systems) {
-      await system.processEvent(event);
+      await system.processEvent(event, this);
     }
   }
 }

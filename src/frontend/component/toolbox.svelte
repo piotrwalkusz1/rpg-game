@@ -1,7 +1,6 @@
 <script lang="ts">
   import { faBahai, faSearchMinus } from '@fortawesome/free-solid-svg-icons';
   import Fa from 'svelte-fa';
-  import { NarrationService } from '../../engine/core/narration/service/narration-service';
   import { gameState } from '../store';
 
   function goToPlayerLocation() {
@@ -9,9 +8,6 @@
     if (playerLocation) {
       $gameState.locationView = playerLocation;
       $gameState.selectedField = $gameState.player.position?.field;
-      $gameState.narration = $gameState.selectedField
-        ? NarrationService.getNarrationForField($gameState.selectedField, $gameState)
-        : undefined;
     }
   }
 

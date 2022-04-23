@@ -1,29 +1,36 @@
-import { ArrayUtils } from '../../../../utils/array-utils';
-import { AttackAction } from '../../../modules/battle/model/actions/attack-action';
-import { BattleActivity } from '../../../modules/battle/model/battle-activity';
+import { ActionExecutor } from 'engine/core/action';
+import { ActivityParticipant } from 'engine/core/activity';
+import { AIActionExecutor } from 'engine/core/ai/service/ai-action-executor';
+import type { Engine, Entity } from 'engine/core/ecs';
+import { AttackAction } from '../../../modules/attack/attack-action';
+import { BattleActivity } from '../../../modules/battle/battle-activity';
 import { ActionService } from '../../action/service/action-service';
-import type { Actor } from '../../actor/model/actor';
-import type { GameContext } from '../../game/model/game-context';
 
 export namespace AIService {
-  export const executeTurn = (character: Actor, context: GameContext): void => {
-    if (character.pendingAction) {
+  export const executeTurn = (entity: Entity, engine: Engine): void => {
+    if (!entity.hasComponent(AIActionExecutor)) {
       return;
     }
-    const battle: BattleActivity | undefined = ArrayUtils.filterInstanceOf(character.activities.getArray(), BattleActivity)[0];
+    const actionExecutor: ActionExecutor | undefined = entity.getComponent(ActionExecutor);
+    if (!actionExecutor || actionExecutor.pendingAction) {
+      return;
+    }
+    const activityParticipant: ActivityParticipant | undefined = entity.getComponent(ActivityParticipant);
+    if (!activityParticipant) {
+      return;
+    }
+
+    const battle: BattleActivity | undefined = activityParticipant.getActivity(BattleActivity);
     if (battle) {
-      const enemy: Actor | undefined = battle.participants.getArray().filter((participant) => participant !== character)[0];
+      const enemy: Entity | undefined = battle.participants
+        .getArray()
+        .map((pariticapt) => pariticapt.entity)
+        .filter((participant) => participant !== entity)[0];
       if (enemy) {
-        const action = new AttackAction({ character, target: enemy });
-        const scheduleActionResult = ActionService.scheduleAction(action, context);
-        switch (scheduleActionResult.type) {
-          case 'SUCCESS':
-          case 'PREVENTION':
-          case 'CANNOT_EXECUTE':
-            break;
-        }
+        const action = new AttackAction({ attacker: actionExecutor, target: enemy });
+        ActionService.scheduleAction(action, engine);
       } else {
-        character.activities.remove(battle);
+        activityParticipant.activities.remove(battle);
       }
     }
   };

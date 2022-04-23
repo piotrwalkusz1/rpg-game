@@ -1,4 +1,4 @@
-import type { InformationOwner } from '../../../information/model/information-owner';
+import type { InformationOwner } from '../../../information/information-owner';
 import { ObservatorTrait } from '../observator-trait';
 
 export class TerrainObjectKnownLocationObservatorTrait extends ObservatorTrait {

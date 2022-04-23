@@ -1,7 +1,12 @@
+import { Component } from 'engine/core/ecs';
 import type { GameEvent } from './game-event';
 
-export class GameEventQueue {
+export class GameEventQueue extends Component {
   private readonly _events: GameEvent[] = [];
+
+  addEvents(events: GameEvent[]): void {
+    events.forEach((event) => this.addEvent(event));
+  }
 
   addEvent(event: GameEvent): void {
     this._events.push(event);

@@ -1,5 +1,5 @@
-import type { ECSEvent } from 'engine/core/ecs';
+import type { ECSEvent, Engine } from 'engine/core/ecs';
 
 export abstract class System {
-  abstract processEvent(event: ECSEvent): Promise<void>;
+  abstract processEvent(event: ECSEvent, engine: Engine): Promise<void>;
 }

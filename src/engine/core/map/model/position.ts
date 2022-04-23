@@ -1,4 +1,4 @@
-import type { ActorsCollection } from '../../actor/model/actor';
+import type { PositionComponentsCollection } from 'engine/core/map/component/position-component';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { MapField } from './map-field';
 import type { TerrainObject } from './terrain-object';
@@ -17,7 +17,7 @@ export abstract class Position {
 
   abstract get field(): MapField | undefined;
 
-  abstract get characters(): ActorsCollection;
+  abstract get positionComponents(): PositionComponentsCollection;
 
   abstract equals(position: Position): boolean;
 
@@ -39,8 +39,8 @@ export class FieldPosition extends Position {
     return this._field;
   }
 
-  override get characters(): ActorsCollection {
-    return this._field.characters;
+  override get positionComponents(): PositionComponentsCollection {
+    return this._field.positionComponents;
   }
 
   override equals(position: Position): boolean {
@@ -68,8 +68,8 @@ export class TerrainObjectPosition extends Position {
     return this.terrainObject.field;
   }
 
-  override get characters(): ActorsCollection {
-    return this.terrainObject.characters;
+  override get positionComponents(): PositionComponentsCollection {
+    return this.terrainObject.positionComponents;
   }
 
   override equals(position: Position): boolean {

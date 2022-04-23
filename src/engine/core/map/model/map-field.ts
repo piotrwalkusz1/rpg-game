@@ -1,6 +1,6 @@
+import { PositionComponentsCollection } from 'engine/core/map/component/position-component';
 import { ArrayUtils } from '../../../../utils/array-utils';
 import { OneToManyCollection } from '../../../../utils/cache-relationship-utils';
-import { ActorsCollection } from '../../actor/model/actor';
 import type { Detector } from '../../detector/model/detector';
 import type { DetectorContext } from '../../detector/model/detector-context';
 import type { NarrationProvider } from '../../narration/model/narration-provider/narration-provider';
@@ -12,7 +12,7 @@ import { FieldPosition } from './position';
 import type { TerrainObject } from './terrain-object';
 
 export class SubLocationsCollection extends OneToManyCollection<MapLocation, MapField> {
-override getForeignKey = (location: MapLocation) => location.parentFieldFK;
+  override getForeignKey = (location: MapLocation) => location.parentFieldFK;
 }
 
 export class TerrainObjectsCollection extends OneToManyCollection<TerrainObject, MapField> {
@@ -24,7 +24,7 @@ export class MapField implements DetectorContext, NarrationProviderOwner {
   readonly location: MapLocation;
   readonly subLocations: SubLocationsCollection = new SubLocationsCollection(this);
   readonly terrainObjects: TerrainObjectsCollection = new TerrainObjectsCollection(this);
-  readonly characters: ActorsCollection = new ActorsCollection(new FieldPosition(this));
+  readonly positionComponents: PositionComponentsCollection = new PositionComponentsCollection(new FieldPosition(this));
   readonly detectors: Detector[] = [];
   readonly narrationProviders: NarrationProvider[] = [];
 

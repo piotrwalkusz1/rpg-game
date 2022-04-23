@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { MapField } from '../../engine/core/map/model/map-field';
-  import { NarrationService } from '../../engine/core/narration/service/narration-service';
   import { gameState } from '../store';
   import FieldView from './field-view.svelte';
 
@@ -16,7 +15,6 @@
 
   function onFieldClick(field: MapField) {
     $gameState.selectedField = field;
-    $gameState.narration = NarrationService.getNarrationForField(field, $gameState);
   }
 </script>
 

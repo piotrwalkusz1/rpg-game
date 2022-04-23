@@ -1,19 +1,19 @@
-import type { CharacterAction } from './character-action';
-import type { ExecuteActionGameEvent } from '../../game/model/game-events/execute-action-game-event';
+import type { Action, BeforeActionExecutingEvent } from 'engine/core/action';
+import type { Time } from 'engine/core/time';
 
 export class PendingAction {
-  readonly action: CharacterAction;
-  readonly scheduleTime: Date;
-  readonly executionEvent: ExecuteActionGameEvent;
+  readonly action: Action;
+  readonly scheduleTime: Time;
+  readonly executionEvent: BeforeActionExecutingEvent;
 
   constructor({
     action,
     scheduleTime,
     executionEvent
   }: {
-    action: CharacterAction;
-    scheduleTime: Date;
-    executionEvent: ExecuteActionGameEvent;
+    action: Action;
+    scheduleTime: Time;
+    executionEvent: BeforeActionExecutingEvent;
   }) {
     this.action = action;
     this.scheduleTime = scheduleTime;

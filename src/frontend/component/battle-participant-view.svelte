@@ -1,20 +1,23 @@
 <script lang="ts">
   import { differenceInMilliseconds } from 'date-fns';
-  import type { Actor } from '../../engine/core/actor/model/actor';
+  import { ActionExecutor } from 'engine/core/action';
+  import type { Entity } from 'engine/core/ecs';
+  import { Health } from 'engine/modules/health';
   import { animatedCurrentTime } from '../store';
   import CharacterAvatarView from './character-avatar-view.svelte';
 
-  export let participant: Actor;
-  export let getParticipantStyle: (participant: Actor) => string | undefined;
+  export let participant: Entity;
+  export let getParticipantStyle: (participant: Entity) => string | undefined;
   export let onClick: (() => void) | undefined = undefined;
 
   const baseStyle = 'border-[2px] border-black';
 
   $: additionalStyle = getParticipantStyle(participant);
   $: style = additionalStyle ? baseStyle + ' ' + additionalStyle : baseStyle;
+  $: actionExectutor = participant.getComponent(ActionExecutor);
   $: actionCompletionPercentage = getActionCompletionPercentage(
-    participant.pendingAction?.scheduleTime,
-    participant.pendingAction?.executionEvent.time,
+    actionExectutor?.pendingAction?.scheduleTime,
+    actionExectutor?.pendingAction?.executionEvent.time,
     $animatedCurrentTime
   );
 
@@ -36,7 +39,7 @@
       <div
         slot="overlay"
         class="absolute bg-red-700/50 bottom-0 left-0 right-0"
-        style={`height: ${participant.lostPercentageOfHealth}%;`}
+        style={`height: ${participant.getComponent(Health)?.lostPercentageOfHealth}%;`}
       />
     </CharacterAvatarView>
   </div>

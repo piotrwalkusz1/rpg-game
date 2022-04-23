@@ -14,58 +14,14 @@
   import NarrationPanel from './component/narration-panel.svelte';
   import TimeView from './component/time-view.svelte';
   import Toolbox from './component/toolbox.svelte';
-  import { animatedCurrentTime, gameState } from './store';
+  import { gameState } from './store';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
   i18n.addResourceBundle('pl', 'common', {});
 
   const gameContext = new GameContext({
-    changeCharacterPosition: (character, position) => {
-      character.position = position;
-      $gameState = $gameState;
-    },
-    addKnownLocation: (character, terrainObject) => {
-      character.addKnownLocation(terrainObject);
-      $gameState = $gameState;
-    },
-    addGameEvent: (event) => {
-      $gameState.eventQueue.addEvent(event);
-      $gameState = $gameState;
-    },
-    popNextGameEvent: () => {
-      const nextEvent = $gameState.eventQueue.popNextEvent();
-      $gameState = $gameState;
-      return nextEvent;
-    },
-    setCurrentTime: (time) => {
-      $gameState.currentTime = time;
-      animatedCurrentTime.set(time, 0);
-    },
-    dealDamage: (target, damage) => {
-      target.dealDamage(damage);
-      $gameState = $gameState;
-    },
-    setNarration: (narration) => ($gameState.narration = narration),
-    setBattle: (battle) => ($gameState.battle = battle),
-    changeLocationView: (newLocationView) => ($gameState.locationView = newLocationView),
-    getGameState: () => $gameState,
-    setPendingNarrationSequence: (pendingNarrationSequence) => ($gameState.pendingNarrationSequence = pendingNarrationSequence),
-    addActivity: (character, activity) => {
-      character.addActivity(activity);
-      $gameState = $gameState;
-    },
-    removeActivity: (character, activity) => {
-      character.removeActivity(activity);
-      $gameState = $gameState;
-    },
     setBlockedScreen: (blockedScreen) => ($gameState.blockedScreen = blockedScreen),
-    changeTime: async (newTime, duration) => {
-      $gameState.blockedScreen = true;
-      $gameState.currentTime = newTime;
-      await animatedCurrentTime.set(newTime, duration);
-      $gameState.blockedScreen = false;
-    },
     refresh: () => ($gameState = $gameState)
   });
 
