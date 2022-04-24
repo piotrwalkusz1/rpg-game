@@ -1,5 +1,5 @@
 import { Component } from 'engine/core/ecs';
-import type { Information } from './information';
+import type { Information } from 'engine/modules/information';
 
 export class InformationOwner extends Component {
   private readonly informations: Information[] = [];

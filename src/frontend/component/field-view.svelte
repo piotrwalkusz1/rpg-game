@@ -1,14 +1,9 @@
 <script lang="ts">
-  import type { MapField } from '../../engine/core/map/model/map-field';
+  import type { Field } from 'engine/core/field';
 
-  export let field: MapField;
+  let field: Field;
 </script>
 
-{#if field.terrainObjects.length > 0}
-  <div class="relative -z-[100]">
-    <img class="absolute" src={field.fieldType.imageUrl} alt="Terrain" width={64} height={64} />
-    <img class="absolute" src={field.terrainObjects.get(0).imageUrl} alt="Terrain object" width={64} height={64} />
-  </div>
-{:else}
-  <img src={field.fieldType.imageUrl} alt="Terrain" width={64} height={64} />
-{/if}
+<div>
+  {field.objects.length}
+</div>

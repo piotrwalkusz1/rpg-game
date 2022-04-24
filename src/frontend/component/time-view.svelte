@@ -1,12 +1,11 @@
 <script lang="ts">
   import { startOfDay } from 'date-fns';
   import { differenceInSeconds } from 'date-fns/esm';
-  import { gameState } from '../store';
+  import { animatedCurrentTime } from 'frontend/store';
 
   const SECONDS_IN_DAY = 24 * 60 * 60;
 
-  $: currentTime = $gameState.currentTime;
-  $: partOfDay = differenceInSeconds(currentTime, startOfDay(currentTime)) / SECONDS_IN_DAY;
+  $: partOfDay = differenceInSeconds($animatedCurrentTime, startOfDay($animatedCurrentTime)) / SECONDS_IN_DAY;
 </script>
 
 <div class="relative">

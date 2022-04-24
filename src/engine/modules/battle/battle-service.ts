@@ -1,6 +1,6 @@
 import type { ActivityParticipant } from 'engine/core/activity';
-import { ArrayUtils } from '../../../utils/array-utils';
-import { BattleActivity } from './battle-activity';
+import { BattleActivity } from 'engine/modules/battle';
+import { ArrayUtils } from 'utils';
 
 export namespace BattleService {
   export const setCommonBattleActivity = (characters: ActivityParticipant[]): BattleActivity => {

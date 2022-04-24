@@ -1,8 +1,4 @@
-import type { RaceId } from '../engine/core/actor/model/race';
-import type { FieldTypeId } from '../engine/core/map/model/map-field-type';
-import type { TerrainObjectPlacementId } from '../engine/core/map/model/terrain-object-placement';
-import type { TerrainObjectTypeId } from '../engine/core/map/model/terrain-object-type';
-import type { NarrationActionId } from '../engine/core/narration/model/narration-actions/template-narration-action';
+import type { FieldPlacementId } from 'engine/core/field';
 
 export type DialogueId =
   | '00001_YES'
@@ -17,14 +13,8 @@ export type DialogueId =
 export type DialogueTranslationKey = `DIALOGUE.TEXT.${DialogueId}`;
 
 type RequiredTranslationKey =
-  | `NARRATION.ACTION.${NarrationActionId}`
-  | `MAP.FIELD.${FieldTypeId}`
-  | `MAP.FIELD.${FieldTypeId}.DESCRIPTION`
-  | `MAP.TERRAIN_OBJECT.${TerrainObjectTypeId}`
-  | `MAP.TERRAIN_OBJECT.${TerrainObjectTypeId}.DESCRIPTION`
-  | `MAP.TERRAIN_OBJECT_PLACEMENT.${TerrainObjectPlacementId}.CHARACTER_DESCRIPTION`
-  | `MAP.TERRAIN_OBJECT_PLACEMENT.${TerrainObjectPlacementId}.MOVEMENT_ACTIVITY`
-  | `CHARACTER.RACE.${RaceId}`
+  | `MAP.TERRAIN_OBJECT_PLACEMENT.${FieldPlacementId}.CHARACTER_DESCRIPTION`
+  | `MAP.TERRAIN_OBJECT_PLACEMENT.${FieldPlacementId}.MOVEMENT_ACTIVITY`
   | DialogueTranslationKey;
 
 type DefaultTranslations = { [key in RequiredTranslationKey]: string } & { [key: string]: string };

@@ -2,7 +2,7 @@ import { ActionExecutedEvent } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
 import { ECSEvent, System } from 'engine/core/ecs';
 import { AttackAction } from 'engine/modules/attack';
-import { BattleService } from 'engine/modules/battle/battle-service';
+import { BattleService } from 'engine/modules/battle';
 
 export class BattleSystem extends System {
   override async processEvent(event: ECSEvent): Promise<void> {

@@ -1,5 +1,5 @@
-import type { ActivityParticipant } from 'engine/core/activity/activity-participant';
-import { ManyToManyCollection } from '../../../utils/cache-relationship-utils';
+import { ManyToManyCollection } from 'utils';
+import type { ActivityParticipant } from '.';
 
 class ParticipantsCollection extends ManyToManyCollection<ActivityParticipant, Activity> {
   override getCollection = (participant: ActivityParticipant) => participant.activities;

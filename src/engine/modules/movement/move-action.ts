@@ -1,12 +1,12 @@
 import { Action, ActionExecutor } from 'engine/core/action';
 import type { Condition } from 'engine/core/ecs';
-import type { Position } from 'engine/core/map/model/position';
+import type { FieldObjectPosition } from 'engine/core/field';
 import { IsAlive } from 'engine/modules/health';
 
 export class MoveAction extends Action {
-  readonly position: Position;
+  readonly position: FieldObjectPosition;
 
-  constructor({ mover, position }: { mover: ActionExecutor; position: Position }) {
+  constructor({ mover, position }: { mover: ActionExecutor; position: FieldObjectPosition }) {
     super({ executor: mover });
     this.position = position;
   }
