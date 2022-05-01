@@ -1,23 +1,38 @@
 <script lang="ts">
-  import { FieldUtils } from 'engine/core/field';
-  import BlockedBackground from 'frontend/component/common/blocked-background.svelte';
-  import Dialog from 'frontend/component/common/dialog.svelte';
+  import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
+  import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
+  import Border from 'frontend/component/borders/border.svelte';
   import LocationView from 'frontend/component/location-view.svelte';
-  import TimeView from 'frontend/component/time-view.svelte';
-  import { blockedScreen, player, resetStore } from 'frontend/store';
-  import TranslatableTextView from 'i18n/translatable-text-view.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
   i18n.addResourceBundle('pl', 'common', {});
-
-  function repeatGame() {
-    resetStore();
-  }
 </script>
 
-<div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
+<div class="relative h-full bg-[url('/images/background.jpg')]">
+  <Border>
+    <div class="flex flex-col h-full">
+      <div class="h-[107px]" />
+      <BorderDivideHorizontal />
+      <div class="flex grow">
+        <div class="w-[116px]" />
+        <BorderDivideVertical />
+        <div class="flex flex-col grow">
+          <div class="grow">
+            <LocationView />
+          </div>
+          <BorderDivideHorizontal />
+          <div class="h-[78px]" />
+        </div>
+        <BorderDivideVertical />
+        <div class="w-[288px]" />
+      </div>
+    </div>
+  </Border>
+</div>
+
+<!-- <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
   <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
     <div class="flex items-center">
       <div class="flex-1">
@@ -46,10 +61,14 @@
 
 {#if $blockedScreen}
   <BlockedBackground z={3000} />
-{/if}
-
+{/if} -->
 <style lang="postcss" global>
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
+
+  :root {
+    --border-width: 5px;
+    --border-gradient: #c79b00, #edc22b, #c79b00;
+  }
 </style>
