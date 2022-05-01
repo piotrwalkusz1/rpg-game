@@ -10,6 +10,7 @@
     margin-top: calc(var(--border-width) * -1);
     margin-bottom: calc(var(--border-width) * -1);
     width: var(--border-width);
+    min-width: var(--border-width);
     height: calc(100% + 2 * var(--border-width));
     background: linear-gradient(to left, var(--border-gradient)) 0 var(--border-width) / var(--border-width)
       calc(100% - 2 * var(--border-width));

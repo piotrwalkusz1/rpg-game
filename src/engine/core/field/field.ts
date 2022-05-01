@@ -22,7 +22,26 @@ export class Field extends Component {
     return this.positionFK.value;
   }
 
+  set position(position: FieldPosition | undefined) {
+    this.positionFK.value = position;
+  }
+
   get parentField(): Field | undefined {
     return this.position?.parentField;
+  }
+
+  getSubFields(): readonly Field[] {
+    return this.subFields.getArray();
+  }
+
+  getRectSubFields(): readonly Field[][] {
+    const fields: Field[][] = [];
+    for (const field of this.getSubFields()) {
+      if (field.position instanceof RectFieldPosition) {
+        fields[field.position.y] = fields[field.position.y] || [];
+        fields[field.position.y][field.position.x] = field;
+      }
+    }
+    return fields;
   }
 }

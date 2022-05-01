@@ -16,4 +16,12 @@ export abstract class Component {
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {
     return this.entity?.getComponent(componentType);
   }
+
+  requireComponent<T extends Component>(componentType: Type<T>): T {
+    const component: T | undefined = this.getComponent(componentType);
+    if (!component) {
+      throw new Error('Component ' + componentType.name + ' is required');
+    }
+    return component;
+  }
 }

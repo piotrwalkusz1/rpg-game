@@ -20,6 +20,14 @@ export class Entity {
     return ArrayUtils.findFirstInstanceOf(this.getComponents(), componentType);
   }
 
+  requireComponent<T extends Component>(componentType: Type<T>): T {
+    const component: T | undefined = this.getComponent(componentType);
+    if (!component) {
+      throw new Error('Component ' + componentType.name + ' is required');
+    }
+    return component;
+  }
+
   addComponent(component: Component): void {
     this.components.add(component);
   }

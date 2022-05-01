@@ -1,6 +1,6 @@
 import { initializeDemoGame } from 'demo/demo-game';
 import type { Engine } from 'engine/core/ecs';
-import type { Field } from 'engine/core/field';
+import { Field, FieldObject } from 'engine/core/field';
 import { Player } from 'engine/core/game';
 import { TimeManager } from 'engine/core/time';
 import { derived, Readable, Writable, writable } from 'svelte/store';
@@ -15,6 +15,10 @@ export const animatedCurrentTime = MotionUtils.interpolate(initialEngine.require
 export const blockedScreen: Writable<boolean> = writable(false);
 
 export const player: Readable<Player> = derived(engine, ($engine) => $engine.requireComponent(Player));
+
+export const displayedLocation: Writable<Field> = writable(
+  initialEngine.requireComponent(Player).requireComponent(FieldObject).field?.parentField
+);
 
 export const selectedField: Writable<Field | undefined> = writable(undefined);
 

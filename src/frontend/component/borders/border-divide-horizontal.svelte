@@ -9,6 +9,7 @@
     margin-left: calc(var(--border-width) * -1);
     margin-right: calc(var(--border-width) * -1);
     height: var(--border-width);
+    min-height: var(--border-width);
     background: linear-gradient(to top, var(--border-gradient)) top / calc(100% - 2 * var(--border-width)) var(--border-width);
     background-repeat: no-repeat;
   }

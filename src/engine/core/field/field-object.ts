@@ -1,4 +1,5 @@
 import { Component } from 'engine/core/ecs';
+import type { Field } from 'engine/core/field/field';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { OneToManyCollection, OneToManyForeignKey } from 'utils';
 
@@ -14,11 +15,26 @@ class FieldObjectPositionFK extends OneToManyForeignKey<FieldObject, FieldObject
 export class FieldObject extends Component {
   readonly positionFK: FieldObjectPositionFK = new FieldObjectPositionFK(this);
 
+  constructor(params?: { field?: Field }) {
+    super();
+    if (params?.field) {
+      this.field = params.field;
+    }
+  }
+
   get position(): FieldObjectPosition | undefined {
     return this.positionFK.value;
   }
 
   set position(position: FieldObjectPosition | undefined) {
     this.positionFK.value = position;
+  }
+
+  get field(): Field | undefined {
+    return this.position?.field;
+  }
+
+  set field(field: Field | undefined) {
+    this.position = field ? new FieldObjectPosition(field) : undefined;
   }
 }

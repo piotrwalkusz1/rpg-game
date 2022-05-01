@@ -1,9 +1,7 @@
 <script lang="ts">
   import type { Field } from 'engine/core/field';
 
-  let field: Field;
+  export let field: Field;
 </script>
 
-<div>
-  {field.objects.length}
-</div>
+<div class="bg-cyan-500 w-[64px] h-[64px]" />
