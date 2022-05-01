@@ -1,6 +1,6 @@
 <script lang="ts">
   import FieldView from 'frontend/component/field-view.svelte';
-  import { displayedLocation } from 'frontend/store';
+  import { displayedLocation, selectedField } from 'frontend/store';
 </script>
 
 <div class="flex h-full overflow-hidden">
@@ -13,9 +13,7 @@
           {#each $displayedLocation.getRectSubFields() as row}
             <div class="flex flex-row">
               {#each row as field}
-                <div>
-                  <FieldView {field} />
-                </div>
+                <FieldView {field} on:click={() => selectedField.set(field)} />
               {/each}
             </div>
           {/each}

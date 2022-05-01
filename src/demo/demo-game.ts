@@ -8,7 +8,7 @@ export const initializeDemoGame = (): Engine => {
   gameManager.addComponent(new GameEventQueue());
   gameManager.addComponent(new TimeManager(new Date()));
   const world: Entity = new Entity();
-  world.addComponent(buildRectField(2, 2));
+  world.addComponent(buildRectField(4, 4));
   const player: Entity = new Entity();
   player.addComponent(new Player());
   player.addComponent(new FieldObject({ field: world.requireComponent(Field).getSubFields()[0] }));

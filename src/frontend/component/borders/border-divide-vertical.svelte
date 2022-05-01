@@ -1,7 +1,6 @@
 <div class="gradient-border">
-  <div class="triangle rotate-[-90deg]" />
-  <div class="triangle bottom-0 rotate-[-90deg] scale-x-[-1]" />
-  <!-- <div class="triangle right-0" /> -->
+  <div class="triangle z-border-triangle rotate-[-90deg]" />
+  <div class="triangle z-border-triangle bottom-0 rotate-[-90deg] scale-x-[-1]" />
 </div>
 
 <style>
@@ -23,6 +22,5 @@
     width: var(--border-width);
     height: var(--border-width);
     background-image: linear-gradient(to top, var(--border-gradient));
-    z-index: 100;
   }
 </style>
