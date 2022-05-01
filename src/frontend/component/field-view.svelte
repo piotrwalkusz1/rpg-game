@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Field } from 'engine/core/field';
-  import { selectedField } from 'frontend/store';
+  import { Field, FieldObject } from 'engine/core/field';
+  import { player, selectedField } from 'frontend/store';
 
   export let field: Field;
 
@@ -8,6 +8,7 @@
 </script>
 
 <div class="relative" on:click>
+  <div class="absolute w-[64px] h-[64px]" class:player-position={field === $player.requireComponent(FieldObject).field} />
   <div class="absolute w-[64px] h-[64px]" class:selected={field === $selectedField} />
   <div class="w-[64px] h-[64px]" style={bgImage} />
 </div>
@@ -26,19 +27,44 @@
   }
 
   .selected {
+    --color-1: rgb(0, 52, 194);
+    --color-2: rgb(145, 173, 250);
+
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-image: conic-gradient(
         from var(--angle),
-        rgb(0, 52, 194),
-        rgb(145, 173, 250),
-        rgb(0, 52, 194),
-        rgb(145, 173, 250),
-        rgb(0, 52, 194),
-        rgb(145, 173, 250),
-        rgb(0, 52, 194),
-        rgb(145, 173, 250),
-        rgb(0, 52, 194)
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1)
+      )
+      1;
+    animation: 10s rotate linear infinite;
+  }
+
+  .player-position {
+    --color-1: rgb(194, 178, 0);
+    --color-2: rgb(250, 250, 145);
+
+    border-style: solid;
+    border-width: 1px;
+    border-image: conic-gradient(
+        from var(--angle),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1),
+        var(--color-2),
+        var(--color-1)
       )
       1;
     animation: 10s rotate linear infinite;
