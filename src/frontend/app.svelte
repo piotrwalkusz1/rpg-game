@@ -68,7 +68,7 @@
   @tailwind utilities;
 
   :root {
-    --border-width: 40px;
+    --border-width: 5px;
     --border-gradient: #c79b00, #edc22b, #c79b00;
   }
 </style>
