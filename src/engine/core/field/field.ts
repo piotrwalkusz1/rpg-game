@@ -17,6 +17,17 @@ export class Field extends Component {
   readonly positionFK: FieldPositionFK = new FieldPositionFK(this);
   readonly subFields: SubFieldsCollection = new SubFieldsCollection(new RectFieldPosition(this, 0, 0));
   readonly objects: FieldObjectsCollection = new FieldObjectsCollection(new FieldObjectPosition(this));
+  imageUrl: string | undefined = undefined;
+
+  constructor(params?: { position?: FieldPosition; imageUrl?: string }) {
+    super();
+    if (params?.position) {
+      this.position = params.position;
+    }
+    if (params?.imageUrl) {
+      this.imageUrl = params.imageUrl;
+    }
+  }
 
   get position(): FieldPosition | undefined {
     return this.positionFK.value;
@@ -43,5 +54,9 @@ export class Field extends Component {
       }
     }
     return fields;
+  }
+
+  addSubField(field: Field): void {
+    this.subFields.add(field);
   }
 }

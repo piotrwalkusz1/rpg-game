@@ -9,7 +9,7 @@
       <div class="grow" />
       <div class="flex flex-col">
         <div class="grow" />
-        <div>
+        <div class="shadow-[0_0px_6px_0px_rgba(0,0,0,0.75)]">
           {#each $displayedLocation.getRectSubFields() as row}
             <div class="flex flex-row">
               {#each row as field}

@@ -25,10 +25,11 @@ const buildRectField = (width: number, height: number): Field => {
   const field: Field = new Field();
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
-      const childField: Field = new Field();
-      childField.position = new RectFieldPosition(field, x, y);
+      new Field({
+        position: new RectFieldPosition(field, x, y),
+        imageUrl: 'images/fields/grass.jpg'
+      });
     }
   }
-
   return field;
 };
