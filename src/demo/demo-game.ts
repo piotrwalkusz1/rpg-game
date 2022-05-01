@@ -6,7 +6,7 @@ import { TimeManager, TimeSystem } from 'engine/core/time';
 export const initializeDemoGame = (): Engine => {
   const gameManager: Entity = new Entity();
   gameManager.addComponent(new GameEventQueue());
-  gameManager.addComponent(new TimeManager(new Date()));
+  gameManager.addComponent(new TimeManager(new Date(812, 6, 12, 8)));
   const world: Entity = new Entity();
   world.addComponent(buildRectField(4, 4));
   const player: Entity = new Entity();

@@ -3,6 +3,7 @@
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
   import Border from 'frontend/component/borders/border.svelte';
   import LocationView from 'frontend/component/location-view.svelte';
+  import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
 
   const { i18n } = initLocalizationContext();
@@ -13,7 +14,9 @@
 <div class="relative h-full bg-[url('/images/background.jpg')]">
   <Border>
     <div class="flex flex-col h-full">
-      <div class="h-[107px] min-h-[107px]" />
+      <div class="relative h-[107px] min-h-[107px]">
+        <Sundial />
+      </div>
       <BorderDivideHorizontal />
       <div class="flex grow min-h-[0px]">
         <div class="w-[116px] min-w-[116px]" />

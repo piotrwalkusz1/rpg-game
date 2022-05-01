@@ -2,13 +2,15 @@ import { initializeDemoGame } from 'demo/demo-game';
 import type { Engine } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
 import { Player } from 'engine/core/game';
-import { TimeManager } from 'engine/core/time';
+import { Time, TimeManager } from 'engine/core/time';
 import { derived, Readable, Writable, writable } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
 
 const initialEngine: Engine = initializeDemoGame();
 
 export const engine: Writable<Engine> = writable(initialEngine);
+
+export const time: Readable<Time> = derived(engine, ($engine) => $engine.requireComponent(TimeManager).time);
 
 export const animatedCurrentTime = MotionUtils.interpolate(initialEngine.requireComponent(TimeManager).time, TimeUtils.interpolate);
 
