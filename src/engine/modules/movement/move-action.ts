@@ -1,6 +1,7 @@
 import { Action, ActionExecutor } from 'engine/core/action';
 import type { Condition } from 'engine/core/ecs';
 import type { FieldObjectPosition } from 'engine/core/field';
+import { AreFieldsConnected } from 'engine/core/field/are-fields-connected';
 import { IsAlive } from 'engine/modules/health';
 
 export class MoveAction extends Action {
@@ -16,6 +17,6 @@ export class MoveAction extends Action {
   }
 
   override getExecutionConditions(): Condition[] {
-    return [new IsAlive(this.executor)];
+    return [new IsAlive(this.executor), new AreFieldsConnected([this.executor, this.position])];
   }
 }
