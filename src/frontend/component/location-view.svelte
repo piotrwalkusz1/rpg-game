@@ -13,7 +13,7 @@
           {#each $displayedLocation.getRectSubFields() as row}
             <div class="flex flex-row">
               {#each row as field}
-                <FieldView {field} on:click={() => selectedField.set(field)} />
+                <FieldView {field} on:click={() => ($selectedField = field)} />
               {/each}
             </div>
           {/each}
