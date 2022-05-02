@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Avatar from 'frontend/component/avatar.svelte';
   import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
   import Border from 'frontend/component/borders/border.svelte';
@@ -12,9 +13,10 @@
 </script>
 
 <div class="relative h-full bg-[url('/images/background.jpg')]">
-  <Border>
+  <Border class="w-full h-full">
     <div class="flex flex-col h-full">
-      <div class="relative h-[107px] min-h-[107px]">
+      <div class="relative h-[107px] min-h-[107px] p-border">
+        <Avatar image="/images/characters/001_Eladin.png" />
         <Sundial />
       </div>
       <BorderDivideHorizontal />
@@ -35,36 +37,6 @@
   </Border>
 </div>
 
-<!-- <div class="border-2 border-black divide-y-[2px] divide-black h-full flex flex-col">
-  <div class="flex flex-col grow overflow-hidden divide-y-[2px] divide-black">
-    <div class="flex items-center">
-      <div class="flex-1">
-        <div class="px-[10%]">
-          <TimeView />
-        </div>
-      </div>
-      <div class="flex-1" />
-    </div>
-    <div class="flex grow divide-x-[2px] divide-black overflow-hidden">
-      <LocationView />
-    </div>
-  </div>
-</div>
-
-{#if FieldUtils.getField($player) === undefined}
-  <Dialog>
-    <div class="flex flex-col w-full justify-center items-center">
-      <div class="text-[60px] font-bold"><TranslatableTextView text="GAME.MESSAGE.YOU_ARE_DEAD" /></div>
-      <div on:click={repeatGame} class="text-[30px] font-bold cursor-pointer hover:text-blue-300">
-        <TranslatableTextView text="GAME.BUTTON.REPEAT" />
-      </div>
-    </div>
-  </Dialog>
-{/if}
-
-{#if $blockedScreen}
-  <BlockedBackground z={3000} />
-{/if} -->
 <style lang="postcss" global>
   @tailwind base;
   @tailwind components;

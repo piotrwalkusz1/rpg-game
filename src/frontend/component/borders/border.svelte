@@ -1,4 +1,11 @@
-<div class="gradient-border">
+<script lang="ts">
+  export let width: number = 5;
+  export let gradient: string = '#c79b00, #edc22b, #c79b00';
+  let className = '';
+  export { className as class };
+</script>
+
+<div class="gradient-border {className}" style="--border-width: {width}px; --border-gradient: {gradient};">
   <div class="content">
     <slot />
   </div>
@@ -20,8 +27,6 @@
       linear-gradient(to right, var(--border-gradient)) right / var(--border-width) calc(100% - 2 * var(--border-width)),
       linear-gradient(to left, var(--border-gradient)) left / var(--border-width) calc(100% - 2 * var(--border-width));
     background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
   }
 
   .triangle {
