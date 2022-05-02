@@ -5,13 +5,13 @@ import { Time, TimeManager } from 'engine/core/time';
 import { Action, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from '.';
 
 export namespace ActionService {
-  export const scheduleAction = (action: Action, engine: Engine): void => {
+  export const scheduleAction = (action: Action, engine: Engine): boolean => {
     if (action.executor.pendingAction || !canExecuteAction(action, engine)) {
-      return;
+      return false;
     }
     const time: Time | undefined = engine.getComponent(TimeManager)?.time;
     if (!time) {
-      return;
+      return false;
     }
     const scheduledEvent = new ActionScheduledEvent({ time, action });
     const executionEvent = new BeforeActionExecutingEvent({
@@ -21,6 +21,7 @@ export namespace ActionService {
     const executor = action.executor;
     executor.pendingAction = new PendingAction({ action, scheduleTime: time, executionEvent });
     engine.getComponent(GameEventQueue)?.addEvents([scheduledEvent, executionEvent]);
+    return true;
   };
 
   export const canExecuteAction = (action: Action, engine: Engine): boolean => {

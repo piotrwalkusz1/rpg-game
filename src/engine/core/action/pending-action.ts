@@ -1,5 +1,6 @@
 import type { Time } from 'engine/core/time';
-import type { Action, BeforeActionExecutingEvent } from '.';
+import type { Action } from './action';
+import type { BeforeActionExecutingEvent } from './action-event';
 
 export class PendingAction {
   readonly action: Action;
