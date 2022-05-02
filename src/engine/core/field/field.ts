@@ -1,4 +1,5 @@
 import { Component } from 'engine/core/ecs';
+import type { FieldDefinition } from 'engine/core/field/field-definition';
 import { FieldObjectsCollection } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { FieldPosition, RectFieldPosition } from 'engine/core/field/field-position';
@@ -17,16 +18,12 @@ export class Field extends Component {
   readonly positionFK: FieldPositionFK = new FieldPositionFK(this);
   readonly subFields: SubFieldsCollection = new SubFieldsCollection(new RectFieldPosition(this, 0, 0));
   readonly objects: FieldObjectsCollection = new FieldObjectsCollection(new FieldObjectPosition(this));
-  imageUrl: string | undefined = undefined;
+  readonly definition: FieldDefinition;
 
-  constructor(params?: { position?: FieldPosition; imageUrl?: string }) {
+  constructor({ definition, position }: { definition: FieldDefinition; position?: FieldPosition }) {
     super();
-    if (params?.position) {
-      this.position = params.position;
-    }
-    if (params?.imageUrl) {
-      this.imageUrl = params.imageUrl;
-    }
+    this.definition = definition;
+    this.position = position;
   }
 
   get position(): FieldPosition | undefined {
@@ -39,6 +36,10 @@ export class Field extends Component {
 
   get parentField(): Field | undefined {
     return this.position?.parentField;
+  }
+
+  get imageUrl(): string | undefined {
+    return this.definition.imageUrl;
   }
 
   getSubFields(): readonly Field[] {

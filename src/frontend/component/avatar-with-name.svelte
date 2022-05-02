@@ -1,9 +1,10 @@
 <script lang="ts">
   import Avatar from 'frontend/component/avatar.svelte';
   import DisplayedName from 'frontend/component/displayed-name.svelte';
+  import type { TranslatableText } from 'i18n/translatable-text';
 
   export let avatar: string;
-  export let name: string;
+  export let name: TranslatableText;
 </script>
 
 <div class="flex">

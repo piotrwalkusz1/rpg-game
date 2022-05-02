@@ -16,7 +16,7 @@
   <Border class="w-full h-full">
     <div class="flex flex-col h-full">
       <div class="relative h-[107px] min-h-[107px] p-border">
-        <AvatarWithName avatar="/images/characters/001_Eladin.png" name="Eladin" />
+        <AvatarWithName avatar="/images/characters/001_Eladin.png" name={{ literal: 'Eladin' }} />
         <Sundial />
       </div>
       <BorderDivideHorizontal />
