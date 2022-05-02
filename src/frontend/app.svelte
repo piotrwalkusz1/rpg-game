@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Avatar from 'frontend/component/avatar.svelte';
+  import AvatarWithName from 'frontend/component/avatar-with-name.svelte';
   import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
   import Border from 'frontend/component/borders/border.svelte';
@@ -16,7 +16,7 @@
   <Border class="w-full h-full">
     <div class="flex flex-col h-full">
       <div class="relative h-[107px] min-h-[107px] p-border">
-        <Avatar image="/images/characters/001_Eladin.png" />
+        <AvatarWithName avatar="/images/characters/001_Eladin.png" name="Eladin" />
         <Sundial />
       </div>
       <BorderDivideHorizontal />
@@ -45,5 +45,10 @@
   :root {
     --border-width: 5px;
     --border-gradient: #c79b00, #edc22b, #c79b00;
+  }
+
+  @font-face {
+    font-family: 'IM FELL English';
+    src: url(/fonts/IMFellEnglish-Regular.ttf);
   }
 </style>

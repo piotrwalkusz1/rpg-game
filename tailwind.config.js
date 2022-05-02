@@ -9,6 +9,9 @@ module.exports = {
       },
       padding: {
         border: '5px'
+      },
+      fontFamily: {
+        default: ['"IM FELL English"']
       }
     }
   },
