@@ -3,7 +3,7 @@
   import DisplayedName from 'frontend/component/displayed-name.svelte';
   import type { TranslatableText } from 'i18n/translatable-text';
 
-  export let avatar: string;
+  export let avatar: string | string;
   export let name: TranslatableText;
 </script>
 

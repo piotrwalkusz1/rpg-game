@@ -3,6 +3,7 @@
   import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
   import Border from 'frontend/component/borders/border.svelte';
+  import Inspector from 'frontend/component/inspector.svelte';
   import LocationView from 'frontend/component/location-view.svelte';
   import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
@@ -31,7 +32,9 @@
           <div class="h-[78px] min-h-[78px]" />
         </div>
         <BorderDivideVertical />
-        <div class="w-[288px] min-w-[288px]" />
+        <div class="w-[288px] min-w-[288px] p-border">
+          <Inspector />
+        </div>
       </div>
     </div>
   </Border>

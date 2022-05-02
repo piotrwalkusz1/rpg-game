@@ -3,6 +3,7 @@ import type { FieldDefinition } from 'engine/core/field/field-definition';
 import { FieldObjectsCollection } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { FieldPosition, RectFieldPosition } from 'engine/core/field/field-position';
+import type { TranslatableText } from 'i18n/translatable-text';
 import { areSame, OneToManyCollection, OneToManyForeignKey } from 'utils';
 
 class SubFieldsCollection extends OneToManyCollection<Field, FieldPosition> {
@@ -40,6 +41,14 @@ export class Field extends Component {
 
   get imageUrl(): string | undefined {
     return this.definition.imageUrl;
+  }
+
+  get name(): TranslatableText {
+    return this.definition.name;
+  }
+
+  get description(): TranslatableText | undefined {
+    return this.definition.description;
   }
 
   getSubFields(): readonly Field[] {
