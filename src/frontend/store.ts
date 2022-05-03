@@ -10,13 +10,7 @@ const initialEngine: Engine = initializeDemoGame();
 
 export const engine: Writable<Engine> = writable(initialEngine);
 
-export const time: Readable<Time> = derived(engine, ($engine) => $engine.requireComponent(TimeManager).time);
-
-export const animatedCurrentTime = MotionUtils.interpolate(initialEngine.requireComponent(TimeManager).time, TimeUtils.interpolate);
-
 export const blockedScreen: Writable<boolean> = writable(false);
-
-export const player: Readable<Player> = derived(engine, ($engine) => $engine.requireComponent(Player));
 
 export const displayedLocation: Writable<Field> = writable(
   initialEngine.requireComponent(Player).requireComponent(FieldObject).field?.parentField
@@ -24,10 +18,10 @@ export const displayedLocation: Writable<Field> = writable(
 
 export const selectedField: Writable<Field | undefined> = writable(undefined);
 
-export const resetStore = (): void => {
-  const newEngine = initializeDemoGame();
-  engine.set(newEngine);
-  animatedCurrentTime.set(newEngine.requireComponent(TimeManager).time, 0);
-  blockedScreen.set(false);
-  selectedField.set(undefined);
-};
+export const animatedCurrentTime = MotionUtils.interpolate(initialEngine.requireComponent(TimeManager).time, TimeUtils.interpolate);
+
+export const time: Readable<Time> = derived(engine, ($engine) => $engine.requireComponent(TimeManager).time);
+
+export const player: Readable<Player> = derived(engine, ($engine) => $engine.requireComponent(Player));
+
+export const refreshEngine = (): void => engine.update(($engine) => $engine);

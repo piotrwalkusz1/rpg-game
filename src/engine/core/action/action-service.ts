@@ -1,9 +1,9 @@
 import { add } from 'date-fns';
-import type { Engine } from 'engine/core/ecs';
+import { Engine, EntityProvider } from 'engine/core/ecs';
 import { GameEventQueue } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
 import { Action, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from '.';
-import type { ActionExecutor } from './action-executor';
+import { ActionExecutor } from './action-executor';
 
 export namespace ActionService {
   export const scheduleAction = (action: Action, executor: ActionExecutor, engine: Engine): boolean => {
@@ -21,7 +21,8 @@ export namespace ActionService {
     return true;
   };
 
-  export const canExecuteAction = (action: Action, executor: ActionExecutor, engine: Engine): boolean => {
-    return action.getExecutionConditions(executor).every((condition) => condition.check(engine));
+  export const canExecuteAction = (action: Action, executor: EntityProvider, engine: Engine): boolean => {
+    const actionExecutor = EntityProvider.getComponent(executor, ActionExecutor);
+    return actionExecutor ? action.getExecutionConditions(actionExecutor).every((condition) => condition.check(engine)) : false;
   };
 }

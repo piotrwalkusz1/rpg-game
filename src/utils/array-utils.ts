@@ -1,3 +1,5 @@
+import type { Type } from './type';
+
 export namespace ArrayUtils {
   export const mapAndFilterNotNull = <T, R>(array: T[], map: (item: T) => R | undefined | null): R[] => {
     const result: (R | undefined | null)[] = array.map(map);
@@ -7,12 +9,10 @@ export namespace ArrayUtils {
   export const filterNotNull = <T>(array: (T | undefined | null)[]): T[] =>
     array.filter((item): item is T => item !== undefined && item !== null);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export const filterInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T[] =>
+  export const filterInstanceOf = <T>(array: readonly unknown[], type: Type<T>): T[] =>
     array.filter((item): item is T => item instanceof type);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export const findFirstInstanceOf = <T>(array: readonly unknown[], type: abstract new (...args: any[]) => T): T | undefined =>
+  export const findFirstInstanceOf = <T>(array: readonly unknown[], type: Type<T>): T | undefined =>
     array.find((item): item is T => item instanceof type);
 
   export const getShuffledArray = <T>(array: T[]) => {

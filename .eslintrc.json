@@ -12,9 +12,11 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "no-unused-expressions": ["error"],
     "@typescript-eslint/no-namespace": ["off"],
     "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/switch-exhaustiveness-check": ["warn"],
-    "@typescript-eslint/no-floating-promises": ["error"]
+    "@typescript-eslint/no-floating-promises": ["error"],
+    "@typescript-eslint/no-empty-interface": ["off"]
   }
 }

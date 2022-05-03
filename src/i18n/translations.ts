@@ -24,6 +24,7 @@ type Translations = { [key in TranslationKey]: string };
 const defaultTranslations = {
   'FIELD.GRASS.NAME': 'Grass',
   'FIELD.GRASS.DESCRIPTION': 'Flat ground covered with grass',
+  'COMMAND.MOVE.NAME': 'Move',
   'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.WAITING_FOR_END_OF_ACTION': 'Waiting for the end of the action...',
   'NARRATION.ACTION_CANNOT_BE_PERFORMED': 'The action cannot be performed.',
@@ -75,6 +76,7 @@ const enTranslations: DefaultTranslations = defaultTranslations;
 const plTranslations: Translations = {
   'FIELD.GRASS.NAME': 'Trawy',
   'FIELD.GRASS.DESCRIPTION': 'Płaski teren porośnięty trawą',
+  'COMMAND.MOVE.NAME': 'Idź',
   'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.WAITING_FOR_END_OF_ACTION': 'Oczekiwanie na zakończenie akcji...',
   'NARRATION.ACTION_CANNOT_BE_PERFORMED': 'Nie można wykonać akcji.',
