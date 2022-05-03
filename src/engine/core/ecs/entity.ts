@@ -28,7 +28,8 @@ export class Entity {
     return component;
   }
 
-  addComponent(component: Component): void {
+  addComponent(component: Component): Entity {
     this.components.add(component);
+    return this;
   }
 }

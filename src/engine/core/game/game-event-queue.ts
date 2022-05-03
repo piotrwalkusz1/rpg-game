@@ -4,6 +4,10 @@ import type { GameEvent } from '.';
 export class GameEventQueue extends Component {
   private readonly _events: GameEvent[] = [];
 
+  get events(): readonly GameEvent[] {
+    return this._events;
+  }
+
   addEvents(events: GameEvent[]): void {
     events.forEach((event) => this.addEvent(event));
   }
