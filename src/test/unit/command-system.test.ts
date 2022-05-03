@@ -31,19 +31,15 @@ describe('Command system', () => {
 
   describe('handleCommandScheduledEvent method', () => {
     it('should create CommandStartedEvent if action scheduled', async () => {
-      await commandSystem.processEvent(new CommandScheduledEvent({ time, command }), engine);
+      await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
-      expect(engine.events).toEqual([
-        new ActionScheduledEvent({ time, action: new MockAction({ executor: actionExecutor }) }),
-        new BeforeActionExecutingEvent({ time, action: new MockAction({ executor: actionExecutor }) }),
-        new CommandStartedEvent({ time, command })
-      ]);
+      expect(engine.events).toEqual([mockActionScheduledEvent(), mockBeforeActionExecutingEvent(), mockCommandStartedEvent()]);
     });
 
     it('should not create CommandStartedEvent if another command is already pending', async () => {
       commandExecutor.pendingCommand = command;
 
-      await commandSystem.processEvent(new CommandScheduledEvent({ time, command }), engine);
+      await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
       expect(engine.events).toEqual([]);
     });
@@ -51,7 +47,7 @@ describe('Command system', () => {
     it('should not create CommandStartedEvent if action cannot be scheduled', async () => {
       actionExecutor.pendingAction = mockPendingAction();
 
-      await commandSystem.processEvent(new CommandScheduledEvent({ time, command }), engine);
+      await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
       expect(engine.events).toEqual([]);
     });
@@ -62,13 +58,13 @@ describe('Command system', () => {
       commandExecutor.pendingCommand = command;
       actionExecutor.pendingAction = mockPendingAction();
 
-      await commandSystem.processEvent(new ActionExecutedEvent({ time, action: mockAction() }), engine);
+      await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
-      expect(engine.events).toEqual([new CommandEndedEvent({ time, command })]);
+      expect(engine.events).toEqual([mockCommandEndedEvent()]);
     });
 
     it('should not create CommandEndedEvent if command is not pending', async () => {
-      await commandSystem.processEvent(new ActionExecutedEvent({ time, action: mockAction() }), engine);
+      await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
       expect(engine.events).toEqual([]);
     });
@@ -76,17 +72,14 @@ describe('Command system', () => {
     it('should not create CommandEndedEvent if next action scheduled', async () => {
       commandExecutor.pendingCommand = command;
 
-      await commandSystem.processEvent(new ActionExecutedEvent({ time, action: mockAction() }), engine);
+      await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
-      expect(engine.events).toEqual([
-        new ActionScheduledEvent({ time, action: new MockAction({ executor: actionExecutor }) }),
-        new BeforeActionExecutingEvent({ time, action: new MockAction({ executor: actionExecutor }) })
-      ]);
+      expect(engine.events).toEqual([mockActionScheduledEvent(), mockBeforeActionExecutingEvent()]);
     });
   });
 
   function mockCommand(): MockCommand {
-    return new MockCommand({ executor: commandExecutor });
+    return new MockCommand();
   }
 
   function mockPendingAction(): PendingAction {
@@ -94,10 +87,30 @@ describe('Command system', () => {
   }
 
   function mockAction(): MockAction {
-    return new MockAction({ executor: actionExecutor });
+    return new MockAction();
+  }
+
+  function mockActionScheduledEvent(): ActionScheduledEvent {
+    return new ActionScheduledEvent({ time, action: mockAction(), executor: actionExecutor });
   }
 
   function mockBeforeActionExecutingEvent(): BeforeActionExecutingEvent {
-    return new BeforeActionExecutingEvent({ time, action: mockAction() });
+    return new BeforeActionExecutingEvent({ time, action: mockAction(), executor: actionExecutor });
+  }
+
+  function mockActionExecutedEvent(): ActionExecutedEvent {
+    return new ActionExecutedEvent({ time, action: mockAction(), executor: actionExecutor });
+  }
+
+  function mockCommandScheduledEvent(): CommandScheduledEvent {
+    return new CommandScheduledEvent({ time, command, executor: commandExecutor });
+  }
+
+  function mockCommandStartedEvent(): CommandStartedEvent {
+    return new CommandStartedEvent({ time, command, executor: commandExecutor });
+  }
+
+  function mockCommandEndedEvent(): CommandEndedEvent {
+    return new CommandEndedEvent({ time, command, executor: commandExecutor });
   }
 });

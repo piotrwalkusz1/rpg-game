@@ -7,7 +7,7 @@ export class MovementSystem extends System {
   override async processEvent(event: ECSEvent): Promise<void> {
     if (event instanceof ActionExecutingEvent && event.action instanceof MoveAction) {
       const action: MoveAction = event.action;
-      FieldUtils.setFieldObjectPosition(action.executor, action.position);
+      FieldUtils.setFieldObjectPosition(event.executor, action.position);
     }
   }
 }

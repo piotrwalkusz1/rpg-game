@@ -5,8 +5,8 @@ import { IsAlive } from 'engine/modules/health';
 export class SpeakAction extends Action {
   readonly receivers: Entity[];
 
-  constructor({ speaker, receivers }: { speaker: ActionExecutor; receivers: Entity[] }) {
-    super({ executor: speaker });
+  constructor({ receivers }: { receivers: Entity[] }) {
+    super();
     this.receivers = receivers;
   }
 
@@ -14,7 +14,7 @@ export class SpeakAction extends Action {
     return { seconds: 0 };
   }
 
-  override getExecutionConditions(): Condition[] {
-    return [new IsAlive(this.executor)];
+  override getExecutionConditions(executor: ActionExecutor): Condition[] {
+    return [new IsAlive(executor)];
   }
 }

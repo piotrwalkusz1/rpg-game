@@ -1,6 +1,6 @@
 import { ECSEvent, Engine, System } from 'engine/core/ecs';
 import { GameEventQueue } from 'engine/core/game';
-import { Action, ActionExecutedEvent, ActionExecutingEvent, ActionExecutor, ActionService, BeforeActionExecutingEvent } from '.';
+import { ActionExecutedEvent, ActionExecutingEvent, ActionService, BeforeActionExecutingEvent } from '.';
 
 export class ActionSystem extends System {
   async processEvent(event: ECSEvent, engine: Engine): Promise<void> {
@@ -9,15 +9,12 @@ export class ActionSystem extends System {
     }
   }
 
-  private async processBeforeActionExecutingEvent(event: BeforeActionExecutingEvent, engine: Engine): Promise<void> {
-    const action: Action = event.action;
-    const executor: ActionExecutor = action.executor;
-    if (executor.pendingAction?.action !== action || !ActionService.canExecuteAction(action, engine)) {
+  private async processBeforeActionExecutingEvent({ time, action, executor }: BeforeActionExecutingEvent, engine: Engine): Promise<void> {
+    if (executor.pendingAction?.action !== action || !ActionService.canExecuteAction(action, executor, engine)) {
       return;
     }
-    const time: Date = event.time;
-    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutingEvent({ action, time }));
-    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutedEvent({ action, time }));
+    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutingEvent({ time, action, executor }));
+    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutedEvent({ time, action, executor }));
     executor.pendingAction = undefined;
   }
 }

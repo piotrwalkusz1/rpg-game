@@ -7,8 +7,8 @@ import { IsAlive } from 'engine/modules/health';
 export class MoveAction extends Action {
   readonly position: FieldObjectPosition;
 
-  constructor({ mover, position }: { mover: ActionExecutor; position: FieldObjectPosition }) {
-    super({ executor: mover });
+  constructor({ position }: { position: FieldObjectPosition }) {
+    super();
     this.position = position;
   }
 
@@ -16,7 +16,7 @@ export class MoveAction extends Action {
     return { minutes: 1 };
   }
 
-  override getExecutionConditions(): Condition[] {
-    return [new IsAlive(this.executor), new AreFieldsConnected([this.executor, this.position])];
+  override getExecutionConditions(executor: ActionExecutor): Condition[] {
+    return [new IsAlive(executor), new AreFieldsConnected([executor, this.position])];
   }
 }

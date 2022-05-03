@@ -28,8 +28,8 @@ export namespace AIService {
         .map((pariticapt) => pariticapt.entity)
         .filter((participant) => participant !== entity)[0];
       if (enemy) {
-        const action = new AttackAction({ attacker: actionExecutor, target: enemy });
-        ActionService.scheduleAction(action, engine);
+        const action = new AttackAction({ target: enemy });
+        ActionService.scheduleAction(action, actionExecutor, engine);
       } else {
         activityParticipant.activities.remove(battle);
       }

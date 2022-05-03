@@ -6,16 +6,8 @@ export class InformAction extends Action {
   readonly informationReceiver: Entity;
   readonly information: Information;
 
-  constructor({
-    informationGiver,
-    informationReceiver,
-    information
-  }: {
-    informationGiver: ActionExecutor;
-    informationReceiver: Entity;
-    information: Information;
-  }) {
-    super({ executor: informationGiver });
+  constructor({ informationReceiver, information }: { informationReceiver: Entity; information: Information }) {
+    super();
     this.informationReceiver = informationReceiver;
     this.information = information;
   }
@@ -24,7 +16,7 @@ export class InformAction extends Action {
     return { seconds: 10 };
   }
 
-  override getExecutionConditions(): Condition[] {
-    return [new IsAlive(this.executor), new IsAlive(this.informationReceiver), new HasInformation(this.executor, this.information)];
+  override getExecutionConditions(executor: ActionExecutor): Condition[] {
+    return [new IsAlive(executor), new IsAlive(this.informationReceiver), new HasInformation(executor, this.information)];
   }
 }

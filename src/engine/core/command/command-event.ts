@@ -4,14 +4,12 @@ import type { CommandExecutor } from './command-executor';
 
 export class CommandEvent extends GameEvent {
   readonly command: Command;
+  readonly executor: CommandExecutor;
 
-  constructor({ time, command }: { time: Date; command: Command }) {
+  constructor({ time, command, executor }: { time: Date; command: Command; executor: CommandExecutor }) {
     super({ time });
     this.command = command;
-  }
-
-  get executor(): CommandExecutor {
-    return this.command.executor;
+    this.executor = executor;
   }
 }
 

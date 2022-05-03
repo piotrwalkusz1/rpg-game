@@ -5,8 +5,8 @@ import { IsAlive } from 'engine/modules/health';
 export class AttackAction extends Action {
   readonly target: Entity;
 
-  constructor({ attacker, target }: { attacker: ActionExecutor; target: Entity }) {
-    super({ executor: attacker });
+  constructor({ target }: { target: Entity }) {
+    super();
     this.target = target;
   }
 
@@ -14,7 +14,7 @@ export class AttackAction extends Action {
     return { seconds: 2 };
   }
 
-  override getExecutionConditions(): Condition[] {
-    return [new IsAlive(this.executor), new IsAlive(this.target)];
+  override getExecutionConditions(executor: ActionExecutor): Condition[] {
+    return [new IsAlive(executor), new IsAlive(this.target)];
   }
 }

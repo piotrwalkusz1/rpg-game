@@ -3,14 +3,12 @@ import type { Action, ActionExecutor } from '.';
 
 export class ActionEvent extends GameEvent {
   readonly action: Action;
+  readonly executor: ActionExecutor;
 
-  constructor({ time, action }: { time: Date; action: Action }) {
+  constructor({ time, action, executor }: { time: Date; action: Action; executor: ActionExecutor }) {
     super({ time });
     this.action = action;
-  }
-
-  get executor(): ActionExecutor {
-    return this.action.executor;
+    this.executor = executor;
   }
 }
 
