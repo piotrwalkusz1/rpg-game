@@ -69,4 +69,8 @@ export class Field extends Component {
   addSubField(field: Field): void {
     this.subFields.add(field);
   }
+
+  get siblings(): readonly Field[] {
+    return this.parentField?.getSubFields()?.filter((field) => field !== this) || [];
+  }
 }

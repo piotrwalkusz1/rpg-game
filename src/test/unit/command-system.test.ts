@@ -29,7 +29,7 @@ describe('Command system', () => {
     time = engine.time;
   });
 
-  describe('handleCommandScheduledEvent method', () => {
+  describe('CommandScheduledEvent', () => {
     it('should create CommandStartedEvent if action scheduled', async () => {
       await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
@@ -53,7 +53,7 @@ describe('Command system', () => {
     });
   });
 
-  describe('handleActionExecutedEvent method', () => {
+  describe('ActionExecutedEvent', () => {
     it('should create CommandEndedEvent if command is pending and next action cannot be scheduled', async () => {
       commandExecutor.pendingCommand = command;
       actionExecutor.pendingAction = mockPendingAction();
