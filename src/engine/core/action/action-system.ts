@@ -1,15 +1,32 @@
+import { add } from 'date-fns';
 import { ECSEvent, Engine, System } from 'engine/core/ecs';
 import { GameEventQueue } from 'engine/core/game';
-import { ActionExecutedEvent, ActionExecutingEvent, ActionService, BeforeActionExecutingEvent } from '.';
+import {
+  ActionExecutedEvent,
+  ActionExecutingEvent,
+  ActionScheduledEvent,
+  ActionStartedEvent,
+  BeforeActionExecutingEvent
+} from './action-event';
+import { ActionService } from './action-service';
+import { PendingAction } from './pending-action';
 
 export class ActionSystem extends System {
   async processEvent(event: ECSEvent, engine: Engine): Promise<void> {
-    if (event instanceof BeforeActionExecutingEvent) {
-      await this.processBeforeActionExecutingEvent(event, engine);
+    if (event instanceof ActionScheduledEvent) {
+      this.handleActionScheduledEvent(event, engine);
+    } else if (event instanceof BeforeActionExecutingEvent) {
+      this.handleBeforeActionExecutingEvent(event, engine);
     }
   }
 
-  private async processBeforeActionExecutingEvent({ time, action, executor }: BeforeActionExecutingEvent, engine: Engine): Promise<void> {
+  private handleActionScheduledEvent({ time, action, executor }: ActionScheduledEvent, engine: Engine): void {
+    const executionEvent = new BeforeActionExecutingEvent({ action, time: add(time, action.duration), executor });
+    executor.pendingAction = new PendingAction({ action, scheduleTime: time, executionEvent });
+    engine.getComponent(GameEventQueue)?.addEvents([new ActionStartedEvent({ time, action, executor }), executionEvent]);
+  }
+
+  private handleBeforeActionExecutingEvent({ time, action, executor }: BeforeActionExecutingEvent, engine: Engine): void {
     if (executor.pendingAction?.action !== action || !ActionService.canExecuteAction(action, executor, engine)) {
       return;
     }

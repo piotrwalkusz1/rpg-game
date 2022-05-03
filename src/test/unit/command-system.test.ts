@@ -33,7 +33,7 @@ describe('Command system', () => {
     it('should create CommandStartedEvent if action scheduled', async () => {
       await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
-      expect(engine.events).toEqual([mockActionScheduledEvent(), mockBeforeActionExecutingEvent(), mockCommandStartedEvent()]);
+      expect(engine.events).toEqual([mockActionScheduledEvent(), mockCommandStartedEvent()]);
     });
 
     it('should not create CommandStartedEvent if another command is already pending', async () => {
@@ -74,7 +74,7 @@ describe('Command system', () => {
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
-      expect(engine.events).toEqual([mockActionScheduledEvent(), mockBeforeActionExecutingEvent()]);
+      expect(engine.events).toEqual([mockActionScheduledEvent()]);
     });
   });
 

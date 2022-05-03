@@ -39,8 +39,8 @@ const FieldDefinitions = {
 
 const buildRectField = (width: number, height: number): Field => {
   const field: Field = new Field({ definition: FieldDefinitions.WORLD });
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
       new Field({
         definition: FieldDefinitions.GRASS,
         position: new RectFieldPosition(field, x, y)

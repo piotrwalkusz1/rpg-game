@@ -1,6 +1,6 @@
-import { Field, FieldPlacement, FieldPosition, PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition } from 'engine/core/field';
-import { FieldDefinition } from 'engine/core/field/field-definition';
+import { FieldPlacement, PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition } from 'engine/core/field';
 import { FieldService } from 'engine/core/field/field-service';
+import { mockField, mockRectField, subFieldAt } from 'test/mock/mock-field';
 
 describe('Field service', () => {
   describe('getConnectedField method', () => {
@@ -52,20 +52,4 @@ describe('Field service', () => {
       expect(FieldService.getConnectedFields(field)).toEqual(subFields);
     });
   });
-
-  const subFieldAt = (field: Field, x: number, y: number): Field => field.getRectSubFields()[x][y];
-
-  const mockField = (position?: FieldPosition): Field => new Field({ definition: mockFieldDefinition(), position });
-
-  const mockFieldDefinition = (): FieldDefinition => new FieldDefinition({ name: { literal: '' } });
-
-  const mockRectField = (width: number, height: number): Field => {
-    const field = mockField();
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-        new Field({ definition: mockFieldDefinition(), position: new RectFieldPosition(field, x, y) });
-      }
-    }
-    return field;
-  };
 });

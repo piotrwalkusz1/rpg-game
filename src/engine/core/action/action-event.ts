@@ -14,6 +14,8 @@ export class ActionEvent extends GameEvent {
 
 export class ActionScheduledEvent extends ActionEvent {}
 
+export class ActionStartedEvent extends ActionEvent {}
+
 export class BeforeActionExecutingEvent extends ActionEvent {}
 
 export class ActionExecutingEvent extends ActionEvent {}

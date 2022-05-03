@@ -1,8 +1,7 @@
-import { add } from 'date-fns';
 import { Engine, EntityProvider } from 'engine/core/ecs';
 import { GameEventQueue } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
-import { Action, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from '.';
+import { Action, ActionScheduledEvent } from '.';
 import { ActionExecutor } from './action-executor';
 
 export namespace ActionService {
@@ -14,10 +13,7 @@ export namespace ActionService {
     if (!time) {
       return false;
     }
-    const scheduledEvent = new ActionScheduledEvent({ time, action, executor });
-    const executionEvent = new BeforeActionExecutingEvent({ action, time: add(time, action.duration), executor });
-    executor.pendingAction = new PendingAction({ action, scheduleTime: time, executionEvent });
-    engine.getComponent(GameEventQueue)?.addEvents([scheduledEvent, executionEvent]);
+    engine.getComponent(GameEventQueue)?.addEvent(new ActionScheduledEvent({ time, action, executor }));
     return true;
   };
 
