@@ -1,6 +1,6 @@
-import { FieldPlacement, PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition } from 'engine/core/field';
+import { FieldPlacement, PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition, subFieldAt } from 'engine/core/field';
 import { FieldService } from 'engine/core/field/field-service';
-import { mockField, mockRectField, subFieldAt } from 'test/mock/mock-field';
+import { mockField, mockRectField } from 'test/mock/mock-field';
 
 describe('Field service', () => {
   describe('getConnectedField method', () => {
@@ -50,6 +50,37 @@ describe('Field service', () => {
       ];
 
       expect(FieldService.getConnectedFields(field)).toEqual(subFields);
+    });
+  });
+
+  describe('getPathBetweenRectFields method', () => {
+    const field = mockRectField(5, 5);
+
+    it('should return one field if "from" and "to" are equal', () => {
+      expect(FieldService.getPathBetweenRectFields(subFieldAt(field, 1, 3), subFieldAt(field, 1, 3))).toEqual([subFieldAt(field, 1, 3)]);
+    });
+
+    it('should return two fields if "from" and "to" are adjoining', () => {
+      expect(FieldService.getPathBetweenRectFields(subFieldAt(field, 1, 3), subFieldAt(field, 0, 2))).toEqual([
+        subFieldAt(field, 1, 3),
+        subFieldAt(field, 0, 2)
+      ]);
+    });
+
+    it('should select diagonal path first if possible', () => {
+      expect(FieldService.getPathBetweenRectFields(subFieldAt(field, 0, 0), subFieldAt(field, 2, 4))).toEqual([
+        subFieldAt(field, 0, 0),
+        subFieldAt(field, 1, 1),
+        subFieldAt(field, 2, 2),
+        subFieldAt(field, 2, 3),
+        subFieldAt(field, 2, 4)
+      ]);
+
+      expect(FieldService.getPathBetweenRectFields(subFieldAt(field, 4, 4), subFieldAt(field, 3, 2))).toEqual([
+        subFieldAt(field, 4, 4),
+        subFieldAt(field, 3, 3),
+        subFieldAt(field, 3, 2)
+      ]);
     });
   });
 });

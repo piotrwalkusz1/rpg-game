@@ -1,10 +1,10 @@
 import { CommandExecutor, CommandService } from 'engine/core/command';
 import { EntityProvider } from 'engine/core/ecs';
-import { FieldObject, RectFieldPosition } from 'engine/core/field';
+import { FieldObject, RectFieldPosition, subFieldAt } from 'engine/core/field';
 import { MovementCommandHintProvider } from 'frontend/command-hint/command-hint-providers/movement-command-hint-provider';
 import { GameService } from 'frontend/game/game-service';
 import { MockedEngine } from 'test/mock/mock-engine';
-import { mockRectField, subFieldAt } from 'test/mock/mock-field';
+import { mockRectField } from 'test/mock/mock-field';
 
 describe('Movement', () => {
   test.only('Move to adjoin field', async () => {

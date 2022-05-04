@@ -13,6 +13,4 @@ export const mockRectField = (width: number, height: number): Field => {
 
 export const mockField = (position?: FieldPosition): Field => new Field({ definition: mockFieldDefinition(), position });
 
-export const subFieldAt = (field: Field, x: number, y: number): Field => field.getRectSubFields()[y][x];
-
 export const mockFieldDefinition = (): FieldDefinition => new FieldDefinition({ name: { literal: '' } });

@@ -35,3 +35,5 @@ export namespace ArrayUtils {
 
   export const distinct = <T>(array: T[]): T[] => [...new Set(array)];
 }
+
+export const notEmpty = <T>(array: T[] | undefined | null): array is T[] => Array.isArray(array) && array.length > 0;

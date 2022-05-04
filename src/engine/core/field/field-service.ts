@@ -1,6 +1,7 @@
 import type { Field } from 'engine/core/field/field';
-import { ArrayUtils } from 'utils';
+import { ArrayUtils, clamp } from 'utils';
 import { PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition } from './field-position';
+import { getX, getY, isRectFieldPosition, sameParent, siblingAt } from './field-utils';
 
 export namespace FieldService {
   export const getConnectedFields = (field: Field): readonly Field[] => {
@@ -27,5 +28,19 @@ export namespace FieldService {
       );
     }
     return [];
+  };
+
+  export const getPathBetweenRectFields = (from: Field, to: Field): Field[] | undefined => {
+    if (!(sameParent(from, to) && isRectFieldPosition(from.position) && isRectFieldPosition(to.position))) {
+      return;
+    }
+    const path = [from];
+    while (path[path.length - 1] !== to) {
+      const last = path[path.length - 1];
+      const x = getX(last) + clamp(getX(to) - getX(last), -1, 1);
+      const y = getY(last) + clamp(getY(to) - getY(last), -1, 1);
+      path.push(siblingAt(from, x, y));
+    }
+    return path;
   };
 }
