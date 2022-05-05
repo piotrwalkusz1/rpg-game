@@ -1,13 +1,14 @@
+import type { Image } from 'frontend/image';
 import type { TranslatableText } from 'i18n/translatable-text';
 
 export class FieldDefinition {
   readonly name: TranslatableText;
   readonly description: TranslatableText | undefined;
-  readonly imageUrl: string | undefined;
+  readonly image: Image | undefined;
 
-  constructor({ name, description, imageUrl }: { name: TranslatableText; description?: TranslatableText; imageUrl?: string }) {
+  constructor({ name, description, image }: { name: TranslatableText; description?: TranslatableText; image?: Image }) {
     this.name = name;
     this.description = description;
-    this.imageUrl = imageUrl;
+    this.image = image;
   }
 }

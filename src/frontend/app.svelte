@@ -3,8 +3,8 @@
   import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
   import Border from 'frontend/component/borders/border.svelte';
-  import Inspector from 'frontend/component/inspector.svelte';
   import LocationView from 'frontend/component/location-view.svelte';
+  import NarrationView from 'frontend/component/narration-view.svelte';
   import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
 
@@ -33,7 +33,7 @@
         </div>
         <BorderDivideVertical />
         <div class="w-[288px] min-w-[288px] p-border">
-          <Inspector />
+          <NarrationView />
         </div>
       </div>
     </div>

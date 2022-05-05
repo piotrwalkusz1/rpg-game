@@ -1,6 +1,7 @@
 <script lang="ts">
-  import FieldView from 'frontend/component/field-view.svelte';
-  import { displayedLocation, selectedField } from 'frontend/store';
+  import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
+  import { displayedLocation, narrationContext, selectedField } from 'frontend/store';
+  import FieldView from './field-view.svelte';
 </script>
 
 <div class="flex h-full overflow-hidden">
@@ -13,7 +14,13 @@
           {#each $displayedLocation.getRectSubFields() as row}
             <div class="flex flex-row">
               {#each row as field}
-                <FieldView {field} on:click={() => ($selectedField = field)} />
+                <FieldView
+                  {field}
+                  on:click={() => {
+                    $selectedField = field;
+                    $narrationContext = new FieldNarrationContext(field);
+                  }}
+                />
               {/each}
             </div>
           {/each}

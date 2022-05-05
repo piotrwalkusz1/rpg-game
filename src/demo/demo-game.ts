@@ -34,7 +34,7 @@ export const initializeDemoGame = (): Engine => {
 
 const FieldDefinitions = {
   WORLD: new FieldDefinition({ name: { literal: '' } }),
-  GRASS: new FieldDefinition({ name: 'FIELD.GRASS.NAME', description: 'FIELD.GRASS.DESCRIPTION', imageUrl: '/images/fields/grass.jpg' })
+  GRASS: new FieldDefinition({ name: 'FIELD.GRASS.NAME', description: 'FIELD.GRASS.DESCRIPTION', image: '/images/fields/grass.jpg' })
 };
 
 const buildRectField = (width: number, height: number): Field => {

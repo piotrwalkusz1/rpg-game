@@ -4,7 +4,7 @@
 
   export let field: Field;
 
-  $: bgImage = field.imageUrl ? `background-image: url("${field.imageUrl}")` : '';
+  $: bgImage = field.image ? `background-image: url("${field.image}")` : '';
 </script>
 
 <div class="relative" on:click>

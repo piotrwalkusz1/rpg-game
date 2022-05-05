@@ -3,6 +3,7 @@ import type { FieldDefinition } from 'engine/core/field/field-definition';
 import { FieldObjectsCollection } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { FieldPosition, RectFieldPosition } from 'engine/core/field/field-position';
+import type { Image } from 'frontend/image';
 import type { TranslatableText } from 'i18n/translatable-text';
 import { areSame, OneToManyCollection, OneToManyForeignKey } from 'utils';
 
@@ -39,8 +40,8 @@ export class Field extends Component {
     return this.position?.parentField;
   }
 
-  get imageUrl(): string | undefined {
-    return this.definition.imageUrl;
+  get image(): Image | undefined {
+    return this.definition.image;
   }
 
   get name(): TranslatableText {

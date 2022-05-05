@@ -31,8 +31,8 @@ export class MockedEngine extends Engine {
     return entity.requireComponent(CommandExecutor);
   }
 
-  addPlayer(params?: { field?: Field }): Entity {
-    return this.addCharacter(params).addComponent(new Player());
+  addPlayer(params?: { field?: Field }): Player {
+    return this.addCharacter(params).addComponent(new Player()).requireComponent(Player);
   }
 
   addCharacter(params?: { field?: Field }): Entity {
