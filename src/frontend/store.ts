@@ -20,8 +20,8 @@ export const selectedField: Writable<Field | undefined> = writable(undefined);
 
 export const narrationContext: Writable<NarrationContext | undefined> = writable(undefined);
 
-export const narration: Readable<Narration | undefined> = derived(narrationContext, ($narrationContext) =>
-  $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: get(engine) }) : undefined
+export const narration: Readable<Narration | undefined> = derived([narrationContext, engine], ([$narrationContext, $engine]) =>
+  $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
 );
 
 export const animatedCurrentTime = MotionUtils.interpolate(get(engine).requireComponent(TimeManager).time, TimeUtils.interpolate);

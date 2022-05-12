@@ -35,6 +35,11 @@ export class MockedEngine extends Engine {
     return this.addCharacter(params).addComponent(new Player()).requireComponent(Player);
   }
 
+  withPlayer(): MockedEngine {
+    this.addPlayer();
+    return this;
+  }
+
   addCharacter(params?: { field?: Field }): Entity {
     const entity = new Entity()
       .addComponent(new ActionExecutor())
