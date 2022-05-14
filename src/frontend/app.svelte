@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Character } from 'engine/modules/character';
   import AvatarWithName from 'frontend/component/avatar-with-name.svelte';
   import BorderDivideHorizontal from 'frontend/component/borders/border-divide-horizontal.svelte';
   import BorderDivideVertical from 'frontend/component/borders/border-divide-vertical.svelte';
@@ -7,17 +8,21 @@
   import NarrationView from 'frontend/component/narration-view.svelte';
   import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
+  import { player } from './store';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
   i18n.addResourceBundle('pl', 'common', {});
+
+  $: playerName = $player.requireComponent(Character).name;
+  $: playerAvatar = $player.requireComponent(Character).avatar;
 </script>
 
 <div class="relative h-full bg-[url('/images/background.jpg')]">
   <Border class="w-full h-full">
     <div class="flex flex-col h-full">
       <div class="relative h-[107px] min-h-[107px] p-border">
-        <AvatarWithName avatar="/images/characters/001_Eladin.png" name={{ literal: 'Eladin' }} />
+        <AvatarWithName avatar={playerAvatar} name={playerName} />
         <Sundial />
       </div>
       <BorderDivideHorizontal />

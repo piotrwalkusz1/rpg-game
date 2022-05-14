@@ -1,5 +1,5 @@
 import { Condition, EntityProvider } from 'engine/core/ecs';
-import { Health } from 'engine/modules/health';
+import { Health } from './health';
 
 export class IsAlive implements Condition {
   constructor(private readonly entityProvider: EntityProvider) {}

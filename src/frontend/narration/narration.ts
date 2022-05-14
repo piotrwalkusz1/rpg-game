@@ -1,4 +1,4 @@
-import type { Image } from 'frontend/image';
+import type { Image } from 'engine/core/resources/image';
 import type { TranslatableText } from 'i18n/translatable-text';
 import type { NarrationOption } from './narration-option';
 

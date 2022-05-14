@@ -1,7 +1,8 @@
 import { Engine, EntityProvider } from 'engine/core/ecs';
 import { GameEventQueue } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
-import { Action, ActionScheduledEvent } from '.';
+import type { Action } from './action';
+import { ActionScheduledEvent } from './action-event';
 import { ActionExecutor } from './action-executor';
 
 export namespace ActionService {

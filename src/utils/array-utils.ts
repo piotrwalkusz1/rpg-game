@@ -1,7 +1,7 @@
 import type { Type } from './type';
 
 export namespace ArrayUtils {
-  export const mapAndFilterNotNull = <T, R>(array: T[], map: (item: T) => R | undefined | null): R[] => {
+  export const mapAndFilterNotNull = <T, R>(array: readonly T[], map: (item: T) => R | undefined | null): R[] => {
     const result: (R | undefined | null)[] = array.map(map);
     return filterNotNull(result);
   };

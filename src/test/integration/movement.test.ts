@@ -1,5 +1,6 @@
+import type { Engine } from 'engine/core/ecs';
 import { getParentField, getX, getY, subFieldAt } from 'engine/core/field';
-import { NarrationService } from 'frontend/narration';
+import { NarrationOptionParams, NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { MockedEngine } from 'test/mock/mock-engine';
 import { mockRectField } from 'test/mock/mock-field';
@@ -11,7 +12,7 @@ describe('Movement', () => {
     const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
 
     await NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 3, 1)), engine })?.options[0].onClick(
-      engine
+      mockNarrationOptionParams(engine)
     );
 
     expect(getParentField(player)).toBe(world);
@@ -25,11 +26,15 @@ describe('Movement', () => {
     const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
 
     await NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 4, 3)), engine })?.options[0].onClick(
-      engine
+      mockNarrationOptionParams(engine)
     );
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(4);
     expect(getY(player)).toEqual(3);
   });
+
+  const mockNarrationOptionParams = (engine: Engine): NarrationOptionParams => {
+    return { engine: engine, refreshEngine: () => {}, setNarrationContext: () => {} };
+  };
 });

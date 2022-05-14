@@ -1,6 +1,8 @@
 {
     "exportall.config.folderListener": [
         "/src/engine/core/ecs",
-        "/src/engine/core/game"
+        "/src/engine/core/game",
+        "/src/engine/modules/character",
+        "/src/engine/core/resources"
     ]
 }

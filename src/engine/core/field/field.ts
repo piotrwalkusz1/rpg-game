@@ -3,9 +3,9 @@ import type { FieldDefinition } from 'engine/core/field/field-definition';
 import { FieldObjectsCollection } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { FieldPosition, RectFieldPosition } from 'engine/core/field/field-position';
-import type { Image } from 'frontend/image';
+import type { Image } from 'engine/core/resources/image';
 import type { TranslatableText } from 'i18n/translatable-text';
-import { areSame, OneToManyCollection, OneToManyForeignKey } from 'utils';
+import { areSame, ArrayUtils, OneToManyCollection, OneToManyForeignKey, Type } from 'utils';
 
 class SubFieldsCollection extends OneToManyCollection<Field, FieldPosition> {
   override getForeignKey = (field: Field) => field.positionFK;
@@ -73,5 +73,9 @@ export class Field extends Component {
 
   get siblings(): readonly Field[] {
     return this.parentField?.getSubFields()?.filter((field) => field !== this) || [];
+  }
+
+  getObjectsByComponentType<T extends Component>(componentType: Type<T>): T[] {
+    return ArrayUtils.mapAndFilterNotNull(this.objects.getArray(), (object) => object.getComponent(componentType));
   }
 }

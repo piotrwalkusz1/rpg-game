@@ -53,7 +53,7 @@ export const tryGetField = (fieldProvider: FieldProvider): Field | undefined => 
 
 export const siblingAt = (field: Field, x: number, y: number): Field => subFieldAt(getParentField(field), x, y);
 
-export const subFieldAt = (field: Field, x: number, y: number): Field => requireNotNull(field.getRectSubFields()[y][x]);
+export const subFieldAt = (field: FieldProvider, x: number, y: number): Field => requireNotNull(getField(field).getRectSubFields()[y][x]);
 
 export const getX = (fieldProvider: FieldProvider): number => requireNotNull(getRectFieldPosition(fieldProvider)?.x);
 

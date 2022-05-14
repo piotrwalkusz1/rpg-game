@@ -3,29 +3,28 @@ import { Command, CommandExecutor } from 'engine/core/command';
 import type { Engine } from 'engine/core/ecs';
 import { GameEvent, GameEventQueue, GameLoopService, Player } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
-import { refreshEngine } from 'frontend/store';
 
 export namespace GameService {
-  export const processEvents = async (engine: Engine): Promise<void> => {
+  export const processEvents = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
     refreshEngine();
     while (nextEvent(engine)) {
-      await processEventsUntilTimeChange(engine);
+      await processEventsUntilTimeChange(engine, refreshEngine);
       if (isPlayerActionRequired(engine)) {
         break;
       }
     }
   };
 
-  const processEventsUntilTimeChange = async (engine: Engine): Promise<void> => {
+  const processEventsUntilTimeChange = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
     if (nextEventTime(engine) !== time(engine)) {
-      await processNextEvent(engine);
+      await processNextEvent(engine, refreshEngine);
     }
     while (nextEventTime(engine) === time(engine)) {
-      await processNextEvent(engine);
+      await processNextEvent(engine, refreshEngine);
     }
   };
 
-  const processNextEvent = async (engine: Engine): Promise<void> => {
+  const processNextEvent = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
     await GameLoopService.processNextEvent(engine);
     refreshEngine();
   };
