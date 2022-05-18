@@ -2,12 +2,12 @@ import type { Engine } from 'engine/core/ecs';
 import { getParentField, getX, getY, subFieldAt } from 'engine/core/field';
 import { NarrationOptionParams, NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
-import { MockedEngine } from 'test/mock/mock-engine';
+import { MockEngine } from 'test/mock/mock-engine';
 import { mockRectField } from 'test/mock/mock-field';
 
 describe('Movement', () => {
   test('Move to adjoin field', async () => {
-    const engine = new MockedEngine();
+    const engine = new MockEngine();
     const world = mockRectField(5, 5);
     const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
 
@@ -21,7 +21,7 @@ describe('Movement', () => {
   });
 
   test('Move to distant field', async () => {
-    const engine = new MockedEngine();
+    const engine = new MockEngine();
     const world = mockRectField(5, 5);
     const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
 

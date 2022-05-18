@@ -32,4 +32,11 @@ export class Entity {
     this.components.add(component);
     return this;
   }
+
+  removeComponent(componentToRemove: Type<Component>) {
+    const component = ArrayUtils.findFirstInstanceOf(this.components.getArray(), componentToRemove);
+    if (component !== undefined) {
+      this.components.remove(component);
+    }
+  }
 }

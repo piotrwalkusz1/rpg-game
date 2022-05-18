@@ -17,6 +17,14 @@ export namespace EntityProvider {
     }
   };
 
+  export const requireComponent = <T extends Component>(entityProvider: EntityProvider, componentType: Type<T>): T => {
+    const component = getComponent(entityProvider, componentType);
+    if (component === undefined) {
+      throw new Error('Component ' + componentType.name + 'is required');
+    }
+    return component;
+  };
+
   export const getComponent = <T extends Component>(entityProvider: EntityProvider, componentType: Type<T>): T | undefined => {
     if (entityProvider instanceof componentType) {
       return entityProvider;

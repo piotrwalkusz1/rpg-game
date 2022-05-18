@@ -7,7 +7,7 @@ import { Time, TimeManager, TimeSystem } from 'engine/core/time';
 import { Health } from 'engine/modules/health';
 import { MovementSystem } from 'engine/modules/movement';
 
-export class MockedEngine extends Engine {
+export class MockEngine extends Engine {
   constructor() {
     super();
     this.addEntity(new Entity().addComponent(new GameEventQueue()).addComponent(new TimeManager(new Date(812, 6, 12, 8))));
@@ -31,11 +31,17 @@ export class MockedEngine extends Engine {
     return entity.requireComponent(CommandExecutor);
   }
 
+  addActionExecutor(): ActionExecutor {
+    const entity = new Entity().addComponent(new ActionExecutor());
+    this.addEntity(entity);
+    return entity.requireComponent(ActionExecutor);
+  }
+
   addPlayer(params?: { field?: Field }): Player {
     return this.addCharacter(params).addComponent(new Player()).requireComponent(Player);
   }
 
-  withPlayer(): MockedEngine {
+  withPlayer(): MockEngine {
     this.addPlayer();
     return this;
   }

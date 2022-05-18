@@ -7,9 +7,7 @@ import type { CommandExecutor } from './command-executor';
 
 export namespace CommandService {
   export const scheduleCommand = (command: Command, executor: CommandExecutor, engine: Engine): void => {
-    const time = engine.getComponent(TimeManager)?.time;
-    if (time) {
-      engine.getComponent(GameEventQueue)?.addEvent(new CommandScheduledEvent({ time, command, executor }));
-    }
+    const time = engine.requireComponent(TimeManager).time;
+    engine.requireComponent(GameEventQueue).addEvent(new CommandScheduledEvent({ time, command, executor }));
   };
 }

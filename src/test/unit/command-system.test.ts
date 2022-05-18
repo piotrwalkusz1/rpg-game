@@ -10,11 +10,11 @@ import {
 import type { Time } from 'engine/core/time';
 import { MockAction } from 'test/mock/mock-action';
 import { MockCommand } from 'test/mock/mock-command';
-import { MockedEngine } from 'test/mock/mock-engine';
+import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Command system', () => {
   let commandSystem: CommandSystem;
-  let engine: MockedEngine;
+  let engine: MockEngine;
   let commandExecutor: CommandExecutor;
   let actionExecutor: ActionExecutor;
   let command: Command;
@@ -22,7 +22,7 @@ describe('Command system', () => {
 
   beforeEach(() => {
     commandSystem = new CommandSystem();
-    engine = new MockedEngine();
+    engine = new MockEngine();
     commandExecutor = engine.addCommandExecutor();
     actionExecutor = commandExecutor.requireComponent(ActionExecutor);
     command = mockCommand();
@@ -54,27 +54,36 @@ describe('Command system', () => {
   });
 
   describe('ActionExecutedEvent', () => {
-    it('should create CommandEndedEvent if command is pending and next action cannot be scheduled', async () => {
+    it('should create CommandEndedEvent and reset pending command if command is pending and next action cannot be scheduled', async () => {
       commandExecutor.pendingCommand = command;
       actionExecutor.pendingAction = mockPendingAction();
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
       expect(engine.events).toEqual([mockCommandEndedEvent()]);
+      expect(commandExecutor.pendingCommand).toBeUndefined();
     });
 
-    it('should not create CommandEndedEvent if command is not pending', async () => {
+    it('should do nothing if command is not pending', async () => {
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
       expect(engine.events).toEqual([]);
     });
 
-    it('should not create CommandEndedEvent if next action scheduled', async () => {
+    it('should do nothing if next action scheduled', async () => {
       commandExecutor.pendingCommand = command;
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
       expect(engine.events).toEqual([mockActionScheduledEvent()]);
+    });
+
+    it('should do nothing if action executor is not command executor', async () => {
+      actionExecutor.entity?.removeComponent(CommandExecutor);
+
+      await commandSystem.processEvent(mockActionExecutedEvent(), engine);
+
+      expect(engine.events).toEqual([]);
     });
   });
 

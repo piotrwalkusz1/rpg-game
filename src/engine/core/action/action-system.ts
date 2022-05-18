@@ -23,15 +23,17 @@ export class ActionSystem extends System {
   private handleActionScheduledEvent({ time, action, executor }: ActionScheduledEvent, engine: Engine): void {
     const executionEvent = new BeforeActionExecutingEvent({ action, time: add(time, action.duration), executor });
     executor.pendingAction = new PendingAction({ action, scheduleTime: time, executionEvent });
-    engine.getComponent(GameEventQueue)?.addEvents([new ActionStartedEvent({ time, action, executor }), executionEvent]);
+    engine.requireComponent(GameEventQueue).addEvents([new ActionStartedEvent({ time, action, executor }), executionEvent]);
   }
 
   private handleBeforeActionExecutingEvent({ time, action, executor }: BeforeActionExecutingEvent, engine: Engine): void {
-    if (executor.pendingAction?.action !== action || !ActionService.canExecuteAction(action, executor, engine)) {
+    if (executor.pendingAction?.action !== action) {
       return;
     }
-    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutingEvent({ time, action, executor }));
-    engine.getComponent(GameEventQueue)?.addEvent(new ActionExecutedEvent({ time, action, executor }));
     executor.pendingAction = undefined;
+    if (ActionService.canExecuteAction(action, executor, engine)) {
+      engine.requireComponent(GameEventQueue).addEvent(new ActionExecutingEvent({ time, action, executor }));
+      engine.requireComponent(GameEventQueue).addEvent(new ActionExecutedEvent({ time, action, executor }));
+    }
   }
 }

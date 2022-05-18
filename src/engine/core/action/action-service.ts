@@ -10,16 +10,13 @@ export namespace ActionService {
     if (executor.pendingAction || !canExecuteAction(action, executor, engine)) {
       return false;
     }
-    const time: Time | undefined = engine.getComponent(TimeManager)?.time;
-    if (!time) {
-      return false;
-    }
-    engine.getComponent(GameEventQueue)?.addEvent(new ActionScheduledEvent({ time, action, executor }));
+    const time: Time = engine.requireComponent(TimeManager).time;
+    engine.requireComponent(GameEventQueue).addEvent(new ActionScheduledEvent({ time, action, executor }));
     return true;
   };
 
   export const canExecuteAction = (action: Action, executor: EntityProvider, engine: Engine): boolean => {
-    const actionExecutor = EntityProvider.getComponent(executor, ActionExecutor);
-    return actionExecutor ? action.getExecutionConditions(actionExecutor).every((condition) => condition.check(engine)) : false;
+    const actionExecutor = EntityProvider.requireComponent(executor, ActionExecutor);
+    return action.getExecutionConditions(actionExecutor).every((condition) => condition.check(engine));
   };
 }

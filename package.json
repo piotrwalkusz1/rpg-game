@@ -6,8 +6,10 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "jest"
+    "check": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "eslint": "eslint src"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
