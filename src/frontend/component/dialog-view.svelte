@@ -8,7 +8,7 @@
 </script>
 
 <div
-  class="flex fixed bg-[url('/images/background.jpg')] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[740px] h-[400px] z-dialog"
+  class="flex fixed bg-[url('/images/background.jpg')] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[740px] h-[400px] z-dialog shadow-[5px_5px_5px_0_rgba(0,0,0,0.4)]"
 >
   <Border class="w-full h-full">
     <div class="p-border">
@@ -17,7 +17,7 @@
       </div>
       <div>
         {#each dialog.speeches as speech}
-          <div>
+          <div class="font-default text-[20px] mx-[12px] my-[15px]">
             <TranslatableTextView text={speech.content} />
           </div>
         {/each}
