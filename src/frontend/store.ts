@@ -3,8 +3,10 @@ import type { Engine } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
 import { Player } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
+import { Journal, JournalOwner } from 'engine/modules/journal';
 import { derived, get, Readable, Writable, writable } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
+import type { Dialog } from './dialog';
 import { Narration, NarrationService } from './narration';
 import type { NarrationContext } from './narration/narration-context';
 
@@ -20,6 +22,8 @@ export const selectedField: Writable<Field | undefined> = writable(undefined);
 
 export const narrationContext: Writable<NarrationContext | undefined> = writable(undefined);
 
+export const displayedDialog: Writable<Dialog | undefined> = writable(undefined);
+
 export const narration: Readable<Narration | undefined> = derived([narrationContext, engine], ([$narrationContext, $engine]) =>
   $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
 );
@@ -29,5 +33,7 @@ export const animatedCurrentTime = MotionUtils.interpolate(get(engine).requireCo
 export const time: Readable<Time> = derived(engine, ($engine) => $engine.requireComponent(TimeManager).time);
 
 export const player: Readable<Player> = derived(engine, ($engine) => $engine.requireComponent(Player));
+
+export const journal: Readable<Journal> = derived(player, ($player) => $player.requireComponent(JournalOwner).journal);
 
 export const refreshEngine = (): void => engine.update(($engine) => $engine);

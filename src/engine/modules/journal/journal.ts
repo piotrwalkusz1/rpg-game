@@ -1,5 +1,7 @@
 import type { JournalEntry } from './journal-entry';
 
+export type JournalSubscriber = (entry: JournalEntry) => void;
+
 export class Journal {
   private readonly _entries: JournalEntry[] = [];
 
@@ -14,5 +16,9 @@ export class Journal {
         return 0;
       }
     });
+  }
+
+  get unreadEntries(): JournalEntry[] {
+    return this._entries.filter((entry) => entry.state !== 'READ');
   }
 }

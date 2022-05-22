@@ -5,6 +5,12 @@
         "/src/engine/modules/character",
         "/src/engine/core/resources",
         "/src/engine/modules/journal",
-        "/src/engine/modules/journal-speaking"
+        "/src/engine/modules/journal-speaking",
+        "/src/frontend/game-context",
+        "/src/frontend/game",
+        "/src/frontend/component",
+        "/src/frontend/animation",
+        "/src/frontend/bookmark",
+        "/src/frontend/dialog"
     ]
 }

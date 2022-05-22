@@ -1,4 +1,4 @@
-import { ActionExecutor, ActionSystem } from 'engine/core/action';
+import { ActionExecutor, ActionService, ActionSystem } from 'engine/core/action';
 import { CommandExecutor, CommandSystem } from 'engine/core/command';
 import { Engine, Entity } from 'engine/core/ecs';
 import { Field, FieldObject, RectFieldPosition, subFieldAt } from 'engine/core/field';
@@ -7,7 +7,10 @@ import { GameEventQueue, Player } from 'engine/core/game';
 import { TimeManager, TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
+import { JournalOwner } from 'engine/modules/journal';
+import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
+import { SpeakAction } from 'engine/modules/speaking';
 
 export const initializeDemoGame = (): Engine => {
   const gameManager: Entity = new Entity();
@@ -22,9 +25,12 @@ export const initializeDemoGame = (): Engine => {
   player.addComponent(new ActionExecutor());
   player.addComponent(new CommandExecutor());
   player.addComponent(new Health());
+  player.addComponent(new JournalOwner());
   const characterSestia: Entity = new Entity();
   characterSestia.addComponent(new Character({ name: { literal: 'Sestia' }, avatar: '/images/characters/002_Sestia.png' }));
   characterSestia.addComponent(new FieldObject({ field: subFieldAt(world, 0, 0) }));
+  characterSestia.addComponent(new ActionExecutor());
+  characterSestia.addComponent(new Health());
   const engine: Engine = new Engine();
   engine.addEntity(gameManager);
   engine.addEntity(world);
@@ -33,6 +39,13 @@ export const initializeDemoGame = (): Engine => {
   engine.addSystem(new ActionSystem());
   engine.addSystem(new CommandSystem());
   engine.addSystem(new MovementSystem());
+  engine.addSystem(new JournalSpeakingSystem());
+
+  ActionService.scheduleAction(
+    new SpeakAction({ receivers: [player], content: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', quote: true }),
+    characterSestia.requireComponent(ActionExecutor),
+    engine
+  );
 
   return engine;
 };

@@ -8,7 +8,9 @@
   import NarrationView from 'frontend/component/narration-view.svelte';
   import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
-  import { player } from './store';
+  import BookmarkPanel from './component/bookmark-panel.svelte';
+  import DialogView from './component/dialog-view.svelte';
+  import { displayedDialog, player } from './store';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
@@ -18,7 +20,7 @@
   $: playerAvatar = $player.requireComponent(Character).avatar;
 </script>
 
-<div class="relative h-full bg-[url('/images/background.jpg')]">
+<div class="relative h-full bg-[url('/images/background.jpg')] z-0">
   <Border class="w-full h-full">
     <div class="flex flex-col h-full">
       <div class="relative h-[107px] min-h-[107px] p-border">
@@ -34,7 +36,9 @@
             <LocationView />
           </div>
           <BorderDivideHorizontal />
-          <div class="h-[78px] min-h-[78px]" />
+          <div class="h-[78px] min-h-[78px]">
+            <BookmarkPanel />
+          </div>
         </div>
         <BorderDivideVertical />
         <div class="w-[288px] min-w-[288px] p-border">
@@ -44,6 +48,10 @@
     </div>
   </Border>
 </div>
+
+{#if $displayedDialog}
+  <DialogView dialog={$displayedDialog} />
+{/if}
 
 <style lang="postcss" global>
   @tailwind base;

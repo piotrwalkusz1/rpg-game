@@ -22,5 +22,5 @@ export abstract class NarrationOption {
     this.imageSize = imageSize || 'NORMAL';
   }
 
-  abstract onClick(context: NarrationOptionParams): Promise<void>;
+  abstract onClick(params: NarrationOptionParams): Promise<void>;
 }
