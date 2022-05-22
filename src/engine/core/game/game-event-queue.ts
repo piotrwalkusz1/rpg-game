@@ -15,9 +15,9 @@ export class GameEventQueue extends Component {
   addEvent(event: GameEvent): void {
     this._events.push(event);
     this._events.sort(function (firstEvent, secondEvent) {
-      if (firstEvent > secondEvent) {
+      if (firstEvent.time > secondEvent.time) {
         return 1;
-      } else if (firstEvent < secondEvent) {
+      } else if (firstEvent.time < secondEvent.time) {
         return -1;
       } else {
         return 0;

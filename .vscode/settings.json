@@ -3,6 +3,8 @@
         "/src/engine/core/ecs",
         "/src/engine/core/game",
         "/src/engine/modules/character",
-        "/src/engine/core/resources"
+        "/src/engine/core/resources",
+        "/src/engine/modules/journal",
+        "/src/engine/modules/journal-speaking"
     ]
 }
