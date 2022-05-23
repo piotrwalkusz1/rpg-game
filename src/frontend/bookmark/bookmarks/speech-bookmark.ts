@@ -19,6 +19,10 @@ export class SpeechBookmark extends Bookmark {
   }
 
   override onClick(params: BookmarkOnClickParams): void {
-    params.setDisplayedDialog(this.dialog);
+    if (params.getDisplayedDialog() === this.dialog) {
+      params.setDisplayedDialog(undefined);
+    } else {
+      params.setDisplayedDialog(this.dialog);
+    }
   }
 }

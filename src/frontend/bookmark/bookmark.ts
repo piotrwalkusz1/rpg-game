@@ -4,7 +4,8 @@ import type { Dialog } from 'frontend/dialog';
 export type BookmarkBackground = 'YELLOW' | 'RED';
 
 export type BookmarkOnClickParams = {
-  setDisplayedDialog: (dialog: Dialog) => void;
+  getDisplayedDialog: () => Dialog | undefined;
+  setDisplayedDialog: (dialog: Dialog | undefined) => void;
 };
 
 export abstract class Bookmark {
