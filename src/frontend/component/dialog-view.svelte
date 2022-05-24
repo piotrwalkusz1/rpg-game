@@ -1,12 +1,24 @@
 <script lang="ts">
   import { faAngleDown, faTimes } from '@fortawesome/free-solid-svg-icons';
   import type { Dialog } from 'frontend/dialog';
+  import { displayedDialog } from 'frontend/store';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
   import Fa from 'svelte-fa';
   import AvatarWithName from './avatar-with-name.svelte';
   import Border from './borders/border.svelte';
 
   export let dialog: Dialog;
+
+  function hideDialog() {
+    displayedDialog.set(undefined);
+  }
+
+  function closeDialog() {
+    if (dialog.onClose) {
+      dialog.onClose();
+    }
+    hideDialog();
+  }
 </script>
 
 <div
@@ -17,8 +29,15 @@
       <div class="flex m-5px">
         <AvatarWithName avatar={dialog.character.avatar} name={dialog.character.name} />
         <div class="flex self-start items-center ml-auto pr-[5px] text-[#c79b00]">
-          <Fa icon={faAngleDown} class="text-[25px] hover:text-[#614c00] cursor-pointer" />
-          <Fa icon={faTimes} class="ml-[15px] text-[20px] hover:text-[#614c00] cursor-pointer" />
+          <span on:click={hideDialog}>
+            <Fa icon={faAngleDown} class="text-[25px] hover:text-[#614c00] cursor-pointer" />
+          </span>
+
+          {#if dialog.onClose}
+            <span on:click={closeDialog}>
+              <Fa icon={faTimes} class="ml-[15px] text-[20px] hover:text-[#614c00] cursor-pointer" />
+            </span>
+          {/if}
         </div>
       </div>
       <div>

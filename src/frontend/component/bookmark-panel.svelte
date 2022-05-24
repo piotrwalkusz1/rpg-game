@@ -5,7 +5,7 @@
   import type { Bookmark } from 'frontend/bookmark';
   import { SpeechBookmark } from 'frontend/bookmark/bookmarks/speech-bookmark';
   import { Dialog, DialogSpeech } from 'frontend/dialog';
-  import { journal } from 'frontend/store';
+  import { journal, refreshEngine } from 'frontend/store';
   import { ArrayUtils } from 'utils';
   import BookmarkView from './bookmark-view.svelte';
 
@@ -28,7 +28,11 @@
         new SpeechBookmark({
           dialog: new Dialog({
             character,
-            speeches: entries.map((entry) => new DialogSpeech({ character: entry.speaker, content: entry.content }))
+            speeches: entries.map((entry) => new DialogSpeech({ character: entry.speaker, content: entry.content })),
+            onClose: () => {
+              entries.forEach((entry) => (entry.state = 'READ'));
+              refreshEngine();
+            }
           })
         })
       )
