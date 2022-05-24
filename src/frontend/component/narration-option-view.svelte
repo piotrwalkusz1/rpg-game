@@ -15,7 +15,7 @@
       refreshEngine,
       setNarrationContext: narrationContext.set
     })}
-  class="flex items-center bg-[#FAFFC3] border-[2px] border-[#A19B00] p-[3px]"
+  class="flex items-center bg-[#FAFFC3] border-[2px] border-[#A19B00] p-[3px] cursor-pointer"
 >
   <div class="image" class:large-image={largeImage} style="background-image: url({narrationOption.image});" />
   <div class="pl-[10px] font-default"><TranslatableTextView text={narrationOption.name} /></div>

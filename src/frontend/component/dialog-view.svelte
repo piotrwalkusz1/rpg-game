@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { faAngleDown, faTimes } from '@fortawesome/free-solid-svg-icons';
   import type { Dialog } from 'frontend/dialog';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
+  import Fa from 'svelte-fa';
   import AvatarWithName from './avatar-with-name.svelte';
   import Border from './borders/border.svelte';
 
@@ -12,8 +14,12 @@
 >
   <Border class="w-full h-full">
     <div class="p-border">
-      <div class="m-5px">
+      <div class="flex m-5px">
         <AvatarWithName avatar={dialog.character.avatar} name={dialog.character.name} />
+        <div class="flex self-start items-center ml-auto pr-[5px] text-[#c79b00]">
+          <Fa icon={faAngleDown} class="text-[25px] hover:text-[#614c00] cursor-pointer" />
+          <Fa icon={faTimes} class="ml-[15px] text-[20px] hover:text-[#614c00] cursor-pointer" />
+        </div>
       </div>
       <div>
         {#each dialog.speeches as speech}

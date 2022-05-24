@@ -17,7 +17,7 @@
 </script>
 
 <div
-  class="bookmark shadow-[5px_3px_5px_1px_rgba(67,67,67,0.27)] hover:shadow-[5px_3px_6px_2px_rgba(0,0,0,0.4)]"
+  class="bookmark shadow-[5px_3px_5px_1px_rgba(67,67,67,0.27)] hover:shadow-[5px_3px_6px_2px_rgba(0,0,0,0.4)] cursor-pointer"
   on:click={() => bookmark.onClick({ setDisplayedDialog: displayedDialog.set, getDisplayedDialog: () => get(displayedDialog) })}
 >
   <div
