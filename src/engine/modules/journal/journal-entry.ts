@@ -5,10 +5,11 @@ export type JournalEntryState = 'UNSEEN' | 'SEEN' | 'READ';
 
 export abstract class JournalEntry {
   readonly time: Time;
-  state: JournalEntryState = 'UNSEEN';
+  state: JournalEntryState;
 
-  constructor({ time }: { time: Time }) {
+  constructor({ time, state }: { time: Time; state?: JournalEntryState }) {
     this.time = time;
+    this.state = state || 'UNSEEN';
   }
 
   abstract get text(): TranslatableText;
