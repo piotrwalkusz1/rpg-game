@@ -13,6 +13,13 @@ export abstract class Component {
     return this.entityFK.value;
   }
 
+  requireEntity(): Entity {
+    if (this.entity) {
+      return this.entity;
+    }
+    throw new Error('Expected entity be not undefined');
+  }
+
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {
     return this.entity?.getComponent(componentType);
   }

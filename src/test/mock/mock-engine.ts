@@ -7,6 +7,7 @@ import type { Image } from 'engine/core/resources';
 import { Time, TimeManager, TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
+import { JournalOwner } from 'engine/modules/journal';
 import { MovementSystem } from 'engine/modules/movement';
 
 export class MockEngine extends Engine {
@@ -39,8 +40,14 @@ export class MockEngine extends Engine {
     return entity.requireComponent(ActionExecutor);
   }
 
+  addJournalOwner(): JournalOwner {
+    const entity = new Entity().addComponent(new JournalOwner());
+    this.addEntity(entity);
+    return entity.requireComponent(JournalOwner);
+  }
+
   addPlayer(params?: { field?: Field }): Player {
-    return this.addCharacter(params).addComponent(new Player()).requireComponent(Player);
+    return this.addCharacter(params).addComponent(new Player()).addComponent(new JournalOwner()).requireComponent(Player);
   }
 
   withPlayer(): MockEngine {
