@@ -11,6 +11,8 @@
         "/src/frontend/component",
         "/src/frontend/animation",
         "/src/frontend/bookmark",
-        "/src/frontend/dialog"
+        "/src/frontend/dialog",
+        "/src/engine/modules/interaction",
+        "/src/engine/modules/offer"
     ]
 }

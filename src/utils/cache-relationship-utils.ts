@@ -85,6 +85,10 @@ export abstract class ManyToManyCollection<Item, FK> {
     this.foreignKey = foreignKey;
   }
 
+  addAll(items: Item[]) {
+    items.forEach((item) => this.add(item));
+  }
+
   add(item: Item) {
     if (this.items.includes(item)) {
       return;
