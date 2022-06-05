@@ -1,5 +1,5 @@
 import { ManyToManyCollection } from 'utils';
-import { OfferDecision } from './offer-decision';
+import { OfferDecision, OfferDecisionValue } from './offer-decision';
 import type { OfferParty } from './offer-party';
 
 class OfferPartiesCollection extends ManyToManyCollection<OfferParty, Offer> {
@@ -22,5 +22,22 @@ export abstract class Offer {
       new OfferDecision({ value: 'ACCEPTED', party: submitter }),
       ...otherParties.map((party) => new OfferDecision({ party }))
     ];
+  }
+
+  makeDecision(party: OfferParty, decisionValue: OfferDecisionValue): void {
+    const decision = this.decisions.find((decision) => decision.party === party);
+    if (!decision) {
+      console.warn('Decision of this party is not needed');
+      return;
+    }
+    decision.value = decisionValue;
+  }
+
+  isAccepted(): boolean {
+    return this.decisions.every((decision) => decision.value === 'ACCEPTED');
+  }
+
+  isRejected(): boolean {
+    return this.decisions.some((decision) => decision.value === 'REJECTED');
   }
 }

@@ -1,4 +1,6 @@
 import { ActionExecutor, ActionSystem } from 'engine/core/action';
+import { ActivityParticipant } from 'engine/core/activity';
+import { ActivitySystem } from 'engine/core/activity/activity-system';
 import { CommandExecutor, CommandSystem } from 'engine/core/command';
 import { Engine, Entity } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
@@ -9,6 +11,7 @@ import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
 import { JournalOwner } from 'engine/modules/journal';
 import { MovementSystem } from 'engine/modules/movement';
+import { OfferParty } from 'engine/modules/offer';
 
 export class MockEngine extends Engine {
   constructor() {
@@ -18,6 +21,7 @@ export class MockEngine extends Engine {
     this.addSystem(new CommandSystem());
     this.addSystem(new TimeSystem());
     this.addSystem(new MovementSystem());
+    this.addSystem(new ActivitySystem());
   }
 
   get time(): Time {
@@ -26,6 +30,12 @@ export class MockEngine extends Engine {
 
   get events(): readonly GameEvent[] {
     return this.requireComponent(GameEventQueue).events;
+  }
+
+  addActivityParticipant(): ActivityParticipant {
+    const entity = new Entity().addComponent(new ActivityParticipant());
+    this.addEntity(entity);
+    return entity.requireComponent(ActivityParticipant);
   }
 
   addCommandExecutor(): CommandExecutor {
@@ -38,6 +48,12 @@ export class MockEngine extends Engine {
     const entity = new Entity().addComponent(new ActionExecutor());
     this.addEntity(entity);
     return entity.requireComponent(ActionExecutor);
+  }
+
+  addOfferParty(): OfferParty {
+    const entity = new Entity().addComponent(new OfferParty());
+    this.addEntity(entity);
+    return entity.requireComponent(OfferParty);
   }
 
   addJournalOwner(): JournalOwner {
@@ -61,6 +77,8 @@ export class MockEngine extends Engine {
       .addComponent(new ActionExecutor())
       .addComponent(new CommandExecutor())
       .addComponent(new Health())
+      .addComponent(new OfferParty())
+      .addComponent(new ActivityParticipant())
       .addComponent(new FieldObject({ field: params?.field }));
     this.addEntity(entity);
     return entity;
