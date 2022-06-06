@@ -4,4 +4,9 @@ module.exports = {
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/src'],
   setupFilesAfterEnv: ['<rootDir>/src/test/setup.js'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true
+    }
+  }
 };
