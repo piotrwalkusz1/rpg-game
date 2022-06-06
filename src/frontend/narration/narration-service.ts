@@ -1,3 +1,6 @@
+import { GameService } from 'frontend/game';
+import type { GameStore } from 'frontend/store';
+import { get } from 'svelte/store';
 import { Narration } from './narration';
 import { CharacterNarrationContext } from './narration-contexts/character-narration-context';
 import { FieldNarrationContext } from './narration-contexts/field-narration-context';
@@ -9,7 +12,7 @@ import { MovementNarrationProvider } from './narration-providers/movement-narrat
 export namespace NarrationService {
   const narrationProviders: NarrationProvider[] = [new MovementNarrationProvider(), new CharacterNarrationProvider()];
 
-  export const getNarration = (params: NarrationProviderParams): Narration | undefined => {
+  export const getNarration = (params: NarrationProviderParams): Narration => {
     if (params.context instanceof FieldNarrationContext) {
       return new Narration({
         title: params.context.field.name,
@@ -24,10 +27,18 @@ export namespace NarrationService {
         options: getNarrationOptions(params)
       });
     }
-    return undefined;
+    throw new Error('Unsupported narrationContext: ' + params.context.constructor.name);
   };
 
   const getNarrationOptions = (params: NarrationProviderParams): NarrationOption[] => {
     return narrationProviders.flatMap((narrationProvider) => narrationProvider.getNarrationOptions(params));
+  };
+
+  export const executeOnNarrationOptionClick = (narrationOption: NarrationOption, store: GameStore): Promise<void> => {
+    return narrationOption.onClick({
+      engine: get(store.engine),
+      processEvents: () => GameService.processEvents(get(store.engine), () => store.refreshEngine()),
+      setNarrationContext: (narrationContext) => store.narrationContext.set(narrationContext)
+    });
   };
 }

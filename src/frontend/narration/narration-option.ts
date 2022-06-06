@@ -7,7 +7,7 @@ export type NarrationOptionImageSize = 'NORMAL' | 'LARGE';
 
 export type NarrationOptionParams = {
   engine: Engine;
-  refreshEngine: () => void;
+  processEvents: () => Promise<void>;
   setNarrationContext: (narrationContext: NarrationContext) => void;
 };
 

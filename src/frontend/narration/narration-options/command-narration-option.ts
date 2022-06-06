@@ -1,7 +1,6 @@
 import { Command, CommandExecutor, CommandService } from 'engine/core/command';
-import { Player } from 'engine/core/game';
+import { getPlayer } from 'engine/core/game';
 import type { Image } from 'engine/core/resources/image';
-import { GameService } from 'frontend/game/game-service';
 import type { TranslatableText } from 'i18n/translatable-text';
 import { NarrationOption, NarrationOptionParams } from '../narration-option';
 
@@ -13,8 +12,8 @@ export class CommandNarrationOption extends NarrationOption {
     this.command = command;
   }
 
-  override async onClick({ engine, refreshEngine }: NarrationOptionParams): Promise<void> {
-    CommandService.scheduleCommand(this.command, engine.requireComponent(Player).requireComponent(CommandExecutor), engine);
-    await GameService.processEvents(engine, refreshEngine);
+  override async onClick({ engine, processEvents }: NarrationOptionParams): Promise<void> {
+    CommandService.scheduleCommand(this.command, getPlayer(engine).requireComponent(CommandExecutor), engine);
+    await processEvents();
   }
 }

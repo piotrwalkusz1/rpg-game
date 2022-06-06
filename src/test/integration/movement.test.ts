@@ -1,19 +1,28 @@
-import type { Engine } from 'engine/core/ecs';
-import { getParentField, getX, getY, subFieldAt } from 'engine/core/field';
-import { NarrationOptionParams, NarrationService } from 'frontend/narration';
+import { Field, getParentField, getX, getY, subFieldAt } from 'engine/core/field';
+import type { Player } from 'engine/core/game';
+import { NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
+import { GameStore } from 'frontend/store';
 import { MockEngine } from 'test/mock/mock-engine';
 import { mockRectField } from 'test/mock/mock-field';
 
 describe('Movement', () => {
-  test('Move to adjoin field', async () => {
-    const engine = new MockEngine();
-    const world = mockRectField(5, 5);
-    const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
+  let engine: MockEngine;
+  let player: Player;
+  let world: Field;
+  let store: GameStore;
 
-    await NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 3, 1)), engine })?.options[0].onClick(
-      mockNarrationOptionParams(engine)
-    );
+  beforeEach(() => {
+    engine = new MockEngine();
+    world = mockRectField(5, 5);
+    player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
+    store = new GameStore({ engine });
+  });
+
+  test('Move to adjoin field', async () => {
+    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 3, 1)), engine })
+      .options[0];
+    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(3);
@@ -21,20 +30,12 @@ describe('Movement', () => {
   });
 
   test('Move to distant field', async () => {
-    const engine = new MockEngine();
-    const world = mockRectField(5, 5);
-    const player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
-
-    await NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 4, 3)), engine })?.options[0].onClick(
-      mockNarrationOptionParams(engine)
-    );
+    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 4, 3)), engine })
+      .options[0];
+    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(4);
     expect(getY(player)).toEqual(3);
   });
-
-  const mockNarrationOptionParams = (engine: Engine): NarrationOptionParams => {
-    return { engine: engine, refreshEngine: () => {}, setNarrationContext: () => {} };
-  };
 });

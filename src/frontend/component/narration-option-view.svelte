@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { NarrationOption } from 'frontend/narration';
-  import { engine, narrationContext, refreshEngine } from 'frontend/store';
+  import { NarrationOption, NarrationService } from 'frontend/narration';
+  import { gameStore } from 'frontend/store';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
 
   export let narrationOption: NarrationOption;
@@ -9,12 +9,7 @@
 </script>
 
 <div
-  on:click={() =>
-    narrationOption.onClick({
-      engine: $engine,
-      refreshEngine,
-      setNarrationContext: narrationContext.set
-    })}
+  on:click={() => NarrationService.executeOnNarrationOptionClick(narrationOption, gameStore)}
   class="flex items-center bg-[#FAFFC3] border-[2px] border-[#A19B00] p-[3px] cursor-pointer"
 >
   <div class="image" class:large-image={largeImage} style="background-image: url({narrationOption.image});" />
