@@ -10,7 +10,9 @@ import { Health } from 'engine/modules/health';
 import { JournalOwner } from 'engine/modules/journal';
 import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
+import { OfferSystem } from 'engine/modules/offer';
 import { SpeakAction } from 'engine/modules/speaking';
+import { TalkSystem } from 'engine/modules/talk';
 
 export const initializeDemoGame = (): Engine => {
   const gameManager: Entity = new Entity();
@@ -40,6 +42,8 @@ export const initializeDemoGame = (): Engine => {
   engine.addSystem(new CommandSystem());
   engine.addSystem(new MovementSystem());
   engine.addSystem(new JournalSpeakingSystem());
+  engine.addSystem(new TalkSystem());
+  engine.addSystem(new OfferSystem());
 
   ActionService.scheduleAction(
     new SpeakAction({ receivers: [player], content: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', quote: true }),

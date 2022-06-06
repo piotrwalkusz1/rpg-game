@@ -8,4 +8,10 @@ class OffersCollection extends ManyToManyCollection<Offer, OfferParty> {
 
 export class OfferParty extends Component {
   readonly offers: OffersCollection = new OffersCollection(this);
+
+  getOffersAwaitingForDecisionOfThisParty(): Offer[] {
+    return this.offers
+      .getArray()
+      .filter((offer) => offer.decisions.some((decision) => decision.party === this && decision.value === undefined));
+  }
 }

@@ -19,6 +19,8 @@
 <style>
   .image {
     background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     width: 32px;
     height: 32px;
   }

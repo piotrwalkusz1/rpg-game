@@ -8,9 +8,14 @@ import type { NarrationOption } from './narration-option';
 import type { NarrationProvider, NarrationProviderParams } from './narration-provider';
 import { CharacterNarrationProvider } from './narration-providers/character-narration-provider';
 import { MovementNarrationProvider } from './narration-providers/movement-narration-provider';
+import { TalkNarrationProvider } from './narration-providers/talk-narration-provider';
 
 export namespace NarrationService {
-  const narrationProviders: NarrationProvider[] = [new MovementNarrationProvider(), new CharacterNarrationProvider()];
+  const narrationProviders: NarrationProvider[] = [
+    new MovementNarrationProvider(),
+    new CharacterNarrationProvider(),
+    new TalkNarrationProvider()
+  ];
 
   export const getNarration = (params: NarrationProviderParams): Narration => {
     if (params.context instanceof FieldNarrationContext) {

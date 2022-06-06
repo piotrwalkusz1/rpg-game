@@ -3,6 +3,7 @@ import { ActivityParticipant } from 'engine/core/activity';
 import { Engine, Entity, EntityProvider } from 'engine/core/ecs';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
+import { OfferParty } from 'engine/modules/offer';
 import { AIActionExecutor } from '.';
 import { CommandUtils } from '../command';
 
@@ -11,6 +12,10 @@ export namespace AIService {
     const entity: Entity | undefined = EntityProvider.getEntity(entityProvider);
     if (!entity || !entity.hasComponent(AIActionExecutor) || CommandUtils.isCommandPending(entity)) {
       return;
+    }
+    const offerParty: OfferParty | undefined = entity.getComponent(OfferParty);
+    if (offerParty) {
+      offerParty.getOffersAwaitingForDecisionOfThisParty().forEach((offer) => offer.makeDecision(offerParty, 'ACCEPTED'));
     }
     const actionExecutor: ActionExecutor | undefined = entity.getComponent(ActionExecutor);
     if (!actionExecutor || actionExecutor.pendingAction) {
