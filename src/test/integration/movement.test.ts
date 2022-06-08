@@ -15,12 +15,12 @@ describe('Movement', () => {
   beforeEach(() => {
     engine = new MockEngine();
     world = mockRectField(5, 5);
-    player = engine.addPlayer({ field: subFieldAt(world, 2, 1) });
+    player = engine.addPlayer({ field: subFieldAt(world, [2, 1]) });
     store = new GameStore({ engine });
   });
 
   test('Move to adjoin field', async () => {
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 3, 1)), engine })
+    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];
     await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
 
@@ -30,7 +30,7 @@ describe('Movement', () => {
   });
 
   test('Move to distant field', async () => {
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, 4, 3)), engine })
+    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [4, 3])), engine })
       .options[0];
     await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
 

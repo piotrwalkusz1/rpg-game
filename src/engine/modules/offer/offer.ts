@@ -40,4 +40,12 @@ export abstract class Offer {
   isRejected(): boolean {
     return this.decisions.some((decision) => decision.value === 'REJECTED');
   }
+
+  get partiesWithPendingDecisions(): OfferParty[] {
+    return this.pendingDecisions.map((decision) => decision.party);
+  }
+
+  get pendingDecisions(): OfferDecision[] {
+    return this.decisions.filter((decision) => decision.pending);
+  }
 }

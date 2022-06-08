@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Field, FieldObject } from 'engine/core/field';
-  import { player, selectedField } from 'frontend/store';
-
+  import { Field,FieldObject } from 'engine/core/field';
+  import { player,selectedField } from 'frontend/store';
+  
   export let field: Field;
 
   $: bgImage = field.image ? `background-image: url("${field.image}")` : '';

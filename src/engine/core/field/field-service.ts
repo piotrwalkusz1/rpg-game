@@ -39,7 +39,7 @@ export namespace FieldService {
       const last = path[path.length - 1];
       const x = getX(last) + clamp(getX(to) - getX(last), -1, 1);
       const y = getY(last) + clamp(getY(to) - getY(last), -1, 1);
-      path.push(siblingAt(from, x, y));
+      path.push(siblingAt(from, [x, y]));
     }
     return path;
   };

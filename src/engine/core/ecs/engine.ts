@@ -1,4 +1,4 @@
-import type { Type } from 'utils';
+import { ArrayUtils, Type } from 'utils';
 import type { Component, ECSEvent, Entity, System } from '.';
 
 export class Engine {
@@ -13,12 +13,20 @@ export class Engine {
     this.entities.push(entity);
   }
 
+  addEntities(entities: readonly Entity[]): void {
+    this.entities.push(...entities);
+  }
+
   getSystems(): readonly System[] {
     return this.systems;
   }
 
   addSystem(system: System): void {
     this.systems.push(system);
+  }
+
+  addSystems(systems: readonly System[]): void {
+    this.systems.push(...systems);
   }
 
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {
@@ -29,6 +37,13 @@ export class Engine {
       }
     }
     return undefined;
+  }
+
+  getComponents<T extends Component>(componentType: Type<T>): T[] {
+    return ArrayUtils.filterInstanceOf(
+      this.entities.flatMap((entity) => entity.getComponents()),
+      componentType
+    );
   }
 
   requireComponent<T extends Component>(componentType: Type<T>): T {

@@ -1,10 +1,10 @@
-import { initializeDemoGame } from 'demo/demo-game';
 import type { Engine } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
 import { getPlayer, Player } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
 import { getTime } from 'engine/core/time/time-utils';
 import { Journal, JournalOwner } from 'engine/modules/journal';
+import { initializeDemoGame } from 'game';
 import { derived, get, Readable, Writable, writable } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
 import type { Dialog } from './dialog';

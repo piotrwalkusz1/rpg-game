@@ -51,9 +51,10 @@ export const tryGetField = (fieldProvider: FieldProvider): Field | undefined => 
   return EntityProvider.getComponent(fieldProvider, FieldObject)?.field;
 };
 
-export const siblingAt = (field: Field, x: number, y: number): Field => subFieldAt(getParentField(field), x, y);
+export const siblingAt = (field: Field, position: [number, number]): Field => subFieldAt(getParentField(field), position);
 
-export const subFieldAt = (field: FieldProvider, x: number, y: number): Field => requireNotNull(getField(field).getRectSubFields()[y][x]);
+export const subFieldAt = (field: FieldProvider, position: [number, number]): Field =>
+  requireNotNull(getField(field).getRectSubFields()[position[1]][position[0]]);
 
 export const getX = (fieldProvider: FieldProvider): number => requireNotNull(getRectFieldPosition(fieldProvider)?.x);
 

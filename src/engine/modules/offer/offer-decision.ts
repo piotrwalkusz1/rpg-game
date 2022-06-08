@@ -10,4 +10,8 @@ export class OfferDecision {
     this.value = value;
     this.party = party;
   }
+
+  get pending(): boolean {
+    return this.value === undefined;
+  }
 }

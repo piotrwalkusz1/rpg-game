@@ -45,3 +45,7 @@ export const convertTranslatableTextsToStringsOnObject = (t: TType, object: Reco
 export const createTranslatableTextFromArray = (translatableTexts: TranslatableText[], separator = DEFAULT_SEPARATOR): TranslatableText => {
   return (tc) => translatableTexts.map((translatableText) => tc.toString(translatableText)).join(separator);
 };
+
+export const isLiteral = (translatableText: TranslatableText, literal: string): boolean => {
+  return typeof translatableText === 'object' && 'literal' in translatableText && translatableText.literal === literal;
+};

@@ -1,5 +1,5 @@
 import type { ActivityParticipant } from 'engine/core/activity';
-import { BattleActivity } from 'engine/modules/battle';
+import { BattleActivity } from 'engine/modules/battle/battle-activity';
 import { ArrayUtils } from 'utils';
 
 export namespace BattleService {

@@ -1,15 +1,13 @@
-import { ActionExecutedEvent, ActionExecutingEvent, ActionExecutor } from 'engine/core/action';
-import { AIService } from 'engine/core/ai';
+import { ActionExecutingEvent, ActionExecutor } from 'engine/core/action';
 import { System, type ECSEvent, type Engine } from 'engine/core/ecs';
-import { AttackAction, Attacker } from 'engine/modules/attack';
 import { Health } from 'engine/modules/health';
+import { AttackAction } from './attack-action';
+import { Attacker } from './attacker';
 
 export class AttackSystem extends System {
-  override async processEvent(event: ECSEvent, engine: Engine): Promise<void> {
+  override async processEvent(event: ECSEvent, _engine: Engine): Promise<void> {
     if (event instanceof ActionExecutingEvent && event.action instanceof AttackAction) {
       this.executeAttackAction(event.action, event.executor);
-    } else if (event instanceof ActionExecutedEvent && event.action instanceof AttackAction) {
-      AIService.executeTurn(event.action.target, engine);
     }
   }
 
