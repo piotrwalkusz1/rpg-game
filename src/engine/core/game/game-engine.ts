@@ -21,6 +21,10 @@ export class GameEngine extends Engine {
     return this.timeManager.time;
   }
 
+  get events(): readonly GameEvent[] {
+    return this.eventQueue.events;
+  }
+
   addEvent(event: GameEvent): void {
     this.eventQueue.addEvent(event);
   }
