@@ -24,7 +24,7 @@ describe('Talk system', () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
       const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
-      offer.pendingDecisions.forEach((pendingDecision) => (pendingDecision.value = 'ACCEPTED'));
+      offer.makeDecision(firstParty, 'ACCEPTED');
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 
@@ -42,7 +42,7 @@ describe('Talk system', () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
       const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
-      offer.pendingDecisions.forEach((pendingDecision) => (pendingDecision.value = 'ACCEPTED'));
+      offer.makeDecision(firstParty, 'ACCEPTED');
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 

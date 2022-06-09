@@ -1,3 +1,4 @@
+import type { DeepReadonly } from 'ts-essentials';
 import type { OfferClause } from './offer-clause';
 import type { OfferDecision, OfferDecisionValue } from './offer-decision';
 import type { OfferParty } from './offer-party';
@@ -10,8 +11,8 @@ export class Offer {
   private _status: OfferStatus;
 
   constructor({ clauses, decisions }: { clauses: OfferClause[]; decisions: OfferDecision[] }) {
-    this._clauses = clauses;
-    this._decisions = decisions;
+    this._clauses = [...clauses];
+    this._decisions = [...decisions];
     this._status = Offer.calculateStatus(decisions);
   }
 
@@ -19,15 +20,19 @@ export class Offer {
     return this._clauses;
   }
 
-  get partiesWithPendingDecisions(): OfferParty[] {
-    return this.pendingDecisions.map((decision) => decision.party);
+  get partiesWithPendingDecisions(): readonly OfferParty[] {
+    return this.getPendingDecisions().map((decision) => decision.party);
   }
 
-  get decisions(): readonly OfferDecision[] {
+  get decisions(): DeepReadonly<OfferDecision[]> {
     return this._decisions;
   }
 
-  get pendingDecisions(): readonly OfferDecision[] {
+  get pendingDecisions(): DeepReadonly<OfferDecision[]> {
+    return this.getPendingDecisions();
+  }
+
+  private getPendingDecisions(): OfferDecision[] {
     return this._decisions.filter((decision) => decision.pending);
   }
 
