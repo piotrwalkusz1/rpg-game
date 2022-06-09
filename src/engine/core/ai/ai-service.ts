@@ -1,8 +1,9 @@
-import { ActionExecutor, ActionService } from 'engine/core/action';
+import { ActionExecutor } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
 import { Entity, EntityProvider } from 'engine/core/ecs';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
+import { ActionEndpoint } from '../action/action-endpoint';
 import { CommandUtils } from '../command';
 import type { GameEngine } from '../game';
 import { AIActionExecutor } from './ai-action-executor';
@@ -30,7 +31,7 @@ export namespace AIService {
         .filter((participant) => participant !== entity)[0];
       if (enemy) {
         const action = new AttackAction({ target: enemy });
-        ActionService.scheduleAction(action, actionExecutor, engine);
+        ActionEndpoint.scheduleAction(action, actionExecutor, engine);
       } else {
         activityParticipant.activities.remove(battle);
       }

@@ -1,4 +1,5 @@
-import { ActionExecutedEvent, ActionExecutor, ActionService } from '../action';
+import { ActionExecutedEvent, ActionExecutor } from '../action';
+import { ActionEndpoint } from '../action/action-endpoint';
 import type { ECSEvent } from '../ecs';
 import { GameEngine, GameSystem, GameUtils } from '../game';
 import type { Command } from './command';
@@ -41,6 +42,6 @@ export class CommandSystem extends GameSystem {
   private scheduleNextAction(command: Command, executor: CommandExecutor, engine: GameEngine): boolean {
     const action = command.getNextAction(executor);
     const actionExecutor = executor.getComponent(ActionExecutor);
-    return action && actionExecutor ? ActionService.scheduleAction(action, actionExecutor, engine) : false;
+    return action && actionExecutor ? ActionEndpoint.scheduleAction(action, actionExecutor, engine) : false;
   }
 }
