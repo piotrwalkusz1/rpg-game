@@ -1,17 +1,15 @@
 import { Engine, EntityProvider } from 'engine/core/ecs';
-import { GameEventQueue } from 'engine/core/game';
-import { Time, TimeManager } from 'engine/core/time';
+import type { GameEngine } from 'engine/core/game';
 import type { Action } from './action';
 import { ActionScheduledEvent } from './action-event';
 import { ActionExecutor } from './action-executor';
 
 export namespace ActionService {
-  export const scheduleAction = (action: Action, executor: ActionExecutor, engine: Engine): boolean => {
+  export const scheduleAction = (action: Action, executor: ActionExecutor, engine: GameEngine): boolean => {
     if (executor.pendingAction || !canExecuteAction(action, executor, engine)) {
       return false;
     }
-    const time: Time = engine.requireComponent(TimeManager).time;
-    engine.requireComponent(GameEventQueue).addEvent(new ActionScheduledEvent({ time, action, executor }));
+    engine.addEvent(new ActionScheduledEvent({ time: engine.time, action, executor }));
     return true;
   };
 

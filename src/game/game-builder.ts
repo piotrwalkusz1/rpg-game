@@ -2,12 +2,12 @@ import { ActionExecutor, ActionSystem } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
 import { AIActionExecutor } from 'engine/core/ai';
 import { CommandExecutor, CommandSystem } from 'engine/core/command';
-import { Engine, Entity } from 'engine/core/ecs';
+import { Entity } from 'engine/core/ecs';
 import { Field, FieldObject, RectFieldPosition, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
-import { GameEventQueue, Player } from 'engine/core/game';
+import { GameEngine, Player } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
-import { TimeManager, TimeSystem } from 'engine/core/time';
+import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
 import { JournalOwner } from 'engine/modules/journal';
@@ -42,10 +42,10 @@ export class GameBuilder {
     return this;
   }
 
-  build(): Engine {
+  build(): GameEngine {
     const world = this.buildWorld();
-    const engine: Engine = new Engine();
-    engine.addEntities([world, this.buildGameManager(), this.buildPlayer(world), ...this.buildCharacters(world)]);
+    const engine: GameEngine = new GameEngine();
+    engine.addEntities([world, this.buildPlayer(world), ...this.buildCharacters(world)]);
     engine.addSystems([
       new TimeSystem(),
       new ActionSystem(),
@@ -60,13 +60,6 @@ export class GameBuilder {
 
   private buildWorld(): Entity {
     return new Entity().addComponent(this.buildRectField(this._worldSize[0], this._worldSize[1]));
-  }
-
-  private buildGameManager(): Entity {
-    const gameManager: Entity = new Entity();
-    gameManager.addComponent(new GameEventQueue());
-    gameManager.addComponent(new TimeManager(new Date(812, 6, 12, 8)));
-    return gameManager;
   }
 
   private buildPlayer(world: Entity): Entity {

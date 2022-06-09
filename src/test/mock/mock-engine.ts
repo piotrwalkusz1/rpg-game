@@ -2,30 +2,25 @@ import { ActionExecutor, ActionSystem } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
 import { ActivitySystem } from 'engine/core/activity/activity-system';
 import { CommandExecutor, CommandSystem } from 'engine/core/command';
-import { Engine, Entity } from 'engine/core/ecs';
+import { Entity } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
-import { GameEvent, GameEventQueue, Player } from 'engine/core/game';
+import { GameEngine, GameEvent, GameEventQueue, Player } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
-import { Time, TimeManager, TimeSystem } from 'engine/core/time';
+import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
 import { JournalOwner } from 'engine/modules/journal';
 import { MovementSystem } from 'engine/modules/movement';
 import { OfferParty } from 'engine/modules/offer';
 
-export class MockEngine extends Engine {
+export class MockEngine extends GameEngine {
   constructor() {
     super();
-    this.addEntity(new Entity().addComponent(new GameEventQueue()).addComponent(new TimeManager(new Date(812, 6, 12, 8))));
     this.addSystem(new ActionSystem());
     this.addSystem(new CommandSystem());
     this.addSystem(new TimeSystem());
     this.addSystem(new MovementSystem());
     this.addSystem(new ActivitySystem());
-  }
-
-  get time(): Time {
-    return this.requireComponent(TimeManager).time;
   }
 
   get events(): readonly GameEvent[] {

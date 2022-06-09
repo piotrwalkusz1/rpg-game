@@ -1,13 +1,14 @@
 import { ActionExecutor, ActionService } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
-import { Engine, Entity, EntityProvider } from 'engine/core/ecs';
+import { Entity, EntityProvider } from 'engine/core/ecs';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
 import { CommandUtils } from '../command';
+import type { GameEngine } from '../game';
 import { AIActionExecutor } from './ai-action-executor';
 
 export namespace AIService {
-  export const executeTurn = (entityProvider: EntityProvider, engine: Engine): void => {
+  export const executeTurn = (entityProvider: EntityProvider, engine: GameEngine): void => {
     const entity: Entity | undefined = EntityProvider.getEntity(entityProvider);
     if (!entity || !entity.hasComponent(AIActionExecutor) || CommandUtils.isCommandPending(entity)) {
       return;

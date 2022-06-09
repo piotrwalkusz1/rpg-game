@@ -1,5 +1,5 @@
 import { areSame, OneToManyForeignKey, Type } from 'utils';
-import type { ComponentsCollection, Entity } from '.';
+import type { ComponentsCollection, Entity } from './entity';
 
 class ComponentEntityFK extends OneToManyForeignKey<Component, ComponentsCollection, Entity> {
   override getCollection = (entity?: Entity) => entity?.components;
