@@ -2,9 +2,10 @@ import { addMinutes } from 'date-fns';
 import { ActivityParticipant } from 'engine/core/activity';
 import { EndActivityEvent } from 'engine/core/activity/activity-event';
 import type { Time } from 'engine/core/time';
+import { Character } from 'engine/modules/character';
 import { OfferAcceptedEvent, OfferParty } from 'engine/modules/offer';
 import { TalkActivity, TalkSystem } from 'engine/modules/talk';
-import { TalkOffer } from 'engine/modules/talk/talk-offer';
+import { TalkService } from 'engine/modules/talk/talk-service';
 import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Talk system', () => {
@@ -22,8 +23,8 @@ describe('Talk system', () => {
     it('should create talk activity', async () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
-      const offer = new TalkOffer({ submitter: firstParty, otherParties: [secondParty] });
-      offer.makeDecision(secondParty, 'ACCEPTED');
+      const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
+      offer.pendingDecisions.forEach((pendingDecision) => (pendingDecision.value = 'ACCEPTED'));
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 
@@ -40,8 +41,8 @@ describe('Talk system', () => {
     it('should scheduled EndActivityEvent', async () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
-      const offer = new TalkOffer({ submitter: firstParty, otherParties: [secondParty] });
-      offer.makeDecision(secondParty, 'ACCEPTED');
+      const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
+      offer.pendingDecisions.forEach((pendingDecision) => (pendingDecision.value = 'ACCEPTED'));
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 

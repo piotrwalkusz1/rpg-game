@@ -1,6 +1,6 @@
-import type { Character } from '../character';
+import { Character } from '../character';
 import { Offer, OfferInteraction, OfferParty } from '../offer';
-import { TalkOffer } from './talk-offer';
+import { TalkService } from './talk-service';
 
 export class TalkOfferInteraction extends OfferInteraction {
   readonly interlocutor: Character;
@@ -11,6 +11,6 @@ export class TalkOfferInteraction extends OfferInteraction {
   }
 
   override createOffer(submitter: OfferParty): Offer {
-    return new TalkOffer({ submitter, otherParties: [this.interlocutor.requireComponent(OfferParty)] });
+    return TalkService.offerTalk(submitter.requireComponent(Character), this.interlocutor);
   }
 }

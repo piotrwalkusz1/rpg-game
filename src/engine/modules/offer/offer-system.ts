@@ -28,11 +28,11 @@ export class OfferSystem extends System {
     engine: Engine;
   }): void {
     const offer = interaction.offer;
-    const decision = interaction.decision;
-    offer.makeDecision(event.executor.requireComponent(OfferParty), decision);
-    if (offer.isAccepted()) {
+    const decisionValue = interaction.decision;
+    offer.makeDecision(event.executor.requireComponent(OfferParty), decisionValue);
+    if (offer.accepted) {
       engine.requireComponent(GameEventQueue).addEvent(new OfferAcceptedEvent({ time: event.time, offer }));
-    } else if (offer.isRejected()) {
+    } else if (offer.rejected) {
       engine.requireComponent(GameEventQueue).addEvent(new OfferRejectedEvent({ time: event.time, offer }));
     }
   }

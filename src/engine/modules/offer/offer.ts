@@ -1,51 +1,68 @@
-import { ManyToManyCollection } from 'utils';
-import { OfferDecision, OfferDecisionValue } from './offer-decision';
+import type { OfferClause } from './offer-clause';
+import type { OfferDecision, OfferDecisionValue } from './offer-decision';
 import type { OfferParty } from './offer-party';
-
-class OfferPartiesCollection extends ManyToManyCollection<OfferParty, Offer> {
-  override getCollection = (party: OfferParty) => party.offers;
-}
 
 export type OfferStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
-export abstract class Offer {
-  status: OfferStatus = 'PENDING';
-  readonly parties: OfferPartiesCollection = new OfferPartiesCollection(this);
-  readonly decisions: OfferDecision[];
+export class Offer {
+  private readonly _clauses: OfferClause[];
+  private readonly _decisions: OfferDecision[];
+  private _status: OfferStatus;
 
-  constructor({ submitter, otherParties }: { submitter: OfferParty; otherParties: OfferParty[] }) {
-    if (otherParties.length === 0) {
-      console.error('"otherParties" was expected to have at least one element');
-    }
-    this.parties.addAll([submitter, ...otherParties]);
-    this.decisions = [
-      new OfferDecision({ value: 'ACCEPTED', party: submitter }),
-      ...otherParties.map((party) => new OfferDecision({ party }))
-    ];
+  constructor({ clauses, decisions }: { clauses: OfferClause[]; decisions: OfferDecision[] }) {
+    this._clauses = clauses;
+    this._decisions = decisions;
+    this._status = Offer.calculateStatus(decisions);
   }
 
-  makeDecision(party: OfferParty, decisionValue: OfferDecisionValue): void {
-    const decision = this.decisions.find((decision) => decision.party === party);
-    if (!decision) {
-      console.warn('Decision of this party is not needed');
-      return;
-    }
-    decision.value = decisionValue;
-  }
-
-  isAccepted(): boolean {
-    return this.decisions.every((decision) => decision.value === 'ACCEPTED');
-  }
-
-  isRejected(): boolean {
-    return this.decisions.some((decision) => decision.value === 'REJECTED');
+  get clauses(): readonly OfferClause[] {
+    return this._clauses;
   }
 
   get partiesWithPendingDecisions(): OfferParty[] {
     return this.pendingDecisions.map((decision) => decision.party);
   }
 
-  get pendingDecisions(): OfferDecision[] {
-    return this.decisions.filter((decision) => decision.pending);
+  get decisions(): readonly OfferDecision[] {
+    return this._decisions;
+  }
+
+  get pendingDecisions(): readonly OfferDecision[] {
+    return this._decisions.filter((decision) => decision.pending);
+  }
+
+  makeDecision(party: OfferParty, decisionValue: OfferDecisionValue): void {
+    this._decisions.filter((decision) => decision.party === party).forEach((decision) => (decision.value = decisionValue));
+    this.refreshStatus();
+  }
+
+  get status(): OfferStatus {
+    return this._status;
+  }
+
+  get pending(): boolean {
+    return this._status == 'PENDING';
+  }
+
+  get accepted(): boolean {
+    return this._status === 'ACCEPTED';
+  }
+
+  get rejected(): boolean {
+    return this._status === 'REJECTED';
+  }
+
+  private refreshStatus(): void {
+    this._status = Offer.calculateStatus(this._decisions);
+  }
+
+  private static calculateStatus(decisions: OfferDecision[]): OfferStatus {
+    if (decisions.every((decision) => decision.value === 'ACCEPTED')) {
+      return 'ACCEPTED';
+    } else if (decisions.some((decision) => decision.value === 'REJECTED')) {
+      return 'REJECTED';
+    } else {
+      return 'PENDING';
+    }
   }
 }

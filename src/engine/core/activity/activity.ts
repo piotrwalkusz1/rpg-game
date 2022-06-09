@@ -8,7 +8,7 @@ class ParticipantsCollection extends ManyToManyCollection<ActivityParticipant, A
 export abstract class Activity {
   readonly participants: ParticipantsCollection = new ParticipantsCollection(this);
 
-  constructor({ participants }: { participants: ActivityParticipant[] }) {
+  constructor({ participants }: { participants: readonly ActivityParticipant[] }) {
     participants.forEach((participant) => this.participants.add(participant));
   }
 

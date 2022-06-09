@@ -14,8 +14,6 @@ import {
 import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Offer system', () => {
-  class MockOffer extends Offer {}
-
   let offerSystem: OfferSystem;
   let engine: MockEngine;
   let time: Time;
@@ -32,7 +30,14 @@ describe('Offer system', () => {
         const submitter = engine.addOfferParty();
         const firstParty = engine.addCharacter().requireComponent(OfferParty);
         const secondParty = engine.addCharacter().requireComponent(OfferParty);
-        const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
+        const offer = new Offer({
+          clauses: [],
+          decisions: [
+            new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+            new OfferDecision({ party: firstParty }),
+            new OfferDecision({ party: secondParty })
+          ]
+        });
 
         await offerSystem.processEvent(mockOfferDecisionInteractionEvent(offer, 'ACCEPTED', firstParty), engine);
 
@@ -48,8 +53,14 @@ describe('Offer system', () => {
         const submitter = engine.addOfferParty();
         const firstParty = engine.addCharacter().requireComponent(OfferParty);
         const secondParty = engine.addCharacter().requireComponent(OfferParty);
-        const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-        offer.makeDecision(firstParty, 'ACCEPTED');
+        const offer = new Offer({
+          clauses: [],
+          decisions: [
+            new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+            new OfferDecision({ value: 'ACCEPTED', party: firstParty }),
+            new OfferDecision({ party: secondParty })
+          ]
+        });
 
         await offerSystem.processEvent(mockOfferDecisionInteractionEvent(offer, 'ACCEPTED', secondParty), engine);
 
@@ -65,7 +76,14 @@ describe('Offer system', () => {
         const submitter = engine.addOfferParty();
         const firstParty = engine.addCharacter().requireComponent(OfferParty);
         const secondParty = engine.addCharacter().requireComponent(OfferParty);
-        const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
+        const offer = new Offer({
+          clauses: [],
+          decisions: [
+            new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+            new OfferDecision({ party: firstParty }),
+            new OfferDecision({ party: secondParty })
+          ]
+        });
 
         await offerSystem.processEvent(mockOfferDecisionInteractionEvent(offer, 'REJECTED', firstParty), engine);
 

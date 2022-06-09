@@ -1,71 +1,17 @@
 import { Offer, OfferDecision, OfferParty } from 'engine/modules/offer';
 
 describe('Offer', () => {
-  class MockOffer extends Offer {}
-
   describe('constructor', () => {
     it('should set offer status to pending', () => {
       const submitter = new OfferParty();
       const otherParty = new OfferParty();
 
-      const offer = new MockOffer({ submitter, otherParties: [otherParty] });
+      const offer = new Offer({
+        clauses: [],
+        decisions: [new OfferDecision({ value: 'ACCEPTED', party: submitter }), new OfferDecision({ party: otherParty })]
+      });
 
       expect(offer.status).toEqual('PENDING');
-    });
-
-    it('should add sumbitter and other parties to parties list', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-
-      expect(offer.parties.getArray()).toEqual([submitter, firstParty, secondParty]);
-    });
-
-    it('should create offer with one accepted decision for submitter and one pending decision for each other party', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-
-      expect(offer.decisions).toEqual([
-        new OfferDecision({ value: 'ACCEPTED', party: submitter }),
-        new OfferDecision({ value: undefined, party: firstParty }),
-        new OfferDecision({ value: undefined, party: secondParty })
-      ]);
-    });
-  });
-
-  describe('makeDecision', () => {
-    it('should change decision value if party exists on offer', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-
-      offer.makeDecision(secondParty, 'ACCEPTED');
-
-      expect(offer.decisions).toEqual([
-        new OfferDecision({ value: 'ACCEPTED', party: submitter }),
-        new OfferDecision({ value: undefined, party: firstParty }),
-        new OfferDecision({ value: 'ACCEPTED', party: secondParty })
-      ]);
-    });
-
-    it('should do nothing if party does not exist on offer', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty] });
-
-      offer.makeDecision(secondParty, 'ACCEPTED');
-
-      expect(offer.decisions).toEqual([
-        new OfferDecision({ value: 'ACCEPTED', party: submitter }),
-        new OfferDecision({ value: undefined, party: firstParty })
-      ]);
     });
   });
 
@@ -74,11 +20,16 @@ describe('Offer', () => {
       const submitter = new OfferParty();
       const firstParty = new OfferParty();
       const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-      offer.makeDecision(firstParty, 'ACCEPTED');
-      offer.makeDecision(secondParty, 'ACCEPTED');
+      const offer = new Offer({
+        clauses: [],
+        decisions: [
+          new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+          new OfferDecision({ value: 'ACCEPTED', party: firstParty }),
+          new OfferDecision({ value: 'ACCEPTED', party: secondParty })
+        ]
+      });
 
-      const accepted = offer.isAccepted();
+      const accepted = offer.accepted;
 
       expect(accepted).toBeTruthy();
     });
@@ -87,10 +38,16 @@ describe('Offer', () => {
       const submitter = new OfferParty();
       const firstParty = new OfferParty();
       const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-      offer.makeDecision(firstParty, 'ACCEPTED');
+      const offer = new Offer({
+        clauses: [],
+        decisions: [
+          new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+          new OfferDecision({ value: 'ACCEPTED', party: firstParty }),
+          new OfferDecision({ party: secondParty })
+        ]
+      });
 
-      const accepted = offer.isAccepted();
+      const accepted = offer.accepted;
 
       expect(accepted).toBeFalsy();
     });
@@ -99,36 +56,16 @@ describe('Offer', () => {
       const submitter = new OfferParty();
       const firstParty = new OfferParty();
       const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-      offer.makeDecision(firstParty, 'ACCEPTED');
-      offer.makeDecision(secondParty, 'REJECTED');
+      const offer = new Offer({
+        clauses: [],
+        decisions: [
+          new OfferDecision({ value: 'ACCEPTED', party: submitter }),
+          new OfferDecision({ value: 'ACCEPTED', party: firstParty }),
+          new OfferDecision({ value: 'REJECTED', party: secondParty })
+        ]
+      });
 
-      const accepted = offer.isAccepted();
-
-      expect(accepted).toBeFalsy();
-    });
-  });
-
-  describe('isRejected', () => {
-    it('should return true if at least one party rejected offer', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-      offer.makeDecision(firstParty, 'REJECTED');
-
-      const accepted = offer.isRejected();
-
-      expect(accepted).toBeTruthy();
-    });
-
-    it('should return false if no party rejected offer', () => {
-      const submitter = new OfferParty();
-      const firstParty = new OfferParty();
-      const secondParty = new OfferParty();
-      const offer = new MockOffer({ submitter, otherParties: [firstParty, secondParty] });
-
-      const accepted = offer.isRejected();
+      const accepted = offer.accepted;
 
       expect(accepted).toBeFalsy();
     });
