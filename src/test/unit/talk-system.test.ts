@@ -5,7 +5,7 @@ import type { Time } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { OfferAcceptedEvent, OfferParty } from 'engine/modules/offer';
 import { TalkActivity, TalkSystem } from 'engine/modules/talk';
-import { TalkService } from 'engine/modules/talk/talk-service';
+import { TalkOffer } from 'engine/modules/talk/talk-offer';
 import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Talk system', () => {
@@ -23,8 +23,8 @@ describe('Talk system', () => {
     it('should create talk activity', async () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
-      const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
-      offer.makeDecision(firstParty, 'ACCEPTED');
+      const offer = new TalkOffer(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
+      offer.makeDecision(secondParty, 'ACCEPTED');
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 
@@ -41,8 +41,8 @@ describe('Talk system', () => {
     it('should scheduled EndActivityEvent', async () => {
       const firstParty = engine.addCharacter().requireComponent(OfferParty);
       const secondParty = engine.addCharacter().requireComponent(OfferParty);
-      const offer = TalkService.offerTalk(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
-      offer.makeDecision(firstParty, 'ACCEPTED');
+      const offer = new TalkOffer(firstParty.requireComponent(Character), secondParty.requireComponent(Character));
+      offer.makeDecision(secondParty, 'ACCEPTED');
 
       await talkSystem.processEvent(new OfferAcceptedEvent({ time, offer }), engine);
 

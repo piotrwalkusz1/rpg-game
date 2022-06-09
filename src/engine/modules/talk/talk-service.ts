@@ -1,26 +1,17 @@
-import { ActivityParticipant } from 'engine/core/activity';
+import type { GameEngine } from 'engine/core/game';
 import type { Character } from '../character';
-import { Offer, OfferDecision, OfferParty } from '../offer';
-import { TalkOfferClause } from './talk-offer-clause';
+import { InteractionEvent } from '../interaction';
+import { OfferInteraction } from '../offer';
+import { TalkOffer } from './talk-offer';
 
 export class TalkService {
-  static offerTalk(characterThatOffersTalk: Character, otherCharacter: Character): Offer {
-    const offer: Offer = new Offer({
-      clauses: [
-        new TalkOfferClause({
-          interlocutors: [
-            characterThatOffersTalk.requireComponent(ActivityParticipant),
-            otherCharacter.requireComponent(ActivityParticipant)
-          ]
-        })
-      ],
-      decisions: [
-        new OfferDecision({ value: 'ACCEPTED', party: characterThatOffersTalk.requireComponent(OfferParty) }),
-        new OfferDecision({ party: otherCharacter.requireComponent(OfferParty) })
-      ]
-    });
-    characterThatOffersTalk.requireComponent(OfferParty).addOffer(offer);
-    otherCharacter.requireComponent(OfferParty).addOffer(offer);
-    return offer;
+  static offerTalk(characterThatOffersTalk: Character, otherCharacter: Character, engine: GameEngine): void {
+    engine.addEvent(
+      new InteractionEvent({
+        time: engine.time,
+        interaction: new OfferInteraction(new TalkOffer(characterThatOffersTalk, otherCharacter)),
+        executor: characterThatOffersTalk
+      })
+    );
   }
 }

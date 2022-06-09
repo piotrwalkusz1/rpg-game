@@ -20,6 +20,10 @@ export class Offer {
     return this._clauses;
   }
 
+  get parties(): readonly OfferParty[] {
+    return this._decisions.map((decision) => decision.party);
+  }
+
   get partiesWithPendingDecisions(): readonly OfferParty[] {
     return this.getPendingDecisions().map((decision) => decision.party);
   }

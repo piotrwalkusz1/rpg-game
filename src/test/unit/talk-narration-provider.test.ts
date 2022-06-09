@@ -1,17 +1,21 @@
-import { Character } from 'engine/modules/character';
-import { TalkOfferInteraction } from 'engine/modules/talk/talk-offer-interaction';
+import { GameEngine, getPlayerComponent } from 'engine/core/game';
+import { Character, getCharacterByName } from 'engine/modules/character';
+import { OfferInteraction } from 'engine/modules/offer';
+import { TalkOffer } from 'engine/modules/talk/talk-offer';
 import { CharacterNarrationContext } from 'frontend/narration/narration-contexts/character-narration-context';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { InteractionNarrationOption } from 'frontend/narration/narration-options/interaction-narration-option';
 import { TalkNarrationProvider } from 'frontend/narration/narration-providers/talk-narration-provider';
-import { MockEngine } from 'test/mock/mock-engine';
+import { GameBuilder } from 'game';
 import { mockField } from 'test/mock/mock-field';
 
 describe('Talk narration provider', () => {
-  let engine: MockEngine;
+  let engine: GameEngine;
+  let character: Character;
 
   beforeEach(() => {
-    engine = new MockEngine();
+    engine = new GameBuilder().addCharacter({ name: 'Sestia' }).build();
+    character = getCharacterByName(engine, 'Sestia');
   });
 
   describe('getNarrationOptions method', () => {
@@ -22,8 +26,6 @@ describe('Talk narration provider', () => {
     });
 
     it('should return talk offer interaction option', () => {
-      const character = engine.addCharacter().requireComponent(Character);
-
       const narrationOptions = new TalkNarrationProvider().getNarrationOptions({
         context: new CharacterNarrationContext(character),
         engine
@@ -33,7 +35,7 @@ describe('Talk narration provider', () => {
         new InteractionNarrationOption({
           name: 'INTERACTION.TALK.NAME',
           image: '/images/ui/speech-bubble.png',
-          interaction: new TalkOfferInteraction({ interlocutor: character })
+          interaction: new OfferInteraction(new TalkOffer(getPlayerComponent(engine, Character), character))
         })
       ]);
     });
