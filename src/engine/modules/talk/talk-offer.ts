@@ -1,22 +1,18 @@
-import { ActivityParticipant } from 'engine/core/activity';
-import type { Character } from '../character';
-import { Offer, OfferDecision, OfferParty } from '../offer';
+import { Offer, OfferDecision } from '../offer';
 import { TalkOfferClause } from './talk-offer-clause';
+import type { TalkerBundle } from './talker-bundle';
 
 export class TalkOffer extends Offer {
-  constructor(characterThatOffersTalk: Character, otherCharacter: Character) {
+  constructor(talkInitiator: TalkerBundle, invitedTalker: TalkerBundle) {
     super({
       clauses: [
         new TalkOfferClause({
-          interlocutors: [
-            characterThatOffersTalk.requireComponent(ActivityParticipant),
-            otherCharacter.requireComponent(ActivityParticipant)
-          ]
+          talkers: [talkInitiator, invitedTalker]
         })
       ],
       decisions: [
-        new OfferDecision({ value: 'ACCEPTED', party: characterThatOffersTalk.requireComponent(OfferParty) }),
-        new OfferDecision({ party: otherCharacter.requireComponent(OfferParty) })
+        new OfferDecision({ value: 'ACCEPTED', party: talkInitiator.offerParty }),
+        new OfferDecision({ party: invitedTalker.offerParty })
       ]
     });
   }

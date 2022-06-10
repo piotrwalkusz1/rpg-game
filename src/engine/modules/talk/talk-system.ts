@@ -12,7 +12,7 @@ export class TalkSystem extends System {
   override async processEvent(event: ECSEvent, engine: Engine): Promise<void> {
     if (event instanceof OfferAcceptedEvent) {
       ArrayUtils.filterInstanceOf(event.offer.clauses, TalkOfferClause).forEach((clause) => {
-        const activity = new TalkActivity({ participants: clause.interlocutors });
+        const activity = new TalkActivity({ participants: clause.talkers.map((talker) => talker.activityParticipant) });
         const endActivityTime: Time = addMinutes(event.time, 1);
         engine.requireComponent(GameEventQueue).addEvent(new EndActivityEvent({ time: endActivityTime, activity }));
       });

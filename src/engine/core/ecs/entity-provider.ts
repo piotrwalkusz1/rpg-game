@@ -5,6 +5,14 @@ import { ArrayUtils, Type } from 'utils';
 export type EntityProvider = Entity | Component;
 
 export namespace EntityProvider {
+  export const requireEntity = (entityProvider: EntityProvider): Entity => {
+    const entity: Entity | undefined = getEntity(entityProvider);
+    if (entity === undefined) {
+      throw new Error('Entity is required');
+    }
+    return entity;
+  };
+
   export const getEntities = (entitiesProviders: EntityProvider[]): Entity[] => {
     return ArrayUtils.mapAndFilterNotNull(entitiesProviders, getEntity);
   };

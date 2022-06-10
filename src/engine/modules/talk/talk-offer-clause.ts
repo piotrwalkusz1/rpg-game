@@ -1,11 +1,11 @@
-import type { ActivityParticipant } from 'engine/core/activity';
 import { OfferClause } from '../offer';
+import type { TalkerBundle } from './talker-bundle';
 
 export class TalkOfferClause extends OfferClause {
-  readonly interlocutors: readonly ActivityParticipant[];
+  readonly talkers: readonly TalkerBundle[];
 
-  constructor({ interlocutors }: { interlocutors: ActivityParticipant[] }) {
+  constructor({ talkers }: { talkers: TalkerBundle[] }) {
     super();
-    this.interlocutors = interlocutors;
+    this.talkers = talkers;
   }
 }
