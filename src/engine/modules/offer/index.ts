@@ -4,5 +4,6 @@ export * from './offer-decision';
 export * from './offer-event';
 export * from './offer-interaction';
 export * from './offer-party';
+export * from './offer-service';
 export * from './offer-system';
 export * from './offer';
