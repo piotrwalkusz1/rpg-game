@@ -1,22 +1,22 @@
-import { Field, getParentField, getX, getY, subFieldAt } from 'engine/core/field';
-import type { GameEngine } from 'engine/core/game';
+import { Field, getParentField, getX, getY, rootField, subFieldAt } from 'engine/core/field';
+import { GameEngine, GameEvent } from 'engine/core/game';
 import { NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { GameStore } from 'frontend/store';
 import { GameBuilder, getPlayer, Player } from 'game';
-import { mockRectField } from 'test/mock/mock-field';
 
 describe('Movement', () => {
+  class MockEvent extends GameEvent {}
+
   let engine: GameEngine;
   let player: Player;
   let world: Field;
   let store: GameStore;
 
   beforeEach(() => {
-    engine = new GameBuilder().build();
-    world = mockRectField(5, 5);
+    engine = new GameBuilder().playerPosition([2, 1]).build();
+    world = rootField(engine);
     player = getPlayer(engine);
-    player.field = subFieldAt(world, [2, 1]);
     store = new GameStore({ engine });
   });
 
@@ -38,5 +38,17 @@ describe('Movement', () => {
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(4);
     expect(getY(player)).toEqual(3);
+  });
+
+  test('Move when events queue is not empty ', async () => {
+    engine.addEvent(new MockEvent({ time: engine.time }));
+
+    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
+      .options[0];
+    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
+
+    expect(getParentField(player)).toBe(world);
+    expect(getX(player)).toEqual(3);
+    expect(getY(player)).toEqual(1);
   });
 });

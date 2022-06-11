@@ -1,4 +1,4 @@
-import { EntityProvider } from 'engine/core/ecs';
+import { Engine, EntityProvider } from 'engine/core/ecs';
 import { Field } from 'engine/core/field/field';
 import { FieldObject } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
@@ -79,3 +79,6 @@ export const tryGetParentField = (field: FieldProvider): Field | undefined => tr
 
 export const sameParent = (firstField: Field, secondField: Field): boolean =>
   tryGetParentField(firstField) === tryGetParentField(secondField);
+
+export const rootField = (engine: Engine): Field =>
+  requireNotNull(engine.getComponents(Field).filter((field) => field.parentField === undefined)[0]);

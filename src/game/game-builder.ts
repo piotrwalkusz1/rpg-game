@@ -6,9 +6,7 @@ import { Field, RectFieldPosition, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
 import { GameEngine } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
-import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
-import { JournalOwner } from 'engine/modules/journal';
 import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
 import { OfferSystem } from 'engine/modules/offer';
@@ -48,7 +46,6 @@ export class GameBuilder {
     this.createPlayer(world, engine);
     this.createCharacters(world, engine);
     engine.addSystems([
-      new TimeSystem(),
       new ActionSystem(),
       new CommandSystem(),
       new MovementSystem(),
@@ -64,18 +61,13 @@ export class GameBuilder {
   }
 
   private createPlayer(world: Entity, engine: GameEngine): Player {
-    const character = this.createCharacter(
-      {
-        name: 'Eladin',
-        avatar: '/images/characters/001_Eladin.png',
-        field: subFieldAt(world, this._playerPosition),
-        aiEnabled: false
-      },
-      engine
-    );
-    const player = new Player({ character });
-    character.requireEntity().addComponent(player);
-    character.requireEntity().addComponent(new JournalOwner());
+    const player = Player.create(engine);
+    this.setCharacterData(player.character, {
+      name: 'Eladin',
+      avatar: '/images/characters/001_Eladin.png',
+      field: subFieldAt(world, this._playerPosition),
+      aiEnabled: false
+    });
     return player;
   }
 
@@ -93,18 +85,22 @@ export class GameBuilder {
     );
   }
 
-  private createCharacter(
-    { name, avatar, field, aiEnabled }: { name: string; avatar: Image; field: Field; aiEnabled: boolean },
-    engine: GameEngine
-  ): Character {
+  private createCharacter(characterData: { name: string; avatar: Image; field: Field; aiEnabled: boolean }, engine: GameEngine): Character {
     const character = Character.create(engine);
+    this.setCharacterData(character, characterData);
+    return character;
+  }
+
+  private setCharacterData(
+    character: Character,
+    { name, avatar, field, aiEnabled }: { name: string; avatar: Image; field: Field; aiEnabled: boolean }
+  ) {
     character.name = { literal: name };
     character.avatar = avatar;
     character.field = field;
     if (aiEnabled) {
       character.requireEntity().addComponent(new AI({ character }));
     }
-    return character;
   }
 
   private buildRectField(width: number, height: number): Field {

@@ -1,5 +1,5 @@
-import { Engine, Entity } from '../ecs';
-import { Time, TimeManager } from '../time';
+import { ECSEvent, Engine, Entity } from '../ecs';
+import { Time, TimeEvent, TimeManager } from '../time';
 import type { GameEvent } from './game-event';
 import { GameEventQueue } from './game-event-queue';
 
@@ -17,12 +17,31 @@ export class GameEngine extends Engine {
     this.addEntity(gameManager);
   }
 
+  override async processEvent(event: ECSEvent): Promise<void> {
+    if (event instanceof TimeEvent) {
+      this.time = event.time;
+    }
+    await super.processEvent(event);
+  }
+
   get time(): Time {
     return this.timeManager.time;
   }
 
+  set time(time: Time) {
+    this.timeManager.time = time;
+  }
+
   get events(): readonly GameEvent[] {
     return this.eventQueue.events;
+  }
+
+  get nextEventTime(): Time | undefined {
+    return this.nextEvent?.time;
+  }
+
+  get nextEvent(): GameEvent | undefined {
+    return this.events[0];
   }
 
   addEvents(events: GameEvent[]): void {

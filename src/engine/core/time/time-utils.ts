@@ -1,7 +1,15 @@
-import type { Engine } from '../ecs';
 import type { Time } from './time';
-import { TimeManager } from './time-manager';
 
-export const getTime = (engine: Engine): Time => {
-  return engine.requireComponent(TimeManager).time;
+export const sameTime = (firstTime: Time | undefined, secondTime: Time | undefined): boolean => {
+  if (firstTime === undefined && secondTime === undefined) {
+    return true;
+  }
+  if (firstTime === undefined || secondTime === undefined) {
+    return false;
+  }
+  return firstTime.getTime() === secondTime.getTime();
+};
+
+export const differentTime = (firstTime: Time | undefined, secondTime: Time | undefined): boolean => {
+  return !sameTime(firstTime, secondTime);
 };

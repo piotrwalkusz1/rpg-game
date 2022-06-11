@@ -1,7 +1,6 @@
 import { Field, FieldObject } from 'engine/core/field';
 import type { GameEngine } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
-import { getTime } from 'engine/core/time/time-utils';
 import { Journal, JournalOwner } from 'engine/modules/journal';
 import { getPlayer, initializeDemoGame, Player } from 'game';
 import { derived, get, Readable, Writable, writable } from 'svelte/store';
@@ -32,7 +31,7 @@ export class GameStore {
     this.narration = derived([this.narrationContext, this.engine], ([$narrationContext, $engine]) =>
       $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
     );
-    this.time = derived(this.engine, ($engine) => getTime($engine));
+    this.time = derived(this.engine, ($engine) => $engine.time);
     this.player = derived(this.engine, ($engine) => getPlayer($engine));
     this.journal = derived(this.player, ($player) => $player.requireComponent(JournalOwner).journal);
   }

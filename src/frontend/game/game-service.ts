@@ -1,14 +1,14 @@
 import type { PendingAction } from 'engine/core/action';
 import type { Command } from 'engine/core/command';
 import type { Engine } from 'engine/core/ecs';
-import { GameEvent, GameEventQueue, GameLoopService } from 'engine/core/game';
-import { Time, TimeManager } from 'engine/core/time';
+import { GameEngine, GameLoopService } from 'engine/core/game';
+import { differentTime, sameTime } from 'engine/core/time/time-utils';
 import { getPlayer } from 'game';
 
 export namespace GameService {
-  export const processEvents = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
+  export const processEvents = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
     refreshEngine();
-    while (nextEvent(engine)) {
+    while (engine.nextEvent) {
       await processEventsUntilTimeChange(engine, refreshEngine);
       if (isPlayerActionRequired(engine)) {
         break;
@@ -16,11 +16,11 @@ export namespace GameService {
     }
   };
 
-  const processEventsUntilTimeChange = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
-    if (nextEventTime(engine) !== time(engine)) {
+  const processEventsUntilTimeChange = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
+    if (differentTime(engine.nextEventTime, engine.time)) {
       await processNextEvent(engine, refreshEngine);
     }
-    while (nextEventTime(engine) === time(engine)) {
+    while (sameTime(engine.nextEventTime, engine.time)) {
       await processNextEvent(engine, refreshEngine);
     }
   };
@@ -33,12 +33,6 @@ export namespace GameService {
   const isPlayerActionRequired = (engine: Engine): boolean => {
     return !playerPendingAction(engine) && !playerPendingCommand(engine);
   };
-
-  const time = (engine: Engine): Time => engine.requireComponent(TimeManager).time;
-
-  const nextEventTime = (engine: Engine): Time | undefined => nextEvent(engine)?.time;
-
-  const nextEvent = (engine: Engine): GameEvent | undefined => engine.requireComponent(GameEventQueue).events[0];
 
   const playerPendingAction = (engine: Engine): PendingAction | undefined => getPlayer(engine).pendingAction;
 
