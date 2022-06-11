@@ -9,6 +9,7 @@ import type { Image } from 'engine/core/resources';
 import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
+import { InteractionExecutor } from 'engine/modules/interaction';
 import { JournalOwner } from 'engine/modules/journal';
 import { MovementSystem } from 'engine/modules/movement';
 import { OfferParty } from 'engine/modules/offer';
@@ -74,7 +75,8 @@ export class MockEngine extends GameEngine {
       .addComponent(new Health())
       .addComponent(new OfferParty())
       .addComponent(new ActivityParticipant())
-      .addComponent(new FieldObject({ field: params?.field }));
+      .addComponent(new FieldObject({ field: params?.field }))
+      .addComponent(new InteractionExecutor());
     this.addEntity(entity);
     return entity;
   }
