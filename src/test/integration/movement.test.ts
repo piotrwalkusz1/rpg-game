@@ -41,7 +41,7 @@ describe('Movement', () => {
   });
 
   test('Move when events queue is not empty ', async () => {
-    engine.addEvent(new MockEvent({ time: engine.time }));
+    engine.addEvent(new MockEvent({ time: new Date(engine.time) }));
 
     const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];

@@ -38,9 +38,9 @@ describe('GameService', () => {
 
     it('should process all next events with same time when time of events is current time', async () => {
       engine.addEvents([
-        new MockEvent({ time: initialTime, id: 1 }),
-        new MockEvent({ time: initialTime, id: 2 }),
-        new MockEvent({ time: initialTime, id: 3 }),
+        new MockEvent({ time: new Date(initialTime), id: 1 }),
+        new MockEvent({ time: new Date(initialTime), id: 2 }),
+        new MockEvent({ time: new Date(initialTime), id: 3 }),
         new MockEvent({ time: addMilliseconds(initialTime, 1), id: 4 }),
         new MockEvent({ time: addMilliseconds(initialTime, 2), id: 5 })
       ]);
@@ -49,9 +49,9 @@ describe('GameService', () => {
 
       expect(engine.time).toEqual(initialTime);
       expect(system.processedEvents).toEqual([
-        new MockEvent({ time: initialTime, id: 1 }),
-        new MockEvent({ time: initialTime, id: 2 }),
-        new MockEvent({ time: initialTime, id: 3 })
+        new MockEvent({ time: new Date(initialTime), id: 1 }),
+        new MockEvent({ time: new Date(initialTime), id: 2 }),
+        new MockEvent({ time: new Date(initialTime), id: 3 })
       ]);
       expect(engine.events).toEqual([
         new MockEvent({ time: addMilliseconds(initialTime, 1), id: 4 }),
