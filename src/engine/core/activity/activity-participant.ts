@@ -12,4 +12,8 @@ export class ActivityParticipant extends Component {
   getActivity<T extends Activity>(activityType: Type<T>): T | undefined {
     return ArrayUtils.findFirstInstanceOf(this.activities.getArray(), activityType);
   }
+
+  removeActivity(activity: Activity): void {
+    return this.activities.remove(activity);
+  }
 }

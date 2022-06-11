@@ -68,6 +68,10 @@ export class Character extends Component {
     return this.commandExecutor.actionExecutor;
   }
 
+  get activityParticipant(): ActivityParticipant {
+    return this.talker.activityParticipant;
+  }
+
   get name(): TranslatableText {
     return this.presentation.name;
   }

@@ -12,6 +12,10 @@ export abstract class Activity {
     participants.forEach((participant) => this.participants.add(participant));
   }
 
+  getParticipantsOtherThan(activityParticipant: ActivityParticipant): ActivityParticipant[] {
+    return this.participants.getArray().filter((participant) => participant !== activityParticipant);
+  }
+
   removeAllParticipants(): void {
     // Participants must be copied to new array to prevent iterating and modifying the same array
     const participants = [...this.participants.getArray()];
