@@ -22,7 +22,7 @@ describe('Talk', () => {
     TalkService.offerTalk(talker, talker2, engine);
     await GameService.processEvents(engine, () => {});
     const offers = talker2.offerParty.offers;
-    OfferService.makeDecision(offers[0], talker2.character, 'ACCEPTED', engine);
+    OfferService.makeDecision(offers[0], talker2.interactionExecutor, 'ACCEPTED', engine);
     await GameService.processEvents(engine, () => {});
 
     expect(talker.activityParticipant.activities.getArray()[0]).toBeInstanceOf(TalkActivity);

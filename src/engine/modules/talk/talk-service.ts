@@ -10,7 +10,7 @@ export class TalkService {
       new InteractionEvent({
         time: engine.time,
         interaction: new OfferInteraction(new TalkOffer(talkInitiator, invitedTalker)),
-        executor: talkInitiator.character
+        executor: talkInitiator.interactionExecutor
       })
     );
   }

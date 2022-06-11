@@ -1,7 +1,7 @@
 import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
-import { Character, getCharacterByName } from 'engine/modules/character';
-import { InteractionEvent } from 'engine/modules/interaction';
+import { getCharacterByName } from 'engine/modules/character';
+import { InteractionEvent, InteractionExecutor } from 'engine/modules/interaction';
 import {
   Offer,
   OfferAcceptedEvent,
@@ -97,7 +97,7 @@ describe('Offer system', () => {
         return new InteractionEvent({
           time,
           interaction: new OfferInteraction(offer),
-          executor: executor.requireComponent(Character)
+          executor: executor.requireComponent(InteractionExecutor)
         });
       }
     });
@@ -167,7 +167,7 @@ describe('Offer system', () => {
         return new InteractionEvent({
           time,
           interaction: new OfferDecisionInteraction({ offer, decision }),
-          executor: executor.requireComponent(Character)
+          executor: executor.requireComponent(InteractionExecutor)
         });
       }
     });

@@ -10,6 +10,7 @@ import type { Image } from 'engine/core/resources';
 import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
 import { Health } from 'engine/modules/health';
+import { InteractionExecutor } from 'engine/modules/interaction';
 import { JournalOwner } from 'engine/modules/journal';
 import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
@@ -94,6 +95,7 @@ export class GameBuilder {
     character.addComponent(new Health());
     character.addComponent(new OfferParty());
     character.addComponent(new ActivityParticipant());
+    character.addComponent(new InteractionExecutor());
     if (aiEnabled) {
       character.addComponent(new AIActionExecutor());
     }

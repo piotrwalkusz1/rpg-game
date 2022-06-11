@@ -1,10 +1,9 @@
 import { getPlayerComponent } from 'engine/core/game';
-import { Character } from 'engine/modules/character';
-import { Interaction, InteractionEvent } from 'engine/modules/interaction';
+import { Interaction, InteractionEvent, InteractionExecutor } from 'engine/modules/interaction';
 import { InteractionNarrationOption } from 'frontend/narration/narration-options/interaction-narration-option';
 import { MockEngine } from 'test/mock/mock-engine';
 
-describe('Interaction player option', () => {
+describe('InteractionNarrationOption', () => {
   class MockInteraction extends Interaction {}
 
   describe('onClick method', () => {
@@ -31,7 +30,7 @@ describe('Interaction player option', () => {
 
       expect(eventsProcessed).toBe(true);
       expect(engine.events).toEqual([
-        new InteractionEvent({ time: engine.time, executor: getPlayerComponent(engine, Character), interaction })
+        new InteractionEvent({ time: engine.time, executor: getPlayerComponent(engine, InteractionExecutor), interaction })
       ]);
     });
   });
