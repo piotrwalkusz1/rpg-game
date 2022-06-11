@@ -12,10 +12,6 @@ export abstract class Activity {
     participants.forEach((participant) => this.participants.add(participant));
   }
 
-  addParticipant(particiapant: ActivityParticipant): void {
-    this.participants.add(particiapant);
-  }
-
   removeAllParticipants(): void {
     // Participants must be copied to new array to prevent iterating and modifying the same array
     const participants = [...this.participants.getArray()];

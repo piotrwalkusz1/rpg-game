@@ -6,7 +6,7 @@ import { Field, FieldObject } from 'engine/core/field';
 import type { Image } from 'engine/core/resources';
 import type { TranslatableText } from 'i18n/translatable-text';
 import { Health } from '../health';
-import { Offer, OfferParty } from '../offer';
+import { OfferParty } from '../offer';
 import { Presentation } from '../presentation';
 import { Talker } from '../talk/talker';
 
@@ -68,10 +68,6 @@ export class Character extends Component {
     return this.commandExecutor.actionExecutor;
   }
 
-  get offerParty(): OfferParty {
-    return this.offerParty;
-  }
-
   get name(): TranslatableText {
     return this.presentation.name;
   }
@@ -100,19 +96,7 @@ export class Character extends Component {
     return this.commandExecutor.pendingAction;
   }
 
-  set pendingAction(pendingAction: PendingAction | undefined) {
-    this.commandExecutor.pendingAction = pendingAction;
-  }
-
   get pendingCommand(): Command | undefined {
     return this.commandExecutor.pendingCommand;
-  }
-
-  set pendingCommand(pendingCommand: Command | undefined) {
-    this.commandExecutor.pendingCommand = pendingCommand;
-  }
-
-  get offers(): readonly Offer[] {
-    return this.offerParty.offers;
   }
 }

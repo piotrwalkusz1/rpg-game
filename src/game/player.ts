@@ -22,27 +22,19 @@ export class Player extends Component {
   }
 
   get field(): Field | undefined {
-    return this.character.fieldObject.field;
+    return this.character.field;
   }
 
   set field(field: Field | undefined) {
-    this.character.fieldObject.field = field;
+    this.character.field = field;
   }
 
   get pendingAction(): PendingAction | undefined {
     return this.character.pendingAction;
   }
 
-  set pendingAction(pendingAction: PendingAction | undefined) {
-    this.character.pendingAction = pendingAction;
-  }
-
   get pendingCommand(): Command | undefined {
     return this.character.pendingCommand;
-  }
-
-  set pendingCommand(pendingCommand: Command | undefined) {
-    this.character.pendingCommand = pendingCommand;
   }
 }
 
