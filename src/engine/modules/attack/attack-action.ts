@@ -7,7 +7,7 @@ export class AttackAction extends Action {
 
   constructor({ target }: { target: EntityProvider }) {
     super();
-    this.target = EntityProvider.requireEntity(target);
+    this.target = EntityProvider.getEntity(target);
   }
 
   override get duration(): Duration {

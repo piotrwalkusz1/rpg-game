@@ -9,6 +9,6 @@ export class InteractionEvent extends GameEvent {
   constructor({ time, interaction, executor }: { time: Date; interaction: Interaction; executor: EntityProvider }) {
     super({ time });
     this.interaction = interaction;
-    this.executor = EntityProvider.requireEntity(executor);
+    this.executor = EntityProvider.getEntity(executor);
   }
 }
