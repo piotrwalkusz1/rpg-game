@@ -1,5 +1,5 @@
-import type { Engine } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
+import type { GameEngine } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
 import { getTime } from 'engine/core/time/time-utils';
 import { Journal, JournalOwner } from 'engine/modules/journal';
@@ -11,7 +11,7 @@ import { Narration, NarrationService } from './narration';
 import type { NarrationContext } from './narration/narration-context';
 
 export class GameStore {
-  readonly engine: Writable<Engine>;
+  readonly engine: Writable<GameEngine>;
   readonly blockedScreen: Writable<boolean>;
   readonly displayedLocation: Writable<Field>;
   readonly selectedField: Writable<Field | undefined>;
@@ -22,7 +22,7 @@ export class GameStore {
   readonly player: Readable<Player>;
   readonly journal: Readable<Journal>;
 
-  constructor(params?: { engine?: Engine }) {
+  constructor(params?: { engine?: GameEngine }) {
     this.engine = writable(params?.engine || initializeDemoGame());
     this.blockedScreen = writable(false);
     this.displayedLocation = writable(get(this.engine).requireComponent(Player).requireComponent(FieldObject).field?.parentField);

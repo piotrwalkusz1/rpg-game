@@ -1,38 +1,30 @@
-import { ActionExecutor, ActionService } from 'engine/core/action';
-import { ActivityParticipant } from 'engine/core/activity';
-import { Entity, EntityProvider } from 'engine/core/ecs';
+import { ActionService } from 'engine/core/action';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
+import type { ActivityParticipant } from '../activity';
 import { CommandUtils } from '../command';
 import type { GameEngine } from '../game';
-import { AIActionExecutor } from './ai-action-executor';
+import type { AI } from './ai';
 
 export namespace AIService {
-  export const executeTurn = (entityProvider: EntityProvider, engine: GameEngine): void => {
-    const entity: Entity | undefined = EntityProvider.getEntity(entityProvider);
-    if (!entity || !entity.hasComponent(AIActionExecutor) || CommandUtils.isCommandPending(entity)) {
+  export const executeTurn = (ai: AI, engine: GameEngine): void => {
+    if (CommandUtils.isCommandPending(ai.character)) {
       return;
     }
-    const actionExecutor: ActionExecutor | undefined = entity.getComponent(ActionExecutor);
-    if (!actionExecutor || actionExecutor.pendingAction) {
-      return;
-    }
-    const activityParticipant: ActivityParticipant | undefined = entity.getComponent(ActivityParticipant);
-    if (!activityParticipant) {
+    if (ai.character.pendingAction) {
       return;
     }
 
-    const battle: BattleActivity | undefined = activityParticipant.getActivity(BattleActivity);
+    const battle: BattleActivity | undefined = ai.character.talker.activityParticipant.getActivity(BattleActivity);
     if (battle) {
-      const enemy: Entity | undefined = battle.participants
+      const enemy: ActivityParticipant | undefined = battle.participants
         .getArray()
-        .map((pariticapt) => pariticapt.entity)
-        .filter((participant) => participant !== entity)[0];
+        .filter((participant) => participant !== ai.character.talker.activityParticipant)[0];
       if (enemy) {
-        const action = new AttackAction({ target: enemy });
-        ActionService.scheduleAction(action, actionExecutor, engine);
+        const action = new AttackAction({ target: enemy.requireEntity() });
+        ActionService.scheduleAction(action, ai.character.actionExecutor, engine);
       } else {
-        activityParticipant.activities.remove(battle);
+        ai.character.talker.activityParticipant.activities.remove(battle);
       }
     }
   };

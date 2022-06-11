@@ -25,6 +25,10 @@ export class GameEngine extends Engine {
     return this.eventQueue.events;
   }
 
+  addEvents(events: GameEvent[]): void {
+    this.eventQueue.addEvents(events);
+  }
+
   addEvent(event: GameEvent): void {
     this.eventQueue.addEvent(event);
   }

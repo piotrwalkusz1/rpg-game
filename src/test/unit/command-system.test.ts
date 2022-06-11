@@ -1,4 +1,5 @@
-import { ActionExecutedEvent, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
+import { add } from 'date-fns';
+import { ActionExecutedEvent, ActionStartedEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
 import {
   Command,
   CommandEndedEvent,
@@ -29,7 +30,7 @@ describe('Command system', () => {
     it('should create CommandStartedEvent if action scheduled', async () => {
       await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
-      expect(engine.events).toEqual([mockActionScheduledEvent(), mockCommandStartedEvent()]);
+      expect(engine.events).toEqual([mockActionStartedEvent(), mockCommandStartedEvent(), mockBeforeActionExecutingEvent()]);
     });
 
     it('should not create CommandStartedEvent if another command is already pending', async () => {
@@ -71,7 +72,7 @@ describe('Command system', () => {
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
-      expect(engine.events).toEqual([mockActionScheduledEvent()]);
+      expect(engine.events).toEqual([mockActionStartedEvent(), mockBeforeActionExecutingEvent()]);
     });
 
     it('should do nothing if action executor is not command executor', async () => {
@@ -95,12 +96,16 @@ describe('Command system', () => {
     return new MockAction();
   }
 
-  function mockActionScheduledEvent(): ActionScheduledEvent {
-    return new ActionScheduledEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
+  function mockActionStartedEvent(): ActionStartedEvent {
+    return new ActionStartedEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
   }
 
   function mockBeforeActionExecutingEvent(): BeforeActionExecutingEvent {
-    return new BeforeActionExecutingEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
+    return new BeforeActionExecutingEvent({
+      time: add(engine.time, MockAction.DEFAULT_DURATION),
+      action: mockAction(),
+      executor: commandExecutor.actionExecutor
+    });
   }
 
   function mockActionExecutedEvent(): ActionExecutedEvent {

@@ -1,5 +1,5 @@
 import { ActionSystem } from 'engine/core/action';
-import { AIActionExecutor } from 'engine/core/ai';
+import { AI } from 'engine/core/ai';
 import { CommandSystem } from 'engine/core/command';
 import { Entity } from 'engine/core/ecs';
 import { Field, RectFieldPosition, subFieldAt } from 'engine/core/field';
@@ -102,7 +102,7 @@ export class GameBuilder {
     character.avatar = avatar;
     character.field = field;
     if (aiEnabled) {
-      character.requireEntity().addComponent(new AIActionExecutor());
+      character.requireEntity().addComponent(new AI({ character }));
     }
     return character;
   }

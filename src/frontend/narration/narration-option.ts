@@ -1,4 +1,4 @@
-import type { Engine } from 'engine/core/ecs';
+import type { GameEngine } from 'engine/core/game';
 import type { Image } from 'engine/core/resources/image';
 import type { TranslatableText } from 'i18n/translatable-text';
 import type { NarrationContext } from './narration-context';
@@ -6,7 +6,7 @@ import type { NarrationContext } from './narration-context';
 export type NarrationOptionImageSize = 'NORMAL' | 'LARGE';
 
 export type NarrationOptionParams = {
-  engine: Engine;
+  engine: GameEngine;
   processEvents: () => Promise<void>;
   setNarrationContext: (narrationContext: NarrationContext) => void;
 };
