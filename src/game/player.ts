@@ -20,7 +20,7 @@ export class Player extends Component {
     const character = Character.create(engine);
     const journalOwner = new JournalOwner();
     const player = new Player({ character, journalOwner });
-    character.requireEntity().addComponents([journalOwner, player]);
+    character.entity.addComponents([journalOwner, player]);
     return player;
   }
 

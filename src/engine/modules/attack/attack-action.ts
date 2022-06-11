@@ -1,13 +1,13 @@
 import { Action, type ActionExecutor } from 'engine/core/action';
-import type { Condition, Entity } from 'engine/core/ecs';
+import { Condition, Entity, EntityProvider } from 'engine/core/ecs';
 import { IsAlive } from 'engine/modules/health';
 
 export class AttackAction extends Action {
   readonly target: Entity;
 
-  constructor({ target }: { target: Entity }) {
+  constructor({ target }: { target: EntityProvider }) {
     super();
-    this.target = target;
+    this.target = EntityProvider.requireEntity(target);
   }
 
   override get duration(): Duration {

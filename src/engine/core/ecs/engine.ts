@@ -54,7 +54,7 @@ export class Engine {
 
   getComponents<T extends Component>(componentType: Type<T>): T[] {
     return ArrayUtils.filterInstanceOf(
-      this.entities.flatMap((entity) => entity.getComponents()),
+      this.entities.flatMap((entity) => entity.components),
       componentType
     );
   }

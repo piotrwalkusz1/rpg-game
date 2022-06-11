@@ -1,23 +1,18 @@
-import { areSame, OneToManyForeignKey, Type } from 'utils';
-import type { ComponentsCollection, Entity } from './entity';
-
-class ComponentEntityFK extends OneToManyForeignKey<Component, ComponentsCollection, Entity> {
-  override getCollection = (entity?: Entity) => entity?.components;
-  override areForeignKeysEqual = areSame;
-}
+import type { Type } from 'utils';
+import type { Entity } from './entity';
 
 export abstract class Component {
-  readonly entityFK: ComponentEntityFK = new ComponentEntityFK(this);
+  private _entity: Entity | undefined;
 
-  get entity(): Entity | undefined {
-    return this.entityFK.value;
+  get entity(): Entity {
+    if (!this._entity) {
+      throw new Error('Component was not added to entity or was removed from entity');
+    }
+    return this._entity;
   }
 
-  requireEntity(): Entity {
-    if (this.entity) {
-      return this.entity;
-    }
-    throw new Error('Expected entity be not undefined');
+  set entity(entity: Entity | undefined) {
+    this._entity = entity;
   }
 
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {

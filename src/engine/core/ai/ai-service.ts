@@ -18,7 +18,7 @@ export namespace AIService {
 
     const enemy: ActivityParticipant | undefined = battle.getParticipantsOtherThan(ai.activityParticipant)[0];
     if (enemy) {
-      const action = new AttackAction({ target: enemy.requireEntity() });
+      const action = new AttackAction({ target: enemy });
       ActionService.scheduleAction(action, ai.character.actionExecutor, engine);
     } else {
       ai.activityParticipant.removeActivity(battle);

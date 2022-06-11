@@ -27,7 +27,7 @@ describe('Journal speaking system', () => {
       const action = new SpeakAction({
         content: { literal: 'Hi, my name is Sestia' },
         quote: true,
-        receivers: [journalOwner.requireEntity()]
+        receivers: [journalOwner]
       });
 
       await journalSpeakingSystem.processEvent(mockActionExecutingEvent(action), engine);

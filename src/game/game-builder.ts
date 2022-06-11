@@ -99,7 +99,7 @@ export class GameBuilder {
     character.avatar = avatar;
     character.field = field;
     if (aiEnabled) {
-      character.requireEntity().addComponent(new AI({ character }));
+      character.entity.addComponent(new AI({ character }));
     }
   }
 
