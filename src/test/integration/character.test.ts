@@ -4,17 +4,18 @@ import { CharacterNarrationContext } from 'frontend/narration/narration-contexts
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { CharacterNarrationOption } from 'frontend/narration/narration-options/character-narration-option';
 import { GameStore } from 'frontend/store';
+import { GameBuilder, getPlayer } from 'game';
 import { get } from 'svelte/store';
-import { MockEngine } from 'test/mock/mock-engine';
 import { mockField } from 'test/mock/mock-field';
 import { ArrayUtils } from 'utils';
 
 describe('Character narration', () => {
   test('Display character narration option', () => {
-    const engine = new MockEngine();
-    engine.addPlayer();
+    const engine = new GameBuilder().build();
     const field = mockField();
-    const character = engine.addCharacter({ field }).requireComponent(Character);
+    const character = Character.create(engine);
+    getPlayer(engine).field = field;
+    character.field = field;
 
     const narrationOptions = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options;
 
@@ -22,9 +23,9 @@ describe('Character narration', () => {
   });
 
   test('Do not display character narration option for player character', () => {
-    const engine = new MockEngine();
+    const engine = new GameBuilder().build();
     const field = mockField();
-    engine.addPlayer({ field });
+    getPlayer(engine).field = field;
 
     const narrationOptions = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options || [];
 
@@ -32,11 +33,12 @@ describe('Character narration', () => {
   });
 
   test('Set character narration context after clicking on character narration option', async () => {
-    const engine = new MockEngine();
-    engine.addPlayer();
+    const engine = new GameBuilder().build();
     const store = new GameStore({ engine });
     const field = mockField();
-    const character = engine.addCharacter({ field, name: 'Eladin' }).requireComponent(Character);
+    const character = Character.create(engine);
+    character.name = { literal: 'Eladin' };
+    character.field = field;
 
     const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine }).options.find(
       (option) => option instanceof CharacterNarrationOption
@@ -50,9 +52,10 @@ describe('Character narration', () => {
   });
 
   test('Display character narration', () => {
-    const engine = new MockEngine();
-    engine.addPlayer();
-    const character = engine.addCharacter({ name: 'Sestia', avatar: '/images/characters/002_Sestia.png' }).requireComponent(Character);
+    const engine = new GameBuilder().build();
+    const character = Character.create(engine);
+    character.presentation.name = { literal: 'Sestia' };
+    character.presentation.avatar = '/images/characters/002_Sestia.png';
 
     const narration = NarrationService.getNarration({ context: new CharacterNarrationContext(character), engine });
 

@@ -1,33 +1,34 @@
-import { Activity } from 'engine/core/activity';
+import { Activity, ActivityParticipant } from 'engine/core/activity';
 import { EndActivityEvent } from 'engine/core/activity/activity-event';
 import { ActivitySystem } from 'engine/core/activity/activity-system';
+import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
-import { MockEngine } from 'test/mock/mock-engine';
+import { GameBuilder } from 'game';
 
 describe('Activity system', () => {
   class MockActivity extends Activity {}
 
   let activitySystem: ActivitySystem;
-  let engine: MockEngine;
+  let engine: GameEngine;
   let time: Time;
 
   beforeEach(() => {
     activitySystem = new ActivitySystem();
-    engine = new MockEngine();
+    engine = new GameBuilder().build();
     time = engine.time;
   });
 
   describe('EndActivityEvent', () => {
     it('should remove all participants from activity', async () => {
-      const firstActivityParticiant = engine.addActivityParticipant();
-      const secondActivityParticiant = engine.addActivityParticipant();
-      const activity = new MockActivity({ participants: [firstActivityParticiant, secondActivityParticiant] });
+      const activityParticipant = engine.addEntityWithComponent(new ActivityParticipant());
+      const activityParticipant2 = engine.addEntityWithComponent(new ActivityParticipant());
+      const activity = new MockActivity({ participants: [activityParticipant, activityParticipant2] });
 
       await activitySystem.processEvent(new EndActivityEvent({ time, activity }), engine);
 
       expect(activity.participants.getArray()).toEqual([]);
-      expect(firstActivityParticiant.activities.getArray()).toEqual([]);
-      expect(secondActivityParticiant.activities.getArray()).toEqual([]);
+      expect(activityParticipant.activities.getArray()).toEqual([]);
+      expect(activityParticipant2.activities.getArray()).toEqual([]);
     });
   });
 });

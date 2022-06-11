@@ -1,23 +1,24 @@
-import { Action, ActionExecutingEvent, ActionExecutor } from 'engine/core/action';
+import { Action, ActionExecutingEvent } from 'engine/core/action';
+import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
-import type { JournalOwner } from 'engine/modules/journal';
+import { JournalOwner } from 'engine/modules/journal';
 import { JournalSpeakingSystem, SpeakJournalEntry } from 'engine/modules/journal-speaking';
 import { SpeakAction } from 'engine/modules/speaking';
-import { MockEngine } from 'test/mock/mock-engine';
+import { GameBuilder } from 'game';
 
 describe('Journal speaking system', () => {
   let journalSpeakingSystem: JournalSpeakingSystem;
-  let engine: MockEngine;
-  let actionExecutor: ActionExecutor;
+  let engine: GameEngine;
+  let speaker: Character;
   let journalOwner: JournalOwner;
   let time: Time;
 
   beforeEach(() => {
     journalSpeakingSystem = new JournalSpeakingSystem();
-    engine = new MockEngine();
-    actionExecutor = engine.addCharacter().requireComponent(ActionExecutor);
-    journalOwner = engine.addJournalOwner();
+    engine = new GameBuilder().build();
+    speaker = Character.create(engine);
+    journalOwner = engine.addEntityWithComponent(new JournalOwner());
     time = engine.time;
   });
 
@@ -36,13 +37,13 @@ describe('Journal speaking system', () => {
           time,
           content: { literal: 'Hi, my name is Sestia' },
           quote: true,
-          speaker: actionExecutor.requireComponent(Character)
+          speaker: speaker.requireComponent(Character)
         })
       ]);
     });
   });
 
   function mockActionExecutingEvent(action: Action): ActionExecutingEvent {
-    return new ActionExecutingEvent({ action, executor: actionExecutor, time });
+    return new ActionExecutingEvent({ action, executor: speaker, time });
   }
 });

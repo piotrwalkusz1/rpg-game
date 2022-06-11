@@ -1,9 +1,11 @@
-import { ActionExecutor, ActionService } from 'engine/core/action';
+import { ActionService } from 'engine/core/action';
 import type { Engine } from 'engine/core/ecs';
-import { GameEngine, getPlayerEntity } from 'engine/core/game';
-import { getCharacterByName } from 'engine/modules/character';
+import type { GameEngine } from 'engine/core/game';
+import { Character } from 'engine/modules/character';
 import { SpeakAction } from 'engine/modules/speaking';
+import { isLiteral } from 'i18n/translatable-text';
 import { GameBuilder } from './game-builder';
+import { getPlayer } from './player';
 
 export const initializeDemoGame = (): Engine => {
   const engine: GameEngine = new GameBuilder()
@@ -11,8 +13,8 @@ export const initializeDemoGame = (): Engine => {
     .build();
 
   ActionService.scheduleAction(
-    new SpeakAction({ receivers: [getPlayerEntity(engine)], content: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', quote: true }),
-    getCharacterByName(engine, 'Sestia').requireComponent(ActionExecutor),
+    new SpeakAction({ receivers: [getPlayer(engine)], content: 'DIALOGUE.TEXT.10002_THERE_IS_BURIED_TREASURE', quote: true }),
+    engine.getComponents(Character).filter((character) => isLiteral(character.name, 'Sestia'))[0].actionExecutor,
     engine
   );
 

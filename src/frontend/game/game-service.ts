@@ -1,8 +1,9 @@
-import { ActionExecutor, PendingAction } from 'engine/core/action';
-import { Command, CommandExecutor } from 'engine/core/command';
+import type { PendingAction } from 'engine/core/action';
+import type { Command } from 'engine/core/command';
 import type { Engine } from 'engine/core/ecs';
-import { GameEvent, GameEventQueue, GameLoopService, Player } from 'engine/core/game';
+import { GameEvent, GameEventQueue, GameLoopService } from 'engine/core/game';
 import { Time, TimeManager } from 'engine/core/time';
+import { getPlayer } from 'game';
 
 export namespace GameService {
   export const processEvents = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
@@ -39,9 +40,7 @@ export namespace GameService {
 
   const nextEvent = (engine: Engine): GameEvent | undefined => engine.requireComponent(GameEventQueue).events[0];
 
-  const playerPendingAction = (engine: Engine): PendingAction | undefined => player(engine).requireComponent(ActionExecutor).pendingAction;
+  const playerPendingAction = (engine: Engine): PendingAction | undefined => getPlayer(engine).pendingAction;
 
-  const playerPendingCommand = (engine: Engine): Command | undefined => player(engine).requireComponent(CommandExecutor).pendingCommand;
-
-  const player = (engine: Engine): Player => engine.requireComponent(Player);
+  const playerPendingCommand = (engine: Engine): Command | undefined => getPlayer(engine).pendingCommand;
 }

@@ -1,5 +1,5 @@
-import { Player } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
+import { getPlayer } from 'game';
 import { FieldNarrationContext } from '../narration-contexts/field-narration-context';
 import type { NarrationOption } from '../narration-option';
 import { CharacterNarrationOption } from '../narration-options/character-narration-option';
@@ -10,7 +10,7 @@ export class CharacterNarrationProvider extends NarrationProvider {
     if (!(context instanceof FieldNarrationContext)) {
       return [];
     }
-    const playerCharacter = engine.getComponent(Player)?.getComponent(Character);
+    const playerCharacter = getPlayer(engine).character;
     return context.field
       .getObjectsByComponentType(Character)
       .filter((character) => character !== playerCharacter)

@@ -14,6 +14,7 @@
         "/src/frontend/dialog",
         "/src/engine/modules/interaction",
         "/src/engine/modules/offer",
-        "/src/game"
+        "/src/game",
+        "/src/engine/modules/presentation"
     ]
 }

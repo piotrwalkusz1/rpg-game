@@ -1,5 +1,8 @@
 import { ArrayUtils, Type } from 'utils';
-import type { Component, ECSEvent, Entity, System } from '.';
+import type { Component } from './component';
+import type { ECSEvent } from './ecs-event';
+import { Entity } from './entity';
+import type { System } from './system';
 
 export class Engine {
   private readonly entities: Entity[] = [];
@@ -9,8 +12,18 @@ export class Engine {
     return this.entities;
   }
 
-  addEntity(entity: Entity): void {
+  addEntityWithComponent<T extends Component>(component: T): T {
+    this.addEntity(new Entity().addComponent(component));
+    return component;
+  }
+
+  addEntityWithComponents(components: Component[]): Entity {
+    return this.addEntity(new Entity().addComponents(components));
+  }
+
+  addEntity(entity: Entity): Entity {
     this.entities.push(entity);
+    return entity;
   }
 
   addEntities(entities: readonly Entity[]): void {

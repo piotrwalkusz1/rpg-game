@@ -1,10 +1,10 @@
 import { OfferClause } from '../offer';
-import type { TalkerBundle } from './talker-bundle';
+import type { Talker } from './talker';
 
 export class TalkOfferClause extends OfferClause {
-  readonly talkers: readonly TalkerBundle[];
+  readonly talkers: readonly Talker[];
 
-  constructor({ talkers }: { talkers: TalkerBundle[] }) {
+  constructor({ talkers }: { talkers: Talker[] }) {
     super();
     this.talkers = talkers;
   }

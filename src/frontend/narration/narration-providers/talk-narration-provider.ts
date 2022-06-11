@@ -1,8 +1,6 @@
-import { getPlayerComponent } from 'engine/core/game';
-import { Character } from 'engine/modules/character';
 import { OfferInteraction } from 'engine/modules/offer';
 import { TalkOffer } from 'engine/modules/talk/talk-offer';
-import { getTalkerBundle } from 'engine/modules/talk/talker-bundle';
+import { getPlayer } from 'game';
 import { CharacterNarrationContext } from '../narration-contexts/character-narration-context';
 import type { NarrationOption } from '../narration-option';
 import { InteractionNarrationOption } from '../narration-options/interaction-narration-option';
@@ -18,9 +16,7 @@ export class TalkNarrationProvider extends NarrationProvider {
       new InteractionNarrationOption({
         name: 'INTERACTION.TALK.NAME',
         image: '/images/ui/speech-bubble.png',
-        interaction: new OfferInteraction(
-          new TalkOffer(getTalkerBundle(getPlayerComponent(params.engine, Character)), getTalkerBundle(params.context.character))
-        )
+        interaction: new OfferInteraction(new TalkOffer(getPlayer(params.engine).talker, params.context.character.talker))
       })
     ];
   }

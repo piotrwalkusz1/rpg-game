@@ -1,4 +1,4 @@
-import { ActionExecutedEvent, ActionExecutor, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
+import { ActionExecutedEvent, ActionScheduledEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
 import {
   Command,
   CommandEndedEvent,
@@ -7,26 +7,22 @@ import {
   CommandStartedEvent,
   CommandSystem
 } from 'engine/core/command';
-import type { Time } from 'engine/core/time';
+import type { GameEngine } from 'engine/core/game';
+import { GameBuilder } from 'game';
 import { MockAction } from 'test/mock/mock-action';
 import { MockCommand } from 'test/mock/mock-command';
-import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Command system', () => {
   let commandSystem: CommandSystem;
-  let engine: MockEngine;
+  let engine: GameEngine;
   let commandExecutor: CommandExecutor;
-  let actionExecutor: ActionExecutor;
   let command: Command;
-  let time: Time;
 
   beforeEach(() => {
     commandSystem = new CommandSystem();
-    engine = new MockEngine();
-    commandExecutor = engine.addCommandExecutor();
-    actionExecutor = commandExecutor.requireComponent(ActionExecutor);
+    engine = new GameBuilder().build();
+    commandExecutor = CommandExecutor.create(engine);
     command = mockCommand();
-    time = engine.time;
   });
 
   describe('CommandScheduledEvent', () => {
@@ -45,7 +41,7 @@ describe('Command system', () => {
     });
 
     it('should not create CommandStartedEvent if action cannot be scheduled', async () => {
-      actionExecutor.pendingAction = mockPendingAction();
+      commandExecutor.pendingAction = mockPendingAction();
 
       await commandSystem.processEvent(mockCommandScheduledEvent(), engine);
 
@@ -56,7 +52,7 @@ describe('Command system', () => {
   describe('ActionExecutedEvent', () => {
     it('should create CommandEndedEvent and reset pending command if command is pending and next action cannot be scheduled', async () => {
       commandExecutor.pendingCommand = command;
-      actionExecutor.pendingAction = mockPendingAction();
+      commandExecutor.pendingAction = mockPendingAction();
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
@@ -79,7 +75,7 @@ describe('Command system', () => {
     });
 
     it('should do nothing if action executor is not command executor', async () => {
-      actionExecutor.entity?.removeComponent(CommandExecutor);
+      commandExecutor.entity?.removeComponent(CommandExecutor);
 
       await commandSystem.processEvent(mockActionExecutedEvent(), engine);
 
@@ -100,26 +96,26 @@ describe('Command system', () => {
   }
 
   function mockActionScheduledEvent(): ActionScheduledEvent {
-    return new ActionScheduledEvent({ time, action: mockAction(), executor: actionExecutor });
+    return new ActionScheduledEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
   }
 
   function mockBeforeActionExecutingEvent(): BeforeActionExecutingEvent {
-    return new BeforeActionExecutingEvent({ time, action: mockAction(), executor: actionExecutor });
+    return new BeforeActionExecutingEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
   }
 
   function mockActionExecutedEvent(): ActionExecutedEvent {
-    return new ActionExecutedEvent({ time, action: mockAction(), executor: actionExecutor });
+    return new ActionExecutedEvent({ time: engine.time, action: mockAction(), executor: commandExecutor.actionExecutor });
   }
 
   function mockCommandScheduledEvent(): CommandScheduledEvent {
-    return new CommandScheduledEvent({ time, command, executor: commandExecutor });
+    return new CommandScheduledEvent({ time: engine.time, command, executor: commandExecutor });
   }
 
   function mockCommandStartedEvent(): CommandStartedEvent {
-    return new CommandStartedEvent({ time, command, executor: commandExecutor });
+    return new CommandStartedEvent({ time: engine.time, command, executor: commandExecutor });
   }
 
   function mockCommandEndedEvent(): CommandEndedEvent {
-    return new CommandEndedEvent({ time, command, executor: commandExecutor });
+    return new CommandEndedEvent({ time: engine.time, command, executor: commandExecutor });
   }
 });

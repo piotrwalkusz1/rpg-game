@@ -1,5 +1,5 @@
 import { Action, ActionExecutor } from 'engine/core/action';
-import type { Condition, Entity } from 'engine/core/ecs';
+import { Condition, Entity, EntityProvider } from 'engine/core/ecs';
 import { IsAlive } from 'engine/modules/health';
 import type { TranslatableText } from 'i18n/translatable-text';
 
@@ -8,9 +8,9 @@ export class SpeakAction extends Action {
   readonly content: TranslatableText;
   readonly quote: boolean;
 
-  constructor({ receivers, content, quote }: { receivers: Entity[]; content: TranslatableText; quote: boolean }) {
+  constructor({ receivers, content, quote }: { receivers: EntityProvider[]; content: TranslatableText; quote: boolean }) {
     super();
-    this.receivers = receivers;
+    this.receivers = EntityProvider.getEntities(receivers);
     this.content = content;
     this.quote = quote;
   }

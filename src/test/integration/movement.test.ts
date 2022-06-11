@@ -1,21 +1,22 @@
 import { Field, getParentField, getX, getY, subFieldAt } from 'engine/core/field';
-import type { Player } from 'engine/core/game';
+import type { GameEngine } from 'engine/core/game';
 import { NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { GameStore } from 'frontend/store';
-import { MockEngine } from 'test/mock/mock-engine';
+import { GameBuilder, getPlayer, Player } from 'game';
 import { mockRectField } from 'test/mock/mock-field';
 
 describe('Movement', () => {
-  let engine: MockEngine;
+  let engine: GameEngine;
   let player: Player;
   let world: Field;
   let store: GameStore;
 
   beforeEach(() => {
-    engine = new MockEngine();
+    engine = new GameBuilder().build();
     world = mockRectField(5, 5);
-    player = engine.addPlayer({ field: subFieldAt(world, [2, 1]) });
+    player = getPlayer(engine);
+    player.field = subFieldAt(world, [2, 1]);
     store = new GameStore({ engine });
   });
 

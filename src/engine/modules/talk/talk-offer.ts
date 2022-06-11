@@ -1,9 +1,9 @@
 import { Offer, OfferDecision } from '../offer';
 import { TalkOfferClause } from './talk-offer-clause';
-import type { TalkerBundle } from './talker-bundle';
+import type { Talker } from './talker';
 
 export class TalkOffer extends Offer {
-  constructor(talkInitiator: TalkerBundle, invitedTalker: TalkerBundle) {
+  constructor(talkInitiator: Talker, invitedTalker: Talker) {
     super({
       clauses: [
         new TalkOfferClause({

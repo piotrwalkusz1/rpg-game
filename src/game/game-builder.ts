@@ -1,21 +1,19 @@
-import { ActionExecutor, ActionSystem } from 'engine/core/action';
-import { ActivityParticipant } from 'engine/core/activity';
+import { ActionSystem } from 'engine/core/action';
 import { AIActionExecutor } from 'engine/core/ai';
-import { CommandExecutor, CommandSystem } from 'engine/core/command';
+import { CommandSystem } from 'engine/core/command';
 import { Entity } from 'engine/core/ecs';
-import { Field, FieldObject, RectFieldPosition, subFieldAt } from 'engine/core/field';
+import { Field, RectFieldPosition, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
-import { GameEngine, Player } from 'engine/core/game';
+import { GameEngine } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
 import { TimeSystem } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
-import { Health } from 'engine/modules/health';
-import { InteractionExecutor } from 'engine/modules/interaction';
 import { JournalOwner } from 'engine/modules/journal';
 import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
-import { OfferParty, OfferSystem } from 'engine/modules/offer';
+import { OfferSystem } from 'engine/modules/offer';
 import { TalkSystem } from 'engine/modules/talk';
+import { Player } from './player';
 
 export interface GameBuilderCharacter {
   name?: string;
@@ -46,7 +44,9 @@ export class GameBuilder {
   build(): GameEngine {
     const world = this.buildWorld();
     const engine: GameEngine = new GameEngine();
-    engine.addEntities([world, this.buildPlayer(world), ...this.buildCharacters(world)]);
+    engine.addEntity(world);
+    this.createPlayer(world, engine);
+    this.createCharacters(world, engine);
     engine.addSystems([
       new TimeSystem(),
       new ActionSystem(),
@@ -63,41 +63,46 @@ export class GameBuilder {
     return new Entity().addComponent(this.buildRectField(this._worldSize[0], this._worldSize[1]));
   }
 
-  private buildPlayer(world: Entity): Entity {
-    const player: Entity = this.buildCharacter({
-      name: 'Eladin',
-      avatar: '/images/characters/001_Eladin.png',
-      field: subFieldAt(world, this._playerPosition),
-      aiEnabled: false
-    });
-    player.addComponent(new Player());
-    player.addComponent(new JournalOwner());
+  private createPlayer(world: Entity, engine: GameEngine): Player {
+    const character = this.createCharacter(
+      {
+        name: 'Eladin',
+        avatar: '/images/characters/001_Eladin.png',
+        field: subFieldAt(world, this._playerPosition),
+        aiEnabled: false
+      },
+      engine
+    );
+    const player = new Player({ character });
+    character.requireEntity().addComponent(player);
+    character.requireEntity().addComponent(new JournalOwner());
     return player;
   }
 
-  private buildCharacters(world: Entity): Entity[] {
-    return this._characters.map(({ name, avatar, position }) =>
-      this.buildCharacter({
-        name: name || 'Eladin',
-        avatar: avatar || '/images/characters/001_Eladin.png',
-        field: subFieldAt(world, position || [0, 0]),
-        aiEnabled: true
-      })
+  private createCharacters(world: Entity, engine: GameEngine): void {
+    this._characters.forEach(({ name, avatar, position }) =>
+      this.createCharacter(
+        {
+          name: name || 'Eladin',
+          avatar: avatar || '/images/characters/001_Eladin.png',
+          field: subFieldAt(world, position || [0, 0]),
+          aiEnabled: true
+        },
+        engine
+      )
     );
   }
 
-  private buildCharacter({ name, avatar, field, aiEnabled }: { name: string; avatar: Image; field: Field; aiEnabled: boolean }): Entity {
-    const character: Entity = new Entity();
-    character.addComponent(new Character({ name: { literal: name }, avatar }));
-    character.addComponent(new FieldObject({ field }));
-    character.addComponent(new ActionExecutor());
-    character.addComponent(new CommandExecutor());
-    character.addComponent(new Health());
-    character.addComponent(new OfferParty());
-    character.addComponent(new ActivityParticipant());
-    character.addComponent(new InteractionExecutor());
+  private createCharacter(
+    { name, avatar, field, aiEnabled }: { name: string; avatar: Image; field: Field; aiEnabled: boolean },
+    engine: GameEngine
+  ): Character {
+    const character = Character.create(engine);
+    character.name = { literal: name };
+    character.avatar = avatar;
+    character.field = field;
     if (aiEnabled) {
-      character.addComponent(new AIActionExecutor());
+      character.requireEntity().addComponent(new AIActionExecutor());
     }
     return character;
   }

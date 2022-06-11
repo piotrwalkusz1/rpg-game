@@ -5,5 +5,3 @@ export * from './game-event';
 export * from './game-loop-service';
 export * from './game-system';
 export * from './game-utils';
-export * from './player-utils';
-export * from './player';

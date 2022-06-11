@@ -7,21 +7,22 @@ import {
   BeforeActionExecutingEvent,
   PendingAction
 } from 'engine/core/action';
+import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
+import { GameBuilder } from 'game';
 import { MockAction } from 'test/mock/mock-action';
-import { MockEngine } from 'test/mock/mock-engine';
 
 describe('Command system', () => {
   let actionSystem: ActionSystem;
-  let engine: MockEngine;
+  let engine: GameEngine;
   let actionExecutor: ActionExecutor;
   let action: Action;
   let time: Time;
 
   beforeEach(() => {
     actionSystem = new ActionSystem();
-    engine = new MockEngine();
-    actionExecutor = engine.addActionExecutor();
+    engine = new GameBuilder().build();
+    actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
     action = new MockAction();
     time = engine.time;
   });

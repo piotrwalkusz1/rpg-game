@@ -1,14 +1,14 @@
+import { Entity, EntityProvider } from 'engine/core/ecs';
 import { GameEvent } from 'engine/core/game';
 import type { Interaction } from './interaction';
-import type { InteractionExecutor } from './interaction-executor';
 
 export class InteractionEvent extends GameEvent {
   readonly interaction: Interaction;
-  readonly executor: InteractionExecutor;
+  readonly executor: Entity;
 
-  constructor({ time, interaction, executor }: { time: Date; interaction: Interaction; executor: InteractionExecutor }) {
+  constructor({ time, interaction, executor }: { time: Date; interaction: Interaction; executor: EntityProvider }) {
     super({ time });
     this.interaction = interaction;
-    this.executor = executor;
+    this.executor = EntityProvider.requireEntity(executor);
   }
 }

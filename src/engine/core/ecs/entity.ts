@@ -33,6 +33,11 @@ export class Entity {
     return this;
   }
 
+  addComponents(components: Component[]): Entity {
+    components.forEach((component) => this.components.add(component));
+    return this;
+  }
+
   removeComponent(componentToRemove: Type<Component>) {
     const component = ArrayUtils.findFirstInstanceOf(this.components.getArray(), componentToRemove);
     if (component !== undefined) {

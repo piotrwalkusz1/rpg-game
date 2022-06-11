@@ -1,7 +1,5 @@
 import type { GameEngine } from 'engine/core/game';
-import type { Time } from 'engine/core/time';
-import { getCharacterByName } from 'engine/modules/character';
-import { InteractionEvent, InteractionExecutor } from 'engine/modules/interaction';
+import { InteractionEvent } from 'engine/modules/interaction';
 import {
   Offer,
   OfferAcceptedEvent,
@@ -18,22 +16,16 @@ import { GameBuilder } from 'game';
 describe('Offer system', () => {
   let offerSystem: OfferSystem;
   let engine: GameEngine;
-  let character: OfferParty;
-  let character2: OfferParty;
-  let character3: OfferParty;
-  let time: Time;
+  let offerParty: OfferParty;
+  let offerParty2: OfferParty;
+  let offerParty3: OfferParty;
 
   beforeEach(() => {
     offerSystem = new OfferSystem();
-    engine = new GameBuilder()
-      .addCharacter({ name: 'CHARACTER_1' })
-      .addCharacter({ name: 'CHARACTER_2' })
-      .addCharacter({ name: 'CHARACTER_3' })
-      .build();
-    character = getCharacterByName(engine, 'CHARACTER_1').requireComponent(OfferParty);
-    character2 = getCharacterByName(engine, 'CHARACTER_2').requireComponent(OfferParty);
-    character3 = getCharacterByName(engine, 'CHARACTER_3').requireComponent(OfferParty);
-    time = engine.time;
+    engine = new GameBuilder().build();
+    offerParty = OfferParty.create(engine);
+    offerParty2 = OfferParty.create(engine);
+    offerParty3 = OfferParty.create(engine);
   });
 
   describe('InteractionEvent', () => {
@@ -41,63 +33,63 @@ describe('Offer system', () => {
       it('should add offer to offer party if offer is pending', async () => {
         const offer = new Offer({
           clauses: [],
-          decisions: [new OfferDecision({ value: 'ACCEPTED', party: character }), new OfferDecision({ party: character2 })]
+          decisions: [new OfferDecision({ value: 'ACCEPTED', party: offerParty }), new OfferDecision({ party: offerParty2 })]
         });
 
-        await offerSystem.processEvent(getOfferDecisionEvent(offer, character), engine);
+        await offerSystem.processEvent(getOfferDecisionEvent(offer, offerParty), engine);
 
-        expect(character.offers).toEqual([offer]);
-        expect(character2.offers).toEqual([offer]);
+        expect(offerParty.offers).toEqual([offer]);
+        expect(offerParty2.offers).toEqual([offer]);
       });
 
       it('should not add offer to offer party if offer is not pending', async () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ value: 'ACCEPTED', party: character2 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty2 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionEvent(offer, character), engine);
+        await offerSystem.processEvent(getOfferDecisionEvent(offer, offerParty), engine);
 
-        expect(character.offers).toEqual([]);
-        expect(character2.offers).toEqual([]);
+        expect(offerParty.offers).toEqual([]);
+        expect(offerParty2.offers).toEqual([]);
       });
 
       it('should add OfferAcceptedEvent if offer is accepted', async () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ value: 'ACCEPTED', party: character2 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty2 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionEvent(offer, character), engine);
+        await offerSystem.processEvent(getOfferDecisionEvent(offer, offerParty), engine);
 
-        expect(engine.events).toEqual([new OfferAcceptedEvent({ time, offer })]);
+        expect(engine.events).toEqual([new OfferAcceptedEvent({ time: engine.time, offer })]);
       });
 
       it('should add OfferRejectedEvent if offer is accepted', async () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ value: 'REJECTED', party: character2 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ value: 'REJECTED', party: offerParty2 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionEvent(offer, character), engine);
+        await offerSystem.processEvent(getOfferDecisionEvent(offer, offerParty), engine);
 
-        expect(engine.events).toEqual([new OfferRejectedEvent({ time, offer })]);
+        expect(engine.events).toEqual([new OfferRejectedEvent({ time: engine.time, offer })]);
       });
 
       function getOfferDecisionEvent(offer: Offer, executor: OfferParty): InteractionEvent {
         return new InteractionEvent({
-          time,
+          time: engine.time,
           interaction: new OfferInteraction(offer),
-          executor: executor.requireComponent(InteractionExecutor)
+          executor
         });
       }
     });
@@ -107,18 +99,18 @@ describe('Offer system', () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ party: character2 }),
-            new OfferDecision({ party: character3 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ party: offerParty2 }),
+            new OfferDecision({ party: offerParty3 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'ACCEPTED', character2), engine);
+        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'ACCEPTED', offerParty2), engine);
 
         expect(offer.decisions).toEqual([
-          new OfferDecision({ party: character, value: 'ACCEPTED' }),
-          new OfferDecision({ party: character2, value: 'ACCEPTED' }),
-          new OfferDecision({ party: character3, value: undefined })
+          new OfferDecision({ party: offerParty, value: 'ACCEPTED' }),
+          new OfferDecision({ party: offerParty2, value: 'ACCEPTED' }),
+          new OfferDecision({ party: offerParty3, value: undefined })
         ]);
         expect(engine.events).toEqual([]);
       });
@@ -127,47 +119,47 @@ describe('Offer system', () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ value: 'ACCEPTED', party: character2 }),
-            new OfferDecision({ party: character3 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty2 }),
+            new OfferDecision({ party: offerParty3 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'ACCEPTED', character3), engine);
+        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'ACCEPTED', offerParty3), engine);
 
         expect(offer.decisions).toEqual([
-          new OfferDecision({ party: character, value: 'ACCEPTED' }),
-          new OfferDecision({ party: character2, value: 'ACCEPTED' }),
-          new OfferDecision({ party: character3, value: 'ACCEPTED' })
+          new OfferDecision({ party: offerParty, value: 'ACCEPTED' }),
+          new OfferDecision({ party: offerParty2, value: 'ACCEPTED' }),
+          new OfferDecision({ party: offerParty3, value: 'ACCEPTED' })
         ]);
-        expect(engine.events).toEqual([new OfferAcceptedEvent({ time, offer })]);
+        expect(engine.events).toEqual([new OfferAcceptedEvent({ time: engine.time, offer })]);
       });
 
       it('should create OfferRejectEvent if at least one party rejected', async () => {
         const offer = new Offer({
           clauses: [],
           decisions: [
-            new OfferDecision({ value: 'ACCEPTED', party: character }),
-            new OfferDecision({ party: character2 }),
-            new OfferDecision({ party: character3 })
+            new OfferDecision({ value: 'ACCEPTED', party: offerParty }),
+            new OfferDecision({ party: offerParty2 }),
+            new OfferDecision({ party: offerParty3 })
           ]
         });
 
-        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'REJECTED', character2), engine);
+        await offerSystem.processEvent(getOfferDecisionInteractionEvent(offer, 'REJECTED', offerParty2), engine);
 
         expect(offer.decisions).toEqual([
-          new OfferDecision({ party: character, value: 'ACCEPTED' }),
-          new OfferDecision({ party: character2, value: 'REJECTED' }),
-          new OfferDecision({ party: character3, value: undefined })
+          new OfferDecision({ party: offerParty, value: 'ACCEPTED' }),
+          new OfferDecision({ party: offerParty2, value: 'REJECTED' }),
+          new OfferDecision({ party: offerParty3, value: undefined })
         ]);
-        expect(engine.events).toEqual([new OfferRejectedEvent({ time, offer })]);
+        expect(engine.events).toEqual([new OfferRejectedEvent({ time: engine.time, offer })]);
       });
 
       function getOfferDecisionInteractionEvent(offer: Offer, decision: OfferDecisionValue, executor: OfferParty): InteractionEvent {
         return new InteractionEvent({
-          time,
+          time: engine.time,
           interaction: new OfferDecisionInteraction({ offer, decision }),
-          executor: executor.requireComponent(InteractionExecutor)
+          executor
         });
       }
     });

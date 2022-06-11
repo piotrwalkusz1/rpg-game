@@ -1,13 +1,12 @@
-import { GameEngine, getPlayerComponent } from 'engine/core/game';
-import { Character, getCharacterByName } from 'engine/modules/character';
+import type { GameEngine } from 'engine/core/game';
+import { Character } from 'engine/modules/character';
 import { OfferInteraction } from 'engine/modules/offer';
 import { TalkOffer } from 'engine/modules/talk/talk-offer';
-import { getTalkerBundle } from 'engine/modules/talk/talker-bundle';
 import { CharacterNarrationContext } from 'frontend/narration/narration-contexts/character-narration-context';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { InteractionNarrationOption } from 'frontend/narration/narration-options/interaction-narration-option';
 import { TalkNarrationProvider } from 'frontend/narration/narration-providers/talk-narration-provider';
-import { GameBuilder } from 'game';
+import { GameBuilder, getPlayer } from 'game';
 import { mockField } from 'test/mock/mock-field';
 
 describe('Talk narration provider', () => {
@@ -15,8 +14,8 @@ describe('Talk narration provider', () => {
   let character: Character;
 
   beforeEach(() => {
-    engine = new GameBuilder().addCharacter({ name: 'Sestia' }).build();
-    character = getCharacterByName(engine, 'Sestia');
+    engine = new GameBuilder().build();
+    character = Character.create(engine);
   });
 
   describe('getNarrationOptions method', () => {
@@ -36,9 +35,7 @@ describe('Talk narration provider', () => {
         new InteractionNarrationOption({
           name: 'INTERACTION.TALK.NAME',
           image: '/images/ui/speech-bubble.png',
-          interaction: new OfferInteraction(
-            new TalkOffer(getTalkerBundle(getPlayerComponent(engine, Character)), getTalkerBundle(character))
-          )
+          interaction: new OfferInteraction(new TalkOffer(getPlayer(engine).talker, character.talker))
         })
       ]);
     });
