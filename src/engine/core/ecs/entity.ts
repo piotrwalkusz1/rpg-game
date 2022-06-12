@@ -1,12 +1,8 @@
-import type { Component } from 'engine/core/ecs/component';
+import { Component } from 'engine/core/ecs/component';
 import { ArrayUtils, Type } from 'utils';
 
 export class Entity {
   private readonly _components: Component[] = [];
-
-  hasComponent(componentType: Type<Component>): boolean {
-    return this.getComponent(componentType) !== undefined;
-  }
 
   get components(): readonly Component[] {
     return this._components;
@@ -35,8 +31,9 @@ export class Entity {
     return this;
   }
 
-  removeComponent(componentToRemove: Type<Component>) {
-    const component = ArrayUtils.findFirstInstanceOf(this._components, componentToRemove);
+  removeComponent(componentToRemove: Component | Type<Component>) {
+    const component =
+      componentToRemove instanceof Component ? componentToRemove : ArrayUtils.findFirstInstanceOf(this._components, componentToRemove);
     if (component !== undefined) {
       ArrayUtils.remove(this._components, component);
       component.entity = undefined;

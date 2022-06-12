@@ -1,5 +1,3 @@
-import type { TranslatableText } from 'i18n/translatable-text';
-
 export type FieldPlacementId = `OUTSIDE` | `INSIDE` | `NEAR`;
 
 export class FieldPlacement {
@@ -8,8 +6,4 @@ export class FieldPlacement {
   static readonly NEAR = new FieldPlacement('NEAR');
 
   constructor(readonly id: FieldPlacementId) {}
-
-  getMovementActivityName(): TranslatableText {
-    return `MAP.TERRAIN_OBJECT_PLACEMENT.${this.id}.MOVEMENT_ACTIVITY`;
-  }
 }

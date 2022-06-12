@@ -1,4 +1,3 @@
-import { addEvent } from 'engine/core/game';
 import type { Image } from 'engine/core/resources/image';
 import { Interaction, InteractionEvent } from 'engine/modules/interaction';
 import { getPlayer } from 'game';
@@ -14,7 +13,7 @@ export class InteractionNarrationOption extends NarrationOption {
   }
 
   override async onClick({ engine, processEvents }: NarrationOptionParams): Promise<void> {
-    addEvent(engine, new InteractionEvent({ time: engine.time, interaction: this.interaction, executor: getPlayer(engine) }));
+    engine.addEvent(new InteractionEvent({ time: engine.time, interaction: this.interaction, executor: getPlayer(engine) }));
     await processEvents();
   }
 }

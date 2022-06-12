@@ -3,24 +3,9 @@ import { Field } from 'engine/core/field/field';
 import { FieldObject } from 'engine/core/field/field-object';
 import { FieldObjectPosition } from 'engine/core/field/field-object-position';
 import { requireNotNull, requireType } from 'utils';
-import { PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition, type FieldPosition } from './field-position';
+import { RectFieldPosition, type FieldPosition } from './field-position';
 
 export namespace FieldUtils {
-  export const isObjectOnField = (object: EntityProvider, field: Field): boolean => {
-    const fieldOfObject: Field | undefined = getField(object);
-    return fieldOfObject !== undefined && (fieldOfObject === field || isSubFieldOfField(fieldOfObject, field));
-  };
-
-  export const isSubFieldOfField = (subField: Field, parentField: Field): boolean => {
-    if (subField.parentField === parentField) {
-      return true;
-    }
-    if (subField.parentField === undefined) {
-      return false;
-    }
-    return isSubFieldOfField(subField.parentField, parentField);
-  };
-
   export const setFieldObjectPosition = (object: EntityProvider, position: FieldObjectPosition): void => {
     const fieldObject: FieldObject | undefined = EntityProvider.getComponent(object, FieldObject);
     if (fieldObject) {
@@ -56,22 +41,16 @@ export const siblingAt = (field: Field, position: [number, number]): Field => su
 export const subFieldAt = (field: FieldProvider, position: [number, number]): Field =>
   requireNotNull(getField(field).getRectSubFields()[position[1]][position[0]]);
 
-export const getX = (fieldProvider: FieldProvider): number => requireNotNull(getRectFieldPosition(fieldProvider)?.x);
+export const getX = (fieldProvider: FieldProvider): number => requireNotNull(getRectFieldPosition(fieldProvider)).x;
 
-export const getY = (fieldProvider: FieldProvider): number => getRectFieldPosition(fieldProvider)?.y;
-
-export const isSimpleFieldPosition = (position: FieldPosition | undefined): position is SimpleFieldPosition =>
-  position instanceof SimpleFieldPosition;
+export const getY = (fieldProvider: FieldProvider): number => requireNotNull(getRectFieldPosition(fieldProvider)).y;
 
 export const isRectFieldPosition = (position: FieldPosition | undefined): position is RectFieldPosition =>
   position instanceof RectFieldPosition;
 
 export const getRectFieldPosition = (fieldProvider: FieldProvider): RectFieldPosition => {
-  return requireType(getField(fieldProvider)?.position, RectFieldPosition);
+  return requireType(getField(fieldProvider).position, RectFieldPosition);
 };
-
-export const isPlacementFieldPosition = (position: FieldPosition): position is PlacementFieldPosition =>
-  position instanceof PlacementFieldPosition;
 
 export const getParentField = (field: FieldProvider): Field => requireNotNull(tryGetParentField(field));
 

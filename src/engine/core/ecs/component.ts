@@ -16,7 +16,7 @@ export abstract class Component {
   }
 
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {
-    return this.entity?.getComponent(componentType);
+    return this.entity.getComponent(componentType);
   }
 
   requireComponent<T extends Component>(componentType: Type<T>): T {

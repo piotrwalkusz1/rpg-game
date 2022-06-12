@@ -12,7 +12,7 @@ export class AttackSystem extends System {
   }
 
   private executeAttackAction(action: AttackAction, executor: ActionExecutor): void {
-    const damage: number | undefined = executor.entity?.getComponent(Attacker)?.damage;
+    const damage: number | undefined = executor.getComponent(Attacker)?.damage;
     if (damage !== undefined) {
       action.target.getComponent(Health)?.decreaseHealthPoints(damage);
     }

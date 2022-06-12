@@ -8,10 +8,6 @@ export class Engine {
   private readonly entities: Entity[] = [];
   private readonly systems: System[] = [];
 
-  getEntities(): readonly Entity[] {
-    return this.entities;
-  }
-
   addEntityWithComponent<T extends Component>(component: T): T {
     this.addEntity(new Entity().addComponent(component));
     return component;
@@ -28,10 +24,6 @@ export class Engine {
 
   addEntities(entities: readonly Entity[]): void {
     this.entities.push(...entities);
-  }
-
-  getSystems(): readonly System[] {
-    return this.systems;
   }
 
   addSystem(system: System): void {

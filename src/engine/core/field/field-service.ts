@@ -1,5 +1,5 @@
 import type { Field } from 'engine/core/field/field';
-import { ArrayUtils, clamp } from 'utils';
+import { ArrayUtils, clamp, typeName } from 'utils';
 import { PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition } from './field-position';
 import { getX, getY, isRectFieldPosition, sameParent, siblingAt } from './field-utils';
 
@@ -27,7 +27,7 @@ export namespace FieldService {
           Math.abs(field.position.y - sibling.position.y) <= 1
       );
     }
-    return [];
+    throw new Error('Field position ' + typeName(field.position) + ' is unsupported');
   };
 
   export const getPathBetweenRectFields = (from: Field, to: Field): Field[] | undefined => {

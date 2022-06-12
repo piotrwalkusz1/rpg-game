@@ -1,6 +1,6 @@
 import { ActionExecutedEvent, ActionService } from '../action';
 import type { ECSEvent } from '../ecs';
-import { GameEngine, GameSystem, GameUtils } from '../game';
+import { GameEngine, GameSystem } from '../game';
 import type { Command } from './command';
 import { CommandEndedEvent, CommandScheduledEvent, CommandStartedEvent } from './command-event';
 import { CommandExecutor } from './command-executor';
@@ -21,7 +21,7 @@ export class CommandSystem extends GameSystem {
     const actionScheduledSuccessfully = this.scheduleNextAction(command, executor, engine);
     if (actionScheduledSuccessfully) {
       executor.pendingCommand = command;
-      GameUtils.addEventToQueue(engine, new CommandStartedEvent({ time, command, executor }));
+      engine.addEvent(new CommandStartedEvent({ time, command, executor }));
     }
   }
 
@@ -34,7 +34,7 @@ export class CommandSystem extends GameSystem {
     const actionScheduledSuccessfully = this.scheduleNextAction(command, commandExecutor, engine);
     if (!actionScheduledSuccessfully) {
       commandExecutor.pendingCommand = undefined;
-      GameUtils.addEventToQueue(engine, new CommandEndedEvent({ time, command, executor: commandExecutor }));
+      engine.addEvent(new CommandEndedEvent({ time, command, executor: commandExecutor }));
     }
   }
 

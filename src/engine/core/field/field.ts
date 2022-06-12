@@ -67,12 +67,8 @@ export class Field extends Component {
     return fields;
   }
 
-  addSubField(field: Field): void {
-    this.subFields.add(field);
-  }
-
   get siblings(): readonly Field[] {
-    return this.parentField?.getSubFields()?.filter((field) => field !== this) || [];
+    return this.parentField?.getSubFields().filter((field) => field !== this) || [];
   }
 
   getObjectsByComponentType<T extends Component>(componentType: Type<T>): T[] {

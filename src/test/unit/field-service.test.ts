@@ -1,8 +1,25 @@
-import { FieldPlacement, PlacementFieldPosition, RectFieldPosition, SimpleFieldPosition, subFieldAt } from 'engine/core/field';
+import {
+  FieldPlacement,
+  FieldPosition,
+  PlacementFieldPosition,
+  RectFieldPosition,
+  SimpleFieldPosition,
+  subFieldAt
+} from 'engine/core/field';
 import { FieldService } from 'engine/core/field/field-service';
 import { mockField, mockRectField } from 'test/mock/mock-field';
 
 describe('Field service', () => {
+  class UnsupportedFieldPosition extends FieldPosition {
+    constructor() {
+      super(mockField());
+    }
+
+    override equals(_position: FieldPosition): boolean {
+      throw new Error('Method not implemented.');
+    }
+  }
+
   describe('getConnectedField method', () => {
     it('should return empty array if field is not connected to any field', () => {
       expect(FieldService.getConnectedFields(mockField())).toEqual([]);
@@ -50,6 +67,12 @@ describe('Field service', () => {
       ];
 
       expect(FieldService.getConnectedFields(field)).toEqual(subFields);
+    });
+
+    it('should throw error is field has unsupported position', () => {
+      const field = mockField(new UnsupportedFieldPosition());
+
+      expect(() => FieldService.getConnectedFields(field)).toThrow(new Error('Field position UnsupportedFieldPosition is unsupported'));
     });
   });
 

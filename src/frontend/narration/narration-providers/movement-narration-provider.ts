@@ -17,7 +17,7 @@ export class MovementNarrationProvider extends NarrationProvider {
     }
     const player = getPlayer(engine);
     const action = new MoveAction({ position: new FieldObjectPosition(context.field) });
-    if (ActionService.canExecuteAction(action, player, engine)) {
+    if (ActionService.canExecuteAction(action, player.actionExecutor, engine)) {
       return this.prepareNarrationOptions(new SimpleCommand(action));
     }
     const path = hasField(player) ? FieldService.getPathBetweenRectFields(getField(player), context.field)?.slice(1) : undefined;

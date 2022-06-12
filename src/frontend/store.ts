@@ -1,7 +1,7 @@
-import { Field, FieldObject } from 'engine/core/field';
+import type { Field } from 'engine/core/field';
 import type { GameEngine } from 'engine/core/game';
-import { Time, TimeManager } from 'engine/core/time';
-import { Journal, JournalOwner } from 'engine/modules/journal';
+import type { Time } from 'engine/core/time';
+import type { Journal } from 'engine/modules/journal';
 import { getPlayer, initializeDemoGame, Player } from 'game';
 import { derived, get, Readable, Writable, writable } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
@@ -24,7 +24,7 @@ export class GameStore {
   constructor(params?: { engine?: GameEngine }) {
     this.engine = writable(params?.engine || initializeDemoGame());
     this.blockedScreen = writable(false);
-    this.displayedLocation = writable(get(this.engine).requireComponent(Player).requireComponent(FieldObject).field?.parentField);
+    this.displayedLocation = writable(getPlayer(get(this.engine)).field?.parentField);
     this.selectedField = writable(undefined);
     this.narrationContext = writable(undefined);
     this.displayedDialog = writable(undefined);
@@ -33,7 +33,7 @@ export class GameStore {
     );
     this.time = derived(this.engine, ($engine) => $engine.time);
     this.player = derived(this.engine, ($engine) => getPlayer($engine));
-    this.journal = derived(this.player, ($player) => $player.requireComponent(JournalOwner).journal);
+    this.journal = derived(this.player, ($player) => $player.journal);
   }
 
   refreshEngine(): void {
@@ -56,6 +56,6 @@ export const {
   journal
 } = gameStore;
 
-export const animatedCurrentTime = MotionUtils.interpolate(get(engine).requireComponent(TimeManager).time, TimeUtils.interpolate);
+export const animatedCurrentTime = MotionUtils.interpolate(get(engine).time, TimeUtils.interpolate);
 
 export const refreshEngine = () => gameStore.refreshEngine();

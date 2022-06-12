@@ -1,9 +1,9 @@
 import { add } from 'date-fns';
-import { Engine, EntityProvider } from 'engine/core/ecs';
+import type { Engine } from 'engine/core/ecs';
 import type { GameEngine } from 'engine/core/game';
 import type { Action } from './action';
 import { ActionStartedEvent, BeforeActionExecutingEvent } from './action-event';
-import { ActionExecutor } from './action-executor';
+import type { ActionExecutor } from './action-executor';
 import { PendingAction } from './pending-action';
 
 export namespace ActionService {
@@ -17,8 +17,7 @@ export namespace ActionService {
     return true;
   };
 
-  export const canExecuteAction = (action: Action, executor: EntityProvider, engine: Engine): boolean => {
-    const actionExecutor = EntityProvider.requireComponent(executor, ActionExecutor);
+  export const canExecuteAction = (action: Action, actionExecutor: ActionExecutor, engine: Engine): boolean => {
     return action.getExecutionConditions(actionExecutor).every((condition) => condition.check(engine));
   };
 }

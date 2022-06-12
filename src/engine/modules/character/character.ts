@@ -5,6 +5,7 @@ import { Component, Engine, Entity } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
 import type { Image } from 'engine/core/resources';
 import type { TranslatableText } from 'i18n/translatable-text';
+import { Attacker } from '../attack';
 import { Health } from '../health';
 import { OfferParty } from '../offer';
 import { Presentation } from '../presentation';
@@ -16,19 +17,22 @@ export class Character extends Component {
   readonly presentation: Presentation;
   readonly commandExecutor: CommandExecutor;
   readonly health: Health;
+  readonly attacker: Attacker;
 
   constructor({
     talker,
     fieldObject,
     presentation,
     commandExecutor,
-    health
+    health,
+    attacker
   }: {
     talker: Talker;
     fieldObject: FieldObject;
     presentation: Presentation;
     commandExecutor: CommandExecutor;
     health: Health;
+    attacker: Attacker;
   }) {
     super();
     this.talker = talker;
@@ -36,6 +40,7 @@ export class Character extends Component {
     this.presentation = presentation;
     this.commandExecutor = commandExecutor;
     this.health = health;
+    this.attacker = attacker;
   }
 
   static create(engine: Engine): Character {
@@ -43,13 +48,15 @@ export class Character extends Component {
     const activityParticipant = new ActivityParticipant();
     const fieldObject = new FieldObject();
     const health = new Health();
+    const attacker = new Attacker();
     const actionExecutor = new ActionExecutor();
     const commandExecutor = new CommandExecutor({ actionExecutor });
     const presentation = new Presentation({ name: { literal: '' }, avatar: '/images/characters/001_Eladin.png' });
     const talker = new Talker({ offerParty, activityParticipant });
-    const character = new Character({ talker, fieldObject, presentation, commandExecutor, health });
+    const character = new Character({ talker, fieldObject, presentation, commandExecutor, health, attacker });
     engine.addEntity(
       new Entity().addComponents([
+        attacker,
         offerParty,
         activityParticipant,
         fieldObject,

@@ -41,6 +41,15 @@ describe('AI', () => {
       expect(engine.events).toEqual([expectedBeforeActionExecutingEvent]);
     });
 
+    test('Do not attack if there is no battle', async () => {
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+
+      await GameService.processEvents(engine, () => {});
+
+      expect(character.pendingAction).toEqual(undefined);
+      expect(engine.events).toEqual([]);
+    });
+
     test('Do not attack if pending action', async () => {
       const pendingAction = new PendingAction({
         action: new MockAction(),
@@ -70,6 +79,17 @@ describe('AI', () => {
 
       expect(character.pendingAction).toEqual(undefined);
       expect(character.pendingCommand).toEqual(new MockCommand());
+      expect(engine.events).toEqual([]);
+    });
+
+    test('Stop battle if there is no enemy', async () => {
+      new BattleActivity({ participants: [character.activityParticipant] });
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+
+      await GameService.processEvents(engine, () => {});
+
+      expect(character.pendingAction).toEqual(undefined);
+      expect(character.activityParticipant.activities.getArray()).toEqual([]);
       expect(engine.events).toEqual([]);
     });
   });

@@ -25,7 +25,7 @@ export namespace GameService {
     }
   };
 
-  const processNextEvent = async (engine: Engine, refreshEngine: () => void): Promise<void> => {
+  const processNextEvent = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
     await GameLoopService.processNextEvent(engine);
     refreshEngine();
   };
