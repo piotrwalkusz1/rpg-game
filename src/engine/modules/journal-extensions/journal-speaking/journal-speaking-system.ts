@@ -1,9 +1,9 @@
 import { ActionExecutingEvent } from 'engine/core/action';
 import { ECSEvent, Engine, System } from 'engine/core/ecs';
 import { ArrayUtils } from 'utils';
-import { Character } from '../character';
-import { JournalOwner } from '../journal/journal-owner';
-import { SpeakAction } from '../speaking';
+import { Character } from '../../character';
+import { JournalOwner } from '../../journal/journal-owner';
+import { SpeakAction } from '../../speaking';
 import { SpeakJournalEntry } from './speak-journal-entry';
 
 export class JournalSpeakingSystem extends System {

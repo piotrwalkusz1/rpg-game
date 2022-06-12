@@ -1,6 +1,6 @@
 import { Character } from 'engine/modules/character';
 import { Journal } from 'engine/modules/journal';
-import { SpeakJournalEntry } from 'engine/modules/journal-speaking';
+import { SpeakJournalEntry } from 'engine/modules/journal-extensions/journal-speaking';
 import { Bookmark, BookmarkService } from 'frontend/bookmark';
 import { SpeechBookmark } from 'frontend/bookmark/bookmarks/speech-bookmark';
 import { Dialog, DialogSpeech } from 'frontend/dialog';

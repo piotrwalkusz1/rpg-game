@@ -7,7 +7,7 @@ import { FieldDefinition } from 'engine/core/field/field-definition';
 import { GameEngine } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
 import { Character } from 'engine/modules/character';
-import { JournalSpeakingSystem } from 'engine/modules/journal-speaking';
+import { JournalSpeakingSystem } from 'engine/modules/journal-extensions/journal-speaking';
 import { MovementSystem } from 'engine/modules/movement';
 import { OfferSystem } from 'engine/modules/offer';
 import { TalkSystem } from 'engine/modules/talk';
