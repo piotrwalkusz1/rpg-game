@@ -100,7 +100,15 @@ export class Character extends Component {
     return this.commandExecutor.pendingAction;
   }
 
+  set pendingAction(pendingAction: PendingAction | undefined) {
+    this.commandExecutor.pendingAction = pendingAction;
+  }
+
   get pendingCommand(): Command | undefined {
     return this.commandExecutor.pendingCommand;
+  }
+
+  set pendingCommand(pendingCommand: Command | undefined) {
+    this.commandExecutor.pendingCommand = pendingCommand;
   }
 }

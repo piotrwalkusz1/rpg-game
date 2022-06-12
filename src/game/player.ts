@@ -1,4 +1,5 @@
 import type { PendingAction } from 'engine/core/action';
+import type { ActivityParticipant } from 'engine/core/activity';
 import type { Command, CommandExecutor } from 'engine/core/command';
 import { Component, Engine } from 'engine/core/ecs';
 import type { Field } from 'engine/core/field';
@@ -30,6 +31,10 @@ export class Player extends Component {
 
   get commandExecutor(): CommandExecutor {
     return this.character.commandExecutor;
+  }
+
+  get activityParticipant(): ActivityParticipant {
+    return this.character.activityParticipant;
   }
 
   get field(): Field | undefined {
