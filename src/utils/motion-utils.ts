@@ -1,7 +1,11 @@
 import { writable } from 'svelte/store';
 
 export namespace MotionUtils {
-  export const interpolate = <T>(initialValue: T, interpolateValue: (startValue: T, endValue: T, ratio: number) => T) => {
+  export const interpolate = <T>(
+    initialValue: T,
+    interpolateValue: (startValue: T, endValue: T, ratio: number) => T,
+    deltaTime?: number
+  ) => {
     const { subscribe, set, update } = writable(initialValue);
     return {
       subscribe,
@@ -20,7 +24,7 @@ export namespace MotionUtils {
                   resolve();
                 } else {
                   set(interpolateValue(startValue, endValue, ratio));
-                  setTimeout(setNewValue);
+                  setTimeout(setNewValue, deltaTime);
                 }
               };
               setNewValue();

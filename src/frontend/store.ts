@@ -57,5 +57,3 @@ export const {
 } = gameStore;
 
 export const animatedCurrentTime = MotionUtils.interpolate(get(engine).time, TimeUtils.interpolate);
-
-export const refreshEngine = () => gameStore.refreshEngine();

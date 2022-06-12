@@ -5,7 +5,7 @@ export const requireType = <T>(value: unknown, type: Type<T>): T => {
   if (value instanceof type) {
     return value;
   }
-  throw new Error(`Expected type "${type}" but was ${typeName(value)}`);
+  throw new Error(`Expected type "${type.name}" but was ${typeName(value)}`);
 };
 
 export const requireNumber = (value: unknown): number => {

@@ -1,4 +1,5 @@
-import { Action, ActionExecutingEvent } from 'engine/core/action';
+import { ActionExecutingEvent } from 'engine/core/action';
+import { Entity } from 'engine/core/ecs';
 import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
 import { Character } from 'engine/modules/character';
@@ -30,7 +31,7 @@ describe('Journal speaking system', () => {
         receivers: [journalOwner]
       });
 
-      await journalSpeakingSystem.processEvent(mockActionExecutingEvent(action), engine);
+      await journalSpeakingSystem.processEvent(new ActionExecutingEvent({ action, executor: speaker, time }), engine);
 
       expect(journalOwner.journal.unreadEntries).toEqual([
         new SpeakJournalEntry({
@@ -41,9 +42,28 @@ describe('Journal speaking system', () => {
         })
       ]);
     });
-  });
 
-  function mockActionExecutingEvent(action: Action): ActionExecutingEvent {
-    return new ActionExecutingEvent({ action, executor: speaker, time });
-  }
+    it('should not add entry to journal if no speaker component', async () => {
+      const action = new SpeakAction({
+        content: { literal: 'Hi, my name is Sestia' },
+        quote: true,
+        receivers: [journalOwner]
+      });
+      speaker.entity.removeComponent(Character);
+
+      await journalSpeakingSystem.processEvent(new ActionExecutingEvent({ action, executor: speaker.actionExecutor, time }), engine);
+
+      expect(journalOwner.journal.unreadEntries).toEqual([]);
+    });
+
+    it('should do nothing if receiver is not journal owner', async () => {
+      const action = new SpeakAction({
+        content: { literal: 'Hi, my name is Sestia' },
+        quote: true,
+        receivers: [new Entity()]
+      });
+
+      await journalSpeakingSystem.processEvent(new ActionExecutingEvent({ action, executor: speaker.actionExecutor, time }), engine);
+    });
+  });
 });

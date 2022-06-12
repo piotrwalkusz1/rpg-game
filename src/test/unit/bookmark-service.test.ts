@@ -7,7 +7,7 @@ import { Dialog, DialogSpeech } from 'frontend/dialog';
 import { GameBuilder } from 'game';
 
 describe('Bookmark service', () => {
-  describe('generateBookmarks method', () => {
+  describe('generateBookmarks', () => {
     it('should return SpeechBookmark for each character with unread SpeakJournalEntry', () => {
       const engine = new GameBuilder().build();
       const character = Character.create(engine);
@@ -53,6 +53,22 @@ describe('Bookmark service', () => {
       ]);
       expect(dialog(bookmarks[1]).character).toBe(character2);
       expect(dialog(bookmarks[1]).speeches).toEqual([new DialogSpeech({ character: character2, content: { literal: 'Hello.' } })]);
+    });
+
+    it('should mark journal entries as read after dialog is closed', () => {
+      const engine = new GameBuilder().build();
+      const character = Character.create(engine);
+      const journal = new Journal();
+      journal.addEntry(
+        new SpeakJournalEntry({ content: { literal: 'Hi.' }, quote: true, speaker: character, time: new Date(1000), state: 'SEEN' })
+      );
+
+      const bookmarks = BookmarkService.generateBookmarks({ journal, refreshEngine: () => {} });
+      (bookmarks[0] as SpeechBookmark).dialog.onClose?.();
+
+      expect(journal.entries).toEqual([
+        new SpeakJournalEntry({ content: { literal: 'Hi.' }, quote: true, speaker: character, time: new Date(1000), state: 'READ' })
+      ]);
     });
 
     function dialog(bookmark: Bookmark): Dialog {

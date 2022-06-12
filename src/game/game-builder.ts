@@ -41,18 +41,13 @@ export class GameBuilder {
     }
   }
 
-  worldSize(worldSize: [number, number]): GameBuilder {
-    this._worldSize = worldSize;
-    return this;
-  }
-
   playerPosition(playerPosition: [number, number]): GameBuilder {
     this._playerPosition = playerPosition;
     return this;
   }
 
-  addCharacter(character?: CharacterData): GameBuilder {
-    this._characters.push(character || {});
+  addCharacter(character: CharacterData): GameBuilder {
+    this._characters.push(character);
     return this;
   }
 

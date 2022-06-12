@@ -35,7 +35,7 @@ export class Entity {
     const component =
       componentToRemove instanceof Component ? componentToRemove : ArrayUtils.findFirstInstanceOf(this._components, componentToRemove);
     if (component !== undefined) {
-      ArrayUtils.remove(this._components, component);
+      ArrayUtils.removeFirst(this._components, component);
       component.entity = undefined;
     }
   }

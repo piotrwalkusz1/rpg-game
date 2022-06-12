@@ -15,16 +15,7 @@ export namespace ArrayUtils {
   export const findFirstInstanceOf = <T>(array: readonly unknown[], type: Type<T>): T | undefined =>
     array.find((item): item is T => item instanceof type);
 
-  export const getShuffledArray = <T>(array: T[]) => {
-    const newArray = array.slice();
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const rand = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[rand]] = [newArray[rand], newArray[i]];
-    }
-    return newArray;
-  };
-
-  export const remove = <T>(array: T[], item: T): boolean => {
+  export const removeFirst = <T>(array: T[], item: T): boolean => {
     const index: number = array.findIndex((otherItem) => otherItem === item);
     if (index !== -1) {
       array.splice(index, 1);

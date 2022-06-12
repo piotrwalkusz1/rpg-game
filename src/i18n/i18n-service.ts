@@ -3,6 +3,7 @@ import translations from './translations';
 
 const INITIAL_LANGUAGE = 'en';
 
+/* istanbul ignore next */
 export class I18nService {
   i18n: i18n;
   constructor() {

@@ -29,5 +29,27 @@ describe('AttackSystem', () => {
 
       expect(target.health.healthPoints).toEqual(204);
     });
+
+    it('should do nothing if no attacker component', async () => {
+      attacker.entity.removeComponent(attacker.attacker);
+      target.health.healthPoints = 217;
+
+      await attackSystem.processEvent(
+        new ActionExecutingEvent({ time: engine.time, action: new AttackAction({ target }), executor: attacker.actionExecutor }),
+        engine
+      );
+
+      expect(target.health.healthPoints).toEqual(217);
+    });
+
+    it('should do nothing if target has no health component', async () => {
+      attacker.attacker.damage = 13;
+      target.entity.removeComponent(target.health);
+
+      await attackSystem.processEvent(
+        new ActionExecutingEvent({ time: engine.time, action: new AttackAction({ target }), executor: attacker.actionExecutor }),
+        engine
+      );
+    });
   });
 });

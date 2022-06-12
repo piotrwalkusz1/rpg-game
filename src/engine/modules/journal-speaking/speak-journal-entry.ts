@@ -26,8 +26,4 @@ export class SpeakJournalEntry extends JournalEntry {
     this.content = content;
     this.quote = quote;
   }
-
-  override get text(): TranslatableText {
-    return this.content;
-  }
 }

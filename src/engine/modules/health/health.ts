@@ -1,8 +1,14 @@
 import { Component } from 'engine/core/ecs';
 
 export class Health extends Component {
-  private _healthPoints = 100;
-  private _maxHealthPoints = 100;
+  private _healthPoints;
+  private _maxHealthPoints;
+
+  constructor(params?: { maxHealthPoints?: number }) {
+    super();
+    this._maxHealthPoints = params?.maxHealthPoints || 100;
+    this._healthPoints = this._maxHealthPoints;
+  }
 
   get healthPoints(): number {
     return this._healthPoints;
@@ -16,10 +22,6 @@ export class Health extends Component {
     if (value > 0) {
       this._healthPoints = Math.max(this.healthPoints - value, 0);
     }
-  }
-
-  get maxHealthPoints(): number {
-    return this._maxHealthPoints;
   }
 
   get lostPercentageOfHealth(): number {

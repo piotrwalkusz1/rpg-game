@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 export abstract class OneToManyCollection<Item, FK> {
   private readonly items: Item[] = [];
 
@@ -48,6 +49,7 @@ export abstract class OneToManyCollection<Item, FK> {
   abstract getForeignKey(item: Item): OneToManyForeignKey<Item, OneToManyCollection<Item, FK>, FK>;
 }
 
+/* istanbul ignore next */
 export abstract class OneToManyForeignKey<Item, Collection extends OneToManyCollection<Item, FK>, FK> {
   protected _value: FK | undefined;
 
@@ -77,6 +79,7 @@ export abstract class OneToManyForeignKey<Item, Collection extends OneToManyColl
   abstract getCollection(foreignKey: FK | undefined): Collection | undefined;
 }
 
+/* istanbul ignore next */
 export abstract class ManyToManyCollection<Item, FK> {
   private readonly foreignKey: FK;
   private items: Item[] = [];

@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Journal } from 'engine/modules/journal';
   import { Bookmark, BookmarkService } from 'frontend/bookmark';
-  import { journal, refreshEngine } from 'frontend/store';
+  import { gameStore, journal } from 'frontend/store';
   import BookmarkView from './bookmark-view.svelte';
 
   $: bookmarks = generateBookmarks($journal);
 
   function generateBookmarks(journal: Journal): Bookmark[] {
-    return BookmarkService.generateBookmarks({ journal, refreshEngine });
+    return BookmarkService.generateBookmarks({ journal, refreshEngine: () => gameStore.refreshEngine() });
   }
 </script>
 

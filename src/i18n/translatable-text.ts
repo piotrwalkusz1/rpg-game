@@ -3,6 +3,7 @@ import type { TranslationKey } from './translations';
 
 const DEFAULT_SEPARATOR = '';
 
+/* istanbul ignore next */
 class TranslationContext {
   constructor(private readonly t: TType) {}
 
@@ -21,6 +22,7 @@ export type TranslatableText =
   | { literal: string }
   | ((tc: TranslationContext) => string);
 
+/* istanbul ignore next */
 export const convertTranslatableTextToString = (t: TType, translatableText: TranslatableText): string => {
   if (typeof translatableText === 'string') {
     return t(translatableText);
@@ -34,6 +36,7 @@ export const convertTranslatableTextToString = (t: TType, translatableText: Tran
   }
 };
 
+/* istanbul ignore next */
 export const convertTranslatableTextsToStringsOnObject = (t: TType, object: Record<string, TranslatableText>): Record<string, string> => {
   const result: Record<string, string> = {};
   for (const key in object) {
@@ -42,6 +45,7 @@ export const convertTranslatableTextsToStringsOnObject = (t: TType, object: Reco
   return result;
 };
 
+/* istanbul ignore next */
 export const createTranslatableTextFromArray = (translatableTexts: TranslatableText[], separator = DEFAULT_SEPARATOR): TranslatableText => {
   return (tc) => translatableTexts.map((translatableText) => tc.toString(translatableText)).join(separator);
 };

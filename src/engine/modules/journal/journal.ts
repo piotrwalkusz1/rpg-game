@@ -18,7 +18,11 @@ export class Journal {
     });
   }
 
-  get unreadEntries(): JournalEntry[] {
+  get entries(): readonly JournalEntry[] {
+    return this._entries;
+  }
+
+  get unreadEntries(): readonly JournalEntry[] {
     return this._entries.filter((entry) => entry.state !== 'READ');
   }
 }
