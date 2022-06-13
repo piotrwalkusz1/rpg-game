@@ -1,33 +1,18 @@
 import type { TType } from './translation-service';
 import type { TranslationKey } from './translations';
 
-const DEFAULT_SEPARATOR = '';
-
-/* istanbul ignore next */
-class TranslationContext {
-  constructor(private readonly t: TType) {}
-
-  toString(translatableText: TranslatableText): string {
-    return convertTranslatableTextToString(this.t, translatableText);
-  }
-
-  join(translatableTexts: TranslatableText[], separator: string = DEFAULT_SEPARATOR): string {
-    return this.toString(createTranslatableTextFromArray(translatableTexts, separator));
-  }
-}
-
 export type TranslatableText =
   | TranslationKey
   | { translationKey: TranslationKey; properties?: Record<string, TranslatableText> }
   | { literal: string }
-  | ((tc: TranslationContext) => string);
+  | TranslatableText[];
 
 /* istanbul ignore next */
 export const convertTranslatableTextToString = (t: TType, translatableText: TranslatableText): string => {
   if (typeof translatableText === 'string') {
     return t(translatableText);
-  } else if (typeof translatableText === 'function') {
-    return translatableText(new TranslationContext(t));
+  } else if (Array.isArray(translatableText)) {
+    return translatableText.map((text) => convertTranslatableTextToString(t, text)).join('');
   } else if ('literal' in translatableText) {
     return translatableText.literal;
   } else {
@@ -45,11 +30,11 @@ export const convertTranslatableTextsToStringsOnObject = (t: TType, object: Reco
   return result;
 };
 
-/* istanbul ignore next */
-export const createTranslatableTextFromArray = (translatableTexts: TranslatableText[], separator = DEFAULT_SEPARATOR): TranslatableText => {
-  return (tc) => translatableTexts.map((translatableText) => tc.toString(translatableText)).join(separator);
-};
-
 export const isLiteral = (translatableText: TranslatableText, literal: string): boolean => {
   return typeof translatableText === 'object' && 'literal' in translatableText && translatableText.literal === literal;
+};
+
+/* istanbul ignore next */
+export const wrapTranslation = (translatableText: TranslatableText, wrapper: string): TranslatableText => {
+  return [{ literal: wrapper }, translatableText, { literal: wrapper }];
 };

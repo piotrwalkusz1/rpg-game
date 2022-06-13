@@ -1,29 +1,23 @@
 import type { Time } from 'engine/core/time';
-import type { TranslatableText } from 'i18n/translatable-text';
+import { TranslatableText, wrapTranslation } from 'i18n/translatable-text';
 import type { Character } from '../../character';
-import { JournalEntry, JournalEntryState } from '../../journal/journal-entry';
+import type { JournalEntryState } from '../../journal/journal-entry';
+import { CharacterJournalEntry } from '../journal-character';
 
-export class SpeakJournalEntry extends JournalEntry {
-  readonly speaker: Character;
-  readonly content: TranslatableText;
-  readonly quote: boolean;
-
+export class SpeakJournalEntry extends CharacterJournalEntry {
   constructor({
-    time,
     speaker,
     content,
     quote,
+    time,
     state
   }: {
-    time: Time;
     speaker: Character;
     content: TranslatableText;
     quote: boolean;
+    time: Time;
     state?: JournalEntryState;
   }) {
-    super({ time, state });
-    this.speaker = speaker;
-    this.content = content;
-    this.quote = quote;
+    super({ text: quote ? wrapTranslation(content, '"') : content, character: speaker, time, state });
   }
 }

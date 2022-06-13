@@ -1,4 +1,6 @@
 import type { Time } from 'engine/core/time';
+import type { TranslatableText } from 'i18n/translatable-text';
+import type { JournalContext } from './journal-context';
 
 export type JournalEntryState = 'UNSEEN' | 'SEEN' | 'READ';
 
@@ -10,4 +12,8 @@ export abstract class JournalEntry {
     this.time = time;
     this.state = state || 'UNSEEN';
   }
+
+  abstract get text(): TranslatableText;
+
+  abstract get contexts(): readonly JournalContext[];
 }

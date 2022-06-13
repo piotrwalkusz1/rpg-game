@@ -16,6 +16,7 @@
         "/src/engine/modules/offer",
         "/src/game",
         "/src/engine/modules/presentation",
-        "/src/engine/modules/journal-extensions/journal-talk"
+        "/src/engine/modules/journal-extensions/journal-talk",
+        "/src/engine/modules/journal-extensions/journal-character"
     ]
 }

@@ -1,8 +1,16 @@
 import { addMilliseconds } from 'date-fns';
-import { Journal, JournalEntry } from 'engine/modules/journal';
+import { Journal, JournalContext, JournalEntry } from 'engine/modules/journal';
+import type { TranslatableText } from 'i18n/translatable-text';
 
 describe('Journal', () => {
-  class MockJournalEntry extends JournalEntry {}
+  class MockJournalEntry extends JournalEntry {
+    get text(): TranslatableText {
+      throw new Error('Method not implemented.');
+    }
+    get contexts(): readonly JournalContext[] {
+      throw new Error('Method not implemented.');
+    }
+  }
 
   describe('addEntry', () => {
     it('should sort entry after each add', () => {

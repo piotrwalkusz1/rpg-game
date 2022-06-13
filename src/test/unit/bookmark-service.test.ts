@@ -48,11 +48,13 @@ describe('Bookmark service', () => {
       expect(bookmarks.length).toBe(2);
       expect(dialog(bookmarks[0]).character).toBe(character);
       expect(dialog(bookmarks[0]).speeches).toEqual([
-        new DialogSpeech({ character: character, content: { literal: 'Are you listening?' } }),
+        new DialogSpeech({ character: character, content: [{ literal: '"' }, { literal: 'Are you listening?' }, { literal: '"' }] }),
         new DialogSpeech({ character: character, content: { literal: 'He asks you about something.' } })
       ]);
       expect(dialog(bookmarks[1]).character).toBe(character2);
-      expect(dialog(bookmarks[1]).speeches).toEqual([new DialogSpeech({ character: character2, content: { literal: 'Hello.' } })]);
+      expect(dialog(bookmarks[1]).speeches).toEqual([
+        new DialogSpeech({ character: character2, content: [{ literal: '"' }, { literal: 'Hello.' }, { literal: '"' }] })
+      ]);
     });
 
     it('should mark journal entries as read after dialog is closed', () => {
