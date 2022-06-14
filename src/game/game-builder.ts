@@ -8,6 +8,7 @@ import { GameEngine } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
 import { Character } from 'engine/modules/character';
 import { JournalSpeakingSystem } from 'engine/modules/journal-extensions/journal-speaking';
+import { TalkJournalSystem } from 'engine/modules/journal-extensions/journal-talk';
 import { MovementSystem } from 'engine/modules/movement';
 import { OfferSystem } from 'engine/modules/offer';
 import { TalkSystem } from 'engine/modules/talk';
@@ -61,6 +62,7 @@ export class GameBuilder {
       new CommandSystem(),
       new MovementSystem(),
       new JournalSpeakingSystem(),
+      new TalkJournalSystem(),
       new TalkSystem(),
       new OfferSystem(),
       new AISystem()

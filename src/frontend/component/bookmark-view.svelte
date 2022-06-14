@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { Image } from 'engine/core/resources';
   import type { Bookmark } from 'frontend/bookmark';
-  import { displayedDialog } from 'frontend/store';
-  import { get } from 'svelte/store';
+  import { activatedBookmark, activatedBookmarkContext } from 'frontend/store';
 
   export let bookmark: Bookmark;
 
@@ -18,7 +17,7 @@
 
 <div
   class="bookmark shadow-[5px_3px_5px_1px_rgba(67,67,67,0.27)] hover:shadow-[5px_3px_6px_2px_rgba(0,0,0,0.4)] cursor-pointer"
-  on:click={() => bookmark.onClick({ setDisplayedDialog: displayedDialog.set, getDisplayedDialog: () => get(displayedDialog) })}
+  on:click={() => ($activatedBookmarkContext = $activatedBookmark ? undefined : bookmark.context)}
 >
   <div
     style="background-image: url({bookmark.image}); {bookmarkImageStyle}"

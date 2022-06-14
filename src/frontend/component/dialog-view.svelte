@@ -1,22 +1,20 @@
 <script lang="ts">
   import { faAngleDown, faTimes } from '@fortawesome/free-solid-svg-icons';
-  import type { Dialog } from 'frontend/dialog';
-  import { displayedDialog } from 'frontend/store';
+  import type { DialogBookmark } from 'frontend/bookmark/bookmarks/dialog-bookmark';
+  import { activatedBookmarkContext } from 'frontend/store';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
   import Fa from 'svelte-fa';
   import AvatarWithName from './avatar-with-name.svelte';
   import Border from './borders/border.svelte';
 
-  export let dialog: Dialog;
+  export let bookmark: DialogBookmark;
 
   function hideDialog() {
-    displayedDialog.set(undefined);
+    activatedBookmarkContext.set(undefined);
   }
 
   function closeDialog() {
-    if (dialog.onClose) {
-      dialog.onClose();
-    }
+    bookmark.journalEntries.forEach((entry) => (entry.state = 'READ'));
     hideDialog();
   }
 </script>
@@ -27,23 +25,21 @@
   <Border class="w-full h-full">
     <div class="p-border">
       <div class="flex m-5px">
-        <AvatarWithName avatar={dialog.character.avatar} name={dialog.character.name} />
+        <AvatarWithName avatar={bookmark.character.avatar} name={bookmark.character.name} />
         <div class="flex self-start items-center ml-auto pr-[5px] text-[#c79b00]">
           <span on:click={hideDialog}>
             <Fa icon={faAngleDown} class="text-[25px] hover:text-[#614c00] cursor-pointer" />
           </span>
 
-          {#if dialog.onClose}
-            <span on:click={closeDialog}>
-              <Fa icon={faTimes} class="ml-[15px] text-[20px] hover:text-[#614c00] cursor-pointer" />
-            </span>
-          {/if}
+          <span on:click={closeDialog}>
+            <Fa icon={faTimes} class="ml-[15px] text-[20px] hover:text-[#614c00] cursor-pointer" />
+          </span>
         </div>
       </div>
       <div>
-        {#each dialog.speeches as speech}
+        {#each bookmark.journalEntries as entry}
           <div class="font-default text-[20px] mx-[12px] my-[15px]">
-            <TranslatableTextView text={speech.content} />
+            <TranslatableTextView text={entry.text} />
           </div>
         {/each}
       </div>

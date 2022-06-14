@@ -5,7 +5,7 @@ import type { Journal } from 'engine/modules/journal';
 import { getPlayer, initializeDemoGame, Player } from 'game';
 import { derived, get, Readable, Writable, writable } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
-import type { Dialog } from './dialog';
+import { Bookmark, BookmarkContext, BookmarkService } from './bookmark';
 import { Narration, NarrationService } from './narration';
 import type { NarrationContext } from './narration/narration-context';
 
@@ -15,8 +15,10 @@ export class GameStore {
   readonly displayedLocation: Writable<Field>;
   readonly selectedField: Writable<Field | undefined>;
   readonly narrationContext: Writable<NarrationContext | undefined>;
-  readonly displayedDialog: Writable<Dialog | undefined>;
+  readonly activatedBookmarkContext: Writable<BookmarkContext | undefined>;
   readonly narration: Readable<Narration | undefined>;
+  readonly bookmarks: Readable<Bookmark[]>;
+  readonly activatedBookmark: Readable<Bookmark | undefined>;
   readonly time: Readable<Time>;
   readonly player: Readable<Player>;
   readonly journal: Readable<Journal>;
@@ -27,9 +29,13 @@ export class GameStore {
     this.displayedLocation = writable(getPlayer(get(this.engine)).field?.parentField);
     this.selectedField = writable(undefined);
     this.narrationContext = writable(undefined);
-    this.displayedDialog = writable(undefined);
+    this.activatedBookmarkContext = writable(undefined);
     this.narration = derived([this.narrationContext, this.engine], ([$narrationContext, $engine]) =>
       $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
+    );
+    this.bookmarks = derived(this.engine, (engine) => BookmarkService.getBookmarks({ engine }));
+    this.activatedBookmark = derived([this.bookmarks, this.activatedBookmarkContext], ([bookmarks, activatedBookmarkContext]) =>
+      activatedBookmarkContext ? bookmarks.find((bookmark) => bookmark.context.equals(activatedBookmarkContext)) : undefined
     );
     this.time = derived(this.engine, ($engine) => $engine.time);
     this.player = derived(this.engine, ($engine) => getPlayer($engine));
@@ -49,8 +55,10 @@ export const {
   displayedLocation,
   selectedField,
   narrationContext,
-  displayedDialog,
+  activatedBookmarkContext,
   narration,
+  bookmarks,
+  activatedBookmark,
   time,
   player,
   journal

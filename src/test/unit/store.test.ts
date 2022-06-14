@@ -1,4 +1,8 @@
 import { rootField, subFieldAt } from 'engine/core/field';
+import { Character } from 'engine/modules/character';
+import { CharacterJournalEntry } from 'engine/modules/journal-extensions/journal-character';
+import { DialogBookmarkContext } from 'frontend/bookmark/bookmark-contexts/dialog-bookmark-context';
+import { DialogBookmark } from 'frontend/bookmark/bookmarks/dialog-bookmark';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { engine as $engine, GameStore, gameStore, narration as $narration, narrationContext as $narrationContext } from 'frontend/store';
 import { GameBuilder, getPlayer } from 'game';
@@ -57,6 +61,32 @@ describe('GameStore', () => {
       const store = new GameStore({ engine });
 
       expect(get(store.displayedLocation)).toBeUndefined();
+    });
+  });
+
+  describe('activatedBookmark', () => {
+    it('should return bookmark with activated bookmark context', () => {
+      const engine = new GameBuilder().build();
+      const character = Character.create(engine);
+      getPlayer(engine).journal.addEntry(new CharacterJournalEntry({ text: { literal: 'Hi' }, character, time: engine.time }));
+      const store = new GameStore({ engine });
+      store.activatedBookmarkContext.set(new DialogBookmarkContext(character));
+
+      expect(get(store.activatedBookmark)).toEqual(
+        new DialogBookmark({
+          character,
+          journalEntries: [new CharacterJournalEntry({ text: { literal: 'Hi' }, character, time: engine.time })]
+        })
+      );
+    });
+
+    it('should return undefined if activatedBookmarkContext is undefined', () => {
+      const engine = new GameBuilder().build();
+      const character = Character.create(engine);
+      getPlayer(engine).journal.addEntry(new CharacterJournalEntry({ text: { literal: 'Hi' }, character, time: engine.time }));
+      const store = new GameStore({ engine });
+
+      expect(get(store.activatedBookmark)).toBeUndefined();
     });
   });
 });

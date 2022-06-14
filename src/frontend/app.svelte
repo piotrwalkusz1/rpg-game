@@ -8,9 +8,10 @@
   import NarrationView from 'frontend/component/narration-view.svelte';
   import Sundial from 'frontend/component/sundial.svelte';
   import { initLocalizationContext } from 'i18n/translation-service';
+  import { DialogBookmark } from './bookmark/bookmarks/dialog-bookmark';
   import BookmarkPanel from './component/bookmark-panel.svelte';
   import DialogView from './component/dialog-view.svelte';
-  import { displayedDialog, player } from './store';
+  import { activatedBookmark, player } from './store';
 
   const { i18n } = initLocalizationContext();
   i18n.addResourceBundle('en', 'common', {});
@@ -49,8 +50,8 @@
   </Border>
 </div>
 
-{#if $displayedDialog}
-  <DialogView dialog={$displayedDialog} />
+{#if $activatedBookmark instanceof DialogBookmark}
+  <DialogView bookmark={$activatedBookmark} />
 {/if}
 
 <style lang="postcss" global>

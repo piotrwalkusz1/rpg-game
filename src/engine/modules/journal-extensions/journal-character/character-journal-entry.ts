@@ -22,4 +22,8 @@ export class CharacterJournalEntry extends JournalEntry {
   override get contexts(): readonly JournalContext[] {
     return [new CharacterJournalContext(this._character)];
   }
+
+  get character(): Character {
+    return this._character;
+  }
 }
