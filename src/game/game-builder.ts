@@ -1,4 +1,3 @@
-import { AI } from 'engine/core/ai';
 import { Entity } from 'engine/core/ecs';
 import { Field, RectFieldPosition, rootField, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
@@ -11,7 +10,6 @@ interface CharacterData {
   name?: string;
   avatar?: Image;
   position?: [number, number];
-  aiDisabled?: boolean;
 }
 
 export class GameBuilder {
@@ -22,7 +20,7 @@ export class GameBuilder {
   constructor(private systems: GameSystem[]) {}
 
   static createCharacter(engine: GameEngine, characterData?: CharacterData): Character {
-    const character = Character.create(engine);
+    const character = Character.create(engine, { withAI: true });
     GameBuilder.fillCharacterData(engine, character, characterData);
     return character;
   }
@@ -32,9 +30,6 @@ export class GameBuilder {
     character.name = { literal: characterData.name || 'Eladin' };
     character.avatar = characterData.avatar || '/images/characters/001_Eladin.png';
     character.field = subFieldAt(rootField(engine), characterData.position || [0, 0]);
-    if (characterData.aiDisabled !== true) {
-      character.entity.addComponent(new AI({ character }));
-    }
   }
 
   playerPosition(playerPosition: [number, number]): GameBuilder {
@@ -65,8 +60,7 @@ export class GameBuilder {
     GameBuilder.fillCharacterData(engine, player.character, {
       name: 'Eladin',
       avatar: '/images/characters/001_Eladin.png',
-      position: this._playerPosition,
-      aiDisabled: true
+      position: this._playerPosition
     });
     return player;
   }

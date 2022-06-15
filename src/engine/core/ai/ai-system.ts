@@ -7,6 +7,10 @@ import { AI } from './ai';
 import { AIService } from './ai-service';
 
 export class AISystem extends GameSystem {
+  constructor(private offerService: OfferService) {
+    super();
+  }
+
   async processEvent(event: ECSEvent, engine: GameEngine): Promise<void> {
     if (event instanceof ActionExecutedEvent || event instanceof CommandEndedEvent) {
       const ai = event.executor.getComponent(AI);
@@ -16,7 +20,7 @@ export class AISystem extends GameSystem {
     } else if (event instanceof NewOffer) {
       event.offer.partiesWithPendingDecisions
         .filter((party) => party.hasComponent(AI))
-        .forEach((party) => OfferService.makeDecision(event.offer, party, 'ACCEPTED', engine));
+        .forEach((party) => this.offerService.makeDecision(event.offer, party, 'ACCEPTED', engine));
     }
   }
 }

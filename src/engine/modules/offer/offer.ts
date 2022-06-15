@@ -40,8 +40,8 @@ export class Offer {
     return this._decisions.filter((decision) => decision.pending);
   }
 
-  makeDecision(party: OfferParty, decisionValue: OfferDecisionValue): void {
-    this._decisions.filter((decision) => decision.party === party).forEach((decision) => (decision.value = decisionValue));
+  makeDecision(decisionMaker: OfferParty, decisionValue: OfferDecisionValue): void {
+    this._decisions.filter((decision) => decision.party === decisionMaker).forEach((decision) => (decision.value = decisionValue));
     this.refreshStatus();
   }
 

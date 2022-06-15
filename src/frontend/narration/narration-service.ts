@@ -1,3 +1,4 @@
+import type { CDIContainer } from 'cdi-container';
 import { GameService } from 'frontend/game';
 import type { GameStore } from 'frontend/store/game-store';
 import { refreshEngine } from 'frontend/store/game-store-utils';
@@ -9,7 +10,7 @@ import type { NarrationOption } from './narration-option';
 import type { NarrationProvider, NarrationProviderParams } from './narration-provider';
 
 export class NarrationService {
-  constructor(private narrationProviders: NarrationProvider[]) {}
+  constructor(private narrationProviders: NarrationProvider[], private cdiContainer: CDIContainer) {}
 
   getNarration = (params: NarrationProviderParams): Narration => {
     if (params.context instanceof FieldNarrationContext) {
@@ -37,7 +38,8 @@ export class NarrationService {
     return narrationOption.onClick({
       engine: get(store.engine),
       processEvents: () => GameService.processEvents(get(store.engine), () => refreshEngine(store)),
-      setNarrationContext: (narrationContext) => store.narrationContext.set(narrationContext)
+      setNarrationContext: (narrationContext) => store.narrationContext.set(narrationContext),
+      cdiContainer: this.cdiContainer
     });
   };
 }

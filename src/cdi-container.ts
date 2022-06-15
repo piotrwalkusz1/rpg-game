@@ -5,8 +5,9 @@ import { GameSystem } from 'engine/core/game';
 import { JournalSpeakingSystem } from 'engine/modules/journal-extensions/journal-speaking';
 import { TalkJournalSystem } from 'engine/modules/journal-extensions/journal-talk';
 import { MovementSystem } from 'engine/modules/movement';
-import { OfferSystem } from 'engine/modules/offer';
+import { OfferService } from 'engine/modules/offer';
 import { TalkSystem } from 'engine/modules/talk';
+import { TalkService } from 'engine/modules/talk/talk-service';
 import { BookmarkProvider, BookmarkService, DialogBookmarkProvider } from 'frontend/bookmark';
 import {
   CharacterNarrationProvider,
@@ -45,16 +46,17 @@ export class CDIContainer {
     container.singleton(TalkNarrationProvider, () => new TalkNarrationProvider());
     container.singleton(MovementNarrationProvider, () => new MovementNarrationProvider());
     container.singleton(CharacterNarrationProvider, () => new CharacterNarrationProvider());
-    container.singleton(NarrationService, (cdi) => new NarrationService(cdi.getAll(NarrationProvider)));
+    container.singleton(NarrationService, (cdi) => new NarrationService(cdi.getAll(NarrationProvider), container));
     container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
+    container.singleton(OfferService, () => new OfferService());
+    container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService)));
     container.singleton(ActionSystem, () => new ActionSystem());
     container.singleton(CommandSystem, () => new CommandSystem());
     container.singleton(MovementSystem, () => new MovementSystem());
     container.singleton(JournalSpeakingSystem, () => new JournalSpeakingSystem());
     container.singleton(TalkJournalSystem, () => new TalkJournalSystem());
     container.singleton(TalkSystem, () => new TalkSystem());
-    container.singleton(OfferSystem, () => new OfferSystem());
-    container.singleton(AISystem, () => new AISystem());
+    container.singleton(AISystem, (cdi) => new AISystem(cdi.get(OfferService)));
     container.dependent(GameBuilder, (cdi) => new GameBuilder(cdi.getAll(GameSystem)));
     return container;
   }

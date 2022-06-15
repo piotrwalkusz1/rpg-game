@@ -1,5 +1,6 @@
 import { ActionExecutor, PendingAction } from 'engine/core/action';
 import { ActivityParticipant } from 'engine/core/activity';
+import { AI } from 'engine/core/ai';
 import { Command, CommandExecutor } from 'engine/core/command';
 import { Component, Engine, Entity } from 'engine/core/ecs';
 import { Field, FieldObject } from 'engine/core/field';
@@ -43,7 +44,7 @@ export class Character extends Component {
     this.attacker = attacker;
   }
 
-  static create(engine: Engine): Character {
+  static create(engine: Engine, params?: { withAI?: boolean }): Character {
     const offerParty = new OfferParty();
     const activityParticipant = new ActivityParticipant();
     const fieldObject = new FieldObject();
@@ -68,6 +69,9 @@ export class Character extends Component {
         character
       ])
     );
+    if (params?.withAI) {
+      character.entity.addComponent(new AI({ character }));
+    }
     return character;
   }
 
