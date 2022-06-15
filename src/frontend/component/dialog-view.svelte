@@ -1,7 +1,8 @@
 <script lang="ts">
   import { faAngleDown, faTimes } from '@fortawesome/free-solid-svg-icons';
   import type { DialogBookmark } from 'frontend/bookmark/bookmarks/dialog-bookmark';
-  import { activatedBookmarkContext } from 'frontend/store';
+  import { activatedBookmarkContext, gameStore } from 'frontend/store';
+  import { refreshEngine } from 'frontend/store/game-store-utils';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
   import Fa from 'svelte-fa';
   import AvatarWithName from './avatar-with-name.svelte';
@@ -15,6 +16,7 @@
 
   function closeDialog() {
     bookmark.journalEntries.forEach((entry) => (entry.state = 'READ'));
+    refreshEngine(gameStore);
     hideDialog();
   }
 </script>
