@@ -1,5 +1,6 @@
 import { ActionExecutedEvent } from 'engine/core/action';
 import type { ECSEvent } from 'engine/core/ecs';
+import { NewOffer, OfferService } from 'engine/modules/offer';
 import { CommandEndedEvent } from '../command';
 import { GameEngine, GameSystem } from '../game';
 import { AI } from './ai';
@@ -12,6 +13,10 @@ export class AISystem extends GameSystem {
       if (ai) {
         AIService.executeTurn(ai, engine);
       }
+    } else if (event instanceof NewOffer) {
+      event.offer.partiesWithPendingDecisions
+        .filter((party) => party.hasComponent(AI))
+        .forEach((party) => OfferService.makeDecision(event.offer, party, 'ACCEPTED', engine));
     }
   }
 }

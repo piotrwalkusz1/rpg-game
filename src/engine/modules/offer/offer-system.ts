@@ -3,7 +3,7 @@ import { GameEngine, GameSystem } from 'engine/core/game';
 import { InteractionEvent } from '../interaction';
 import type { Offer } from './offer';
 import { OfferDecisionInteraction } from './offer-decision-interaction';
-import { OfferAcceptedEvent, OfferRejectedEvent } from './offer-event';
+import { NewOffer, OfferAcceptedEvent, OfferRejectedEvent } from './offer-event';
 import { OfferInteraction } from './offer-interaction';
 import { OfferParty } from './offer-party';
 
@@ -26,6 +26,7 @@ export class OfferSystem extends GameSystem {
     if (offer.pending) {
       offer.parties.forEach((party) => party.addOffer(offer));
     }
+    engine.addEvent(new NewOffer({ time: engine.time, offer }));
     this.addEventIfOfferAcceptedOrRejected(offer, engine);
   }
 

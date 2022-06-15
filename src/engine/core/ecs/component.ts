@@ -19,6 +19,10 @@ export abstract class Component {
     return this.entity.getComponent(componentType);
   }
 
+  hasComponent<T extends Component>(componentType: Type<T>): boolean {
+    return this.getComponent(componentType) !== undefined;
+  }
+
   requireComponent<T extends Component>(componentType: Type<T>): T {
     const component: T | undefined = this.getComponent(componentType);
     if (!component) {

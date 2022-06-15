@@ -11,6 +11,8 @@ export class OfferEvent extends GameEvent {
   }
 }
 
+export class NewOffer extends OfferEvent {}
+
 export class OfferAcceptedEvent extends OfferEvent {}
 
 export class OfferRejectedEvent extends OfferEvent {}
