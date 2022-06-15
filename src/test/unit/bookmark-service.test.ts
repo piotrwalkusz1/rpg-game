@@ -1,54 +1,30 @@
-import { Character } from 'engine/modules/character';
-import { SpeakJournalEntry } from 'engine/modules/journal-extensions/journal-speaking';
-import { BookmarkService } from 'frontend/bookmark';
-import { DialogBookmark } from 'frontend/bookmark/bookmarks/dialog-bookmark';
-import { GameBuilder, getPlayer } from 'game';
+import { GameEngine } from 'engine/core/game';
+import { Bookmark, BookmarkProvider, BookmarkProviderParams, BookmarkService } from 'frontend/bookmark';
+import { It, Mock, Times } from 'moq.ts';
 
 describe('Bookmark service', () => {
   describe('generateBookmarks', () => {
-    it('should return SpeechBookmark for each character with unread SpeakJournalEntry', () => {
-      const engine = new GameBuilder().build();
-      const character = Character.create(engine);
-      const character2 = Character.create(engine);
-      const journalEntry = new SpeakJournalEntry({
-        content: { literal: 'Hi.' },
-        quote: true,
-        speaker: character,
-        time: new Date(1000),
-        state: 'READ'
-      });
-      const journalEntry2 = new SpeakJournalEntry({
-        content: { literal: 'Are you listening?' },
-        quote: true,
-        speaker: character,
-        time: new Date(2000),
-        state: 'SEEN'
-      });
-      const journalEntry3 = new SpeakJournalEntry({
-        content: { literal: 'He asks you about something.' },
-        quote: false,
-        speaker: character,
-        time: new Date(3000),
-        state: 'UNSEEN'
-      });
-      const journalEntry4 = new SpeakJournalEntry({
-        content: { literal: 'Hello.' },
-        quote: true,
-        speaker: character2,
-        time: new Date(4000)
-      });
-      const journal = getPlayer(engine).journal;
-      journal.addEntry(journalEntry);
-      journal.addEntry(journalEntry2);
-      journal.addEntry(journalEntry3);
-      journal.addEntry(journalEntry4);
+    it('should return all bookmarks from all providers', () => {
+      const engine = new GameEngine();
+      const bookmarks = [new Mock<Bookmark>().object(), new Mock<Bookmark>().object(), new Mock<Bookmark>().object()];
+      const bookmarkProvidersMocks = [
+        new Mock<BookmarkProvider>().setup((instance) => instance.getBookmarks(It.IsAny())).returns([bookmarks[0], bookmarks[1]]),
+        new Mock<BookmarkProvider>().setup((instance) => instance.getBookmarks(It.IsAny())).returns([bookmarks[2]])
+      ];
+      const bookmarkProviders = bookmarkProvidersMocks.map((mock) => mock.object());
+      const bookmarkService = new BookmarkService(bookmarkProviders);
 
-      const bookmarks = BookmarkService.getBookmarks({ engine });
+      const result = bookmarkService.getBookmarks({ engine });
 
-      expect(bookmarks).toEqual([
-        new DialogBookmark({ character: character, journalEntries: [journalEntry2, journalEntry3] }),
-        new DialogBookmark({ character: character2, journalEntries: [journalEntry4] })
-      ]);
+      expect(result).toEqual(bookmarks);
+      bookmarkProvidersMocks[0].verify(
+        (instance) => instance.getBookmarks(It.Is((params: BookmarkProviderParams) => params.engine === engine)),
+        Times.Once()
+      );
+      bookmarkProvidersMocks[1].verify(
+        (instance) => instance.getBookmarks(It.Is((params: BookmarkProviderParams) => params.engine === engine)),
+        Times.Once()
+      );
     });
   });
 });

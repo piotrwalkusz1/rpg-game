@@ -17,6 +17,13 @@
         "/src/game",
         "/src/engine/modules/presentation",
         "/src/engine/modules/journal-extensions/journal-talk",
-        "/src/engine/modules/journal-extensions/journal-character"
+        "/src/engine/modules/journal-extensions/journal-character",
+        "/src/frontend/bookmark/bookmarks",
+        "/src/frontend/bookmark/bookmark-providers",
+        "/src/frontend/bookmark/bookmark-contexts",
+        "/src/frontend/narration/narration-providers",
+        "/src/frontend/narration/narration-options",
+        "/src/frontend/narration/narration-contexts",
+        "/src/frontend/narration"
     ]
 }

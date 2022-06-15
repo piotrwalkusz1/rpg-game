@@ -1,5 +1,6 @@
 import { GameService } from 'frontend/game';
-import type { GameStore } from 'frontend/store';
+import type { GameStore } from 'frontend/store/game-store';
+import { refreshEngine } from 'frontend/store/game-store-utils';
 import { get } from 'svelte/store';
 import { Narration } from './narration';
 import { CharacterNarrationContext } from './narration-contexts/character-narration-context';
@@ -42,7 +43,7 @@ export namespace NarrationService {
   export const executeOnNarrationOptionClick = (narrationOption: NarrationOption, store: GameStore): Promise<void> => {
     return narrationOption.onClick({
       engine: get(store.engine),
-      processEvents: () => GameService.processEvents(get(store.engine), () => store.refreshEngine()),
+      processEvents: () => GameService.processEvents(get(store.engine), () => refreshEngine(store)),
       setNarrationContext: (narrationContext) => store.narrationContext.set(narrationContext)
     });
   };
