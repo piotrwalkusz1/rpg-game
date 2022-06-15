@@ -57,6 +57,7 @@ export class CDIContainer {
       NarrationService,
       (cdi) => new NarrationService(cdi.getAll(NarrationProvider), cdi.getAll(NarrationOptionExecutor))
     );
+    container.singleton(ActionSystem, () => new ActionSystem());
     container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
     container.singleton(OfferService, () => new OfferService());
     container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService)));

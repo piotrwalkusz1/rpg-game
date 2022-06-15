@@ -1,1 +1,1 @@
-export * from './speak-action';
+export * from './speak-interaction';
