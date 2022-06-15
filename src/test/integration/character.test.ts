@@ -4,6 +4,7 @@ import { NarrationService } from 'frontend/narration';
 import { CharacterNarrationContext } from 'frontend/narration/narration-contexts/character-narration-context';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { CharacterNarrationOption } from 'frontend/narration/narration-options/character-narration-option';
+import { GameStoreService } from 'frontend/store/game-store-service';
 import { GameBuilder, getPlayer } from 'game';
 import { get } from 'svelte/store';
 import { mockField } from 'test/mock/mock-field';
@@ -34,7 +35,7 @@ describe('Character narration', () => {
 
   test('Set character narration context after clicking on character narration option', async () => {
     const engine = new GameBuilder().build();
-    const store = CDIContainer.create().gameStoreService.createStore({ engine });
+    const store = CDIContainer.create().get(GameStoreService).createStore({ engine });
     const field = mockField();
     const character = Character.create(engine);
     character.name = { literal: 'Eladin' };

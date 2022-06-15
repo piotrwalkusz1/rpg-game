@@ -4,6 +4,7 @@ import { GameEngine, GameEvent } from 'engine/core/game';
 import { NarrationService } from 'frontend/narration';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import type { GameStore } from 'frontend/store/game-store';
+import { GameStoreService } from 'frontend/store/game-store-service';
 import { GameBuilder, getPlayer, Player } from 'game';
 
 describe('Movement', () => {
@@ -18,7 +19,7 @@ describe('Movement', () => {
     engine = new GameBuilder().playerPosition([2, 1]).build();
     world = rootField(engine);
     player = getPlayer(engine);
-    store = CDIContainer.create().gameStoreService.createStore({ engine });
+    store = CDIContainer.create().get(GameStoreService).createStore({ engine });
   });
 
   test('Move to adjoin field', async () => {

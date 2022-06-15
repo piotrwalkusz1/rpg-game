@@ -28,3 +28,7 @@ export const typeName = (value: unknown): string => {
   }
   return typeof value;
 };
+
+export const isAssignableTo = (maybeAssignable: Type<unknown>, type: Type<unknown>): boolean => {
+  return maybeAssignable.prototype.constructor === type || maybeAssignable.prototype instanceof type;
+};
