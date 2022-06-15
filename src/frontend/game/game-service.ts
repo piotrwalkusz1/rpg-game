@@ -1,33 +1,34 @@
 import type { PendingAction } from 'engine/core/action';
 import type { Command } from 'engine/core/command';
 import type { Engine } from 'engine/core/ecs';
-import { GameEngine, GameLoopService } from 'engine/core/game';
+import { GameLoopService } from 'engine/core/game';
 import { differentTime, sameTime } from 'engine/core/time/time-utils';
+import type { GameStore } from 'frontend/store/game-store';
 import { getPlayer } from 'game';
 
 export namespace GameService {
-  export const processEvents = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
-    refreshEngine();
-    while (engine.nextEvent) {
-      await processEventsUntilTimeChange(engine, refreshEngine);
-      if (isPlayerActionRequired(engine)) {
+  export const processEvents = async (store: GameStore): Promise<void> => {
+    store.refreshEngine();
+    while (store.engine.nextEvent) {
+      await processEventsUntilTimeChange(store);
+      if (isPlayerActionRequired(store.engine)) {
         break;
       }
     }
   };
 
-  const processEventsUntilTimeChange = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
-    if (differentTime(engine.nextEventTime, engine.time)) {
-      await processNextEvent(engine, refreshEngine);
+  const processEventsUntilTimeChange = async (store: GameStore): Promise<void> => {
+    if (differentTime(store.engine.nextEventTime, store.engine.time)) {
+      await processNextEvent(store);
     }
-    while (sameTime(engine.nextEventTime, engine.time)) {
-      await processNextEvent(engine, refreshEngine);
+    while (sameTime(store.engine.nextEventTime, store.engine.time)) {
+      await processNextEvent(store);
     }
   };
 
-  const processNextEvent = async (engine: GameEngine, refreshEngine: () => void): Promise<void> => {
-    await GameLoopService.processNextEvent(engine);
-    refreshEngine();
+  const processNextEvent = async (store: GameStore): Promise<void> => {
+    await GameLoopService.processNextEvent(store.engine);
+    store.refreshEngine();
   };
 
   const isPlayerActionRequired = (engine: Engine): boolean => {

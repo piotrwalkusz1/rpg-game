@@ -24,6 +24,7 @@
         "/src/frontend/narration/narration-providers",
         "/src/frontend/narration/narration-options",
         "/src/frontend/narration/narration-contexts",
-        "/src/frontend/narration"
+        "/src/frontend/narration",
+        "/src/frontend/narration/narration-option-executors"
     ]
 }

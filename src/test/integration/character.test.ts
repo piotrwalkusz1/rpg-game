@@ -55,9 +55,9 @@ describe('Character narration', () => {
     if (narrationOption === undefined) {
       throw new Error('Expected narrationOption to be defined');
     }
-    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeNarrationOption(narrationOption, store);
 
-    expect(get(store.narrationContext)).toEqual(new CharacterNarrationContext(character));
+    expect(get(store.props.narrationContext)).toEqual(new CharacterNarrationContext(character));
   });
 
   test('Display character narration', () => {

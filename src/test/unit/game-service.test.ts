@@ -1,8 +1,11 @@
+import { CDIContainer } from 'cdi-container';
 import { addMilliseconds } from 'date-fns';
 import { ECSEvent, Engine, System } from 'engine/core/ecs';
 import { GameEngine, GameEvent } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
 import { GameService } from 'frontend/game';
+import type { GameStore } from 'frontend/store/game-store';
+import { GameStoreService } from 'frontend/store/game-store-service';
 import { Player } from 'game';
 
 describe('GameService', () => {
@@ -24,13 +27,17 @@ describe('GameService', () => {
   }
 
   describe('processEvents method', () => {
+    let cdiContainer: CDIContainer;
     let engine: GameEngine;
+    let store: GameStore;
     let system: MockSystem;
     let initialTime: Time;
 
     beforeEach(() => {
+      cdiContainer = CDIContainer.default();
       engine = new GameEngine();
       Player.create(engine);
+      store = cdiContainer.get(GameStoreService).createStore({ engine });
       system = new MockSystem();
       engine.addSystem(system);
       initialTime = engine.time;
@@ -45,7 +52,7 @@ describe('GameService', () => {
         new MockEvent({ time: addMilliseconds(initialTime, 2), id: 5 })
       ]);
 
-      await GameService.processEvents(engine, () => {});
+      await GameService.processEvents(store);
 
       expect(engine.time).toEqual(initialTime);
       expect(system.processedEvents).toEqual([
@@ -67,7 +74,7 @@ describe('GameService', () => {
         new MockEvent({ time: addMilliseconds(initialTime, 300), id: 4 })
       ]);
 
-      await GameService.processEvents(engine, () => {});
+      await GameService.processEvents(store);
 
       expect(engine.time).toEqual(addMilliseconds(initialTime, 100));
       expect(system.processedEvents).toEqual([

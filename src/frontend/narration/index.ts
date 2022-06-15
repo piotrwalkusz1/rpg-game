@@ -1,5 +1,7 @@
 export * from './narration-context';
 export * from './narration-contexts';
+export * from './narration-option-executor';
+export * from './narration-option-executors';
 export * from './narration-option';
 export * from './narration-options';
 export * from './narration-provider';

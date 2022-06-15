@@ -3,7 +3,7 @@ import type { BookmarkService } from 'frontend/bookmark';
 import type { NarrationService } from 'frontend/narration';
 import { getPlayer } from 'game';
 import { derived, get, writable } from 'svelte/store';
-import type { GameStore } from './game-store';
+import { GameStore } from './game-store';
 
 export class GameStoreService {
   constructor(private bookmarkService: BookmarkService, private narrationService: NarrationService) {}
@@ -26,7 +26,7 @@ export class GameStoreService {
     const player = derived(engine, ($engine) => getPlayer($engine));
     const journal = derived(player, ($player) => $player.journal);
 
-    return {
+    return new GameStore({
       engine,
       blockedScreen,
       displayedLocation,
@@ -39,6 +39,6 @@ export class GameStoreService {
       time,
       player,
       journal
-    };
+    });
   }
 }

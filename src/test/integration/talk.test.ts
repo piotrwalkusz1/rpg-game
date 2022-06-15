@@ -11,7 +11,7 @@ import { GameService } from 'frontend/game';
 import { CharacterNarrationContext, NarrationService, TalkNarrationOption } from 'frontend/narration';
 import type { GameStore } from 'frontend/store/game-store';
 import { GameStoreService } from 'frontend/store/game-store-service';
-import { GameBuilder, getPlayer, Player } from 'game';
+import { GameBuilder } from 'game';
 import { get } from 'svelte/store';
 
 describe('Talk', () => {
@@ -21,7 +21,6 @@ describe('Talk', () => {
   let narrationService: NarrationService;
   let engine: GameEngine;
   let store: GameStore;
-  let player: Player;
 
   beforeEach(() => {
     cdiContainer = CDIContainer.default();
@@ -30,7 +29,6 @@ describe('Talk', () => {
     narrationService = cdiContainer.get(NarrationService);
     engine = cdiContainer.get(GameBuilder).build();
     store = cdiContainer.get(GameStoreService).createStore({ engine });
-    player = getPlayer(engine);
   });
 
   test('Create talk activity after talk offer is accepted', async () => {
@@ -38,10 +36,10 @@ describe('Talk', () => {
     const talker2 = Talker.create(engine);
 
     talkService.offerTalk(talker, talker2, engine);
-    await GameService.processEvents(engine, () => {});
+    await GameService.processEvents(store);
     const offers = talker2.offerParty.offers;
     offerService.makeDecision(offers[0], talker2.offerParty, 'ACCEPTED', engine);
-    await GameService.processEvents(engine, () => {});
+    await GameService.processEvents(store);
 
     expect(talker.activityParticipant.activities.getArray()[0]).toBeInstanceOf(TalkActivity);
     expect(talker.activityParticipant.activities.getArray()[0].participants.getArray()).toEqual([
@@ -56,15 +54,10 @@ describe('Talk', () => {
     const talkNarrationOption = narrationService
       .getNarrationOptions({ context: new CharacterNarrationContext(character), engine })
       .filter((option) => option instanceof TalkNarrationOption)[0];
-    await talkNarrationOption.onClick({
-      cdiContainer,
-      engine,
-      processEvents: () => GameService.processEvents(engine, () => {}),
-      setNarrationContext: () => {}
-    });
-    await GameService.processEvents(engine, () => {});
+    await narrationService.executeNarrationOption(talkNarrationOption, store);
+    await GameService.processEvents(store);
 
-    const bookmarks = get(store.bookmarks);
+    const bookmarks = get(store.props.bookmarks);
 
     expect(bookmarks).toEqual([
       new DialogBookmark({

@@ -10,10 +10,14 @@ import { TalkSystem } from 'engine/modules/talk';
 import { TalkService } from 'engine/modules/talk/talk-service';
 import { BookmarkProvider, BookmarkService, DialogBookmarkProvider } from 'frontend/bookmark';
 import {
+  CharacterNarrationOptionExecutor,
   CharacterNarrationProvider,
+  CommandNarrationOptionExecutor,
   MovementNarrationProvider,
+  NarrationOptionExecutor,
   NarrationProvider,
   NarrationService,
+  TalkNarrationOptionExecutor,
   TalkNarrationProvider
 } from 'frontend/narration';
 import { GameStoreService } from 'frontend/store/game-store-service';
@@ -46,7 +50,13 @@ export class CDIContainer {
     container.singleton(TalkNarrationProvider, () => new TalkNarrationProvider());
     container.singleton(MovementNarrationProvider, () => new MovementNarrationProvider());
     container.singleton(CharacterNarrationProvider, () => new CharacterNarrationProvider());
-    container.singleton(NarrationService, (cdi) => new NarrationService(cdi.getAll(NarrationProvider), container));
+    container.singleton(TalkNarrationOptionExecutor, (cdi) => new TalkNarrationOptionExecutor(cdi.get(TalkService)));
+    container.singleton(CommandNarrationOptionExecutor, () => new CommandNarrationOptionExecutor());
+    container.singleton(CharacterNarrationOptionExecutor, () => new CharacterNarrationOptionExecutor());
+    container.singleton(
+      NarrationService,
+      (cdi) => new NarrationService(cdi.getAll(NarrationProvider), cdi.getAll(NarrationOptionExecutor))
+    );
     container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
     container.singleton(OfferService, () => new OfferService());
     container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService)));

@@ -9,7 +9,7 @@
 </script>
 
 <div
-  on:click={() => cdiContainer.get(NarrationService).executeOnNarrationOptionClick(narrationOption, gameStore)}
+  on:click={() => cdiContainer.get(NarrationService).executeNarrationOption(narrationOption, gameStore)}
   class="flex items-center bg-[#FAFFC3] border-[2px] border-[#A19B00] p-[3px] cursor-pointer"
 >
   <div class="image" class:large-image={largeImage} style="background-image: url({narrationOption.image});" />

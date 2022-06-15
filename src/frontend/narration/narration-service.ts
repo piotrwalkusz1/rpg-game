@@ -1,18 +1,19 @@
-import type { CDIContainer } from 'cdi-container';
-import { GameService } from 'frontend/game';
 import type { GameStore } from 'frontend/store/game-store';
-import { refreshEngine } from 'frontend/store/game-store-utils';
-import { get } from 'svelte/store';
+import { typeName } from 'utils';
 import { Narration } from './narration';
 import { CharacterNarrationContext } from './narration-contexts/character-narration-context';
 import { FieldNarrationContext } from './narration-contexts/field-narration-context';
 import type { NarrationOption } from './narration-option';
+import type { NarrationOptionExecutor } from './narration-option-executor';
 import type { NarrationProvider, NarrationProviderParams } from './narration-provider';
 
 export class NarrationService {
-  constructor(private narrationProviders: NarrationProvider[], private cdiContainer: CDIContainer) {}
+  constructor(
+    private narrationProviders: NarrationProvider[],
+    private narrationOptionExecutors: NarrationOptionExecutor<NarrationOption>[]
+  ) {}
 
-  getNarration = (params: NarrationProviderParams): Narration => {
+  getNarration(params: NarrationProviderParams): Narration {
     if (params.context instanceof FieldNarrationContext) {
       return new Narration({
         title: params.context.field.name,
@@ -28,18 +29,17 @@ export class NarrationService {
       });
     }
     throw new Error('Unsupported narrationContext: ' + params.context.constructor.name);
-  };
+  }
 
-  getNarrationOptions = (params: NarrationProviderParams): NarrationOption[] => {
+  getNarrationOptions(params: NarrationProviderParams): NarrationOption[] {
     return this.narrationProviders.flatMap((narrationProvider) => narrationProvider.getNarrationOptions(params));
-  };
+  }
 
-  executeOnNarrationOptionClick = (narrationOption: NarrationOption, store: GameStore): Promise<void> => {
-    return narrationOption.onClick({
-      engine: get(store.engine),
-      processEvents: () => GameService.processEvents(get(store.engine), () => refreshEngine(store)),
-      setNarrationContext: (narrationContext) => store.narrationContext.set(narrationContext),
-      cdiContainer: this.cdiContainer
-    });
-  };
+  executeNarrationOption(narrationOption: NarrationOption, store: GameStore): Promise<void> {
+    const executor = this.narrationOptionExecutors.filter((executor) => narrationOption instanceof executor.narrationOptionType)[0];
+    if (!executor) {
+      throw new Error('NarrationOptionExecutor for type ' + typeName(narrationOption) + ' not found');
+    }
+    return executor.execute(narrationOption, store);
+  }
 }

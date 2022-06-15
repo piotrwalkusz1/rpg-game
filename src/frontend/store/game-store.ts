@@ -5,9 +5,9 @@ import type { Journal } from 'engine/modules/journal';
 import type { Bookmark, BookmarkContext } from 'frontend/bookmark';
 import type { Narration, NarrationContext } from 'frontend/narration';
 import type { Player } from 'game';
-import type { Readable, Writable } from 'svelte/store';
+import { get, Readable, Writable } from 'svelte/store';
 
-export interface GameStore {
+export interface GameStoreProps {
   readonly engine: Writable<GameEngine>;
   readonly blockedScreen: Writable<boolean>;
   readonly displayedLocation: Writable<Field>;
@@ -20,4 +20,16 @@ export interface GameStore {
   readonly time: Readable<Time>;
   readonly player: Readable<Player>;
   readonly journal: Readable<Journal>;
+}
+
+export class GameStore {
+  constructor(readonly props: GameStoreProps) {}
+
+  get engine(): GameEngine {
+    return get(this.props.engine);
+  }
+
+  refreshEngine(): void {
+    this.props.engine.update((engine) => engine);
+  }
 }

@@ -30,7 +30,7 @@ describe('Movement', () => {
     const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];
 
-    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeNarrationOption(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(3);
@@ -40,7 +40,7 @@ describe('Movement', () => {
   test('Move to distant field', async () => {
     const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [4, 3])), engine })
       .options[0];
-    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeNarrationOption(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(4);
@@ -52,7 +52,7 @@ describe('Movement', () => {
 
     const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];
-    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeNarrationOption(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(3);

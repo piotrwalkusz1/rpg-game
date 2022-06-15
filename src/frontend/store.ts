@@ -1,6 +1,5 @@
 import { CDIContainer } from 'cdi-container';
 import { initializeDemoGame } from 'game';
-import { get } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
 import { GameStoreService } from './store/game-store-service';
 
@@ -20,6 +19,6 @@ export const {
   time,
   player,
   journal
-} = gameStore;
+} = gameStore.props;
 
-export const animatedCurrentTime = MotionUtils.interpolate(get(engine).time, TimeUtils.interpolate);
+export const animatedCurrentTime = MotionUtils.interpolate(gameStore.engine.time, TimeUtils.interpolate);
