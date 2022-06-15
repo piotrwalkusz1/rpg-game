@@ -1,9 +1,9 @@
-import { ECSEvent, System } from 'engine/core/ecs';
-import type { GameEngine } from 'engine/core/game';
+import type { ECSEvent } from 'engine/core/ecs';
+import { GameEngine, GameSystem } from 'engine/core/game';
 import { ActionExecutedEvent, ActionExecutingEvent, BeforeActionExecutingEvent } from './action-event';
 import { ActionService } from './action-service';
 
-export class ActionSystem extends System {
+export class ActionSystem extends GameSystem {
   async processEvent(event: ECSEvent, engine: GameEngine): Promise<void> {
     if (event instanceof BeforeActionExecutingEvent) {
       this.handleBeforeActionExecutingEvent(event, engine);

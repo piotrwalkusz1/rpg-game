@@ -1,11 +1,10 @@
 import { addMinutes } from 'date-fns';
 import { EndActivityEvent } from 'engine/core/activity/activity-event';
-import type { GameEngine } from 'engine/core/game';
+import { GameEngine } from 'engine/core/game';
 import { OfferAcceptedEvent } from 'engine/modules/offer';
 import { TalkActivity, TalkSystem } from 'engine/modules/talk';
 import { TalkOffer } from 'engine/modules/talk/talk-offer';
 import { Talker } from 'engine/modules/talk/talker';
-import { GameBuilder } from 'game';
 
 describe('Talk system', () => {
   let talkSystem: TalkSystem;
@@ -15,7 +14,7 @@ describe('Talk system', () => {
 
   beforeEach(() => {
     talkSystem = new TalkSystem();
-    engine = new GameBuilder().build();
+    engine = new GameEngine();
     talker = Talker.create(engine);
     talker2 = Talker.create(engine);
   });

@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { ActionExecutingEvent } from 'engine/core/action';
 import { Entity } from 'engine/core/ecs';
 import type { GameEngine } from 'engine/core/game';
@@ -17,7 +18,7 @@ describe('Journal speaking system', () => {
 
   beforeEach(() => {
     journalSpeakingSystem = new JournalSpeakingSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     speaker = Character.create(engine);
     journalOwner = engine.addEntityWithComponent(new JournalOwner());
     time = engine.time;

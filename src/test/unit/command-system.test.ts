@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { add } from 'date-fns';
 import { ActionExecutedEvent, ActionStartedEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
 import {
@@ -21,7 +22,7 @@ describe('Command system', () => {
 
   beforeEach(() => {
     commandSystem = new CommandSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     commandExecutor = CommandExecutor.create(engine);
     command = mockCommand();
   });

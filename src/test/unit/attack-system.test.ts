@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { ActionExecutingEvent } from 'engine/core/action';
 import type { GameEngine } from 'engine/core/game';
 import { AttackAction, AttackSystem } from 'engine/modules/attack';
@@ -12,7 +13,7 @@ describe('AttackSystem', () => {
 
   beforeEach(() => {
     attackSystem = new AttackSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     attacker = Character.create(engine);
     target = Character.create(engine);
   });

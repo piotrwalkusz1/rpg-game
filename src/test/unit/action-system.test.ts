@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import {
   Action,
   ActionExecutedEvent,
@@ -21,7 +22,7 @@ describe('Command system', () => {
 
   beforeEach(() => {
     actionSystem = new ActionSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
     action = new MockAction();
     time = engine.time;

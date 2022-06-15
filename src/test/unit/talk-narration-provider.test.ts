@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
 import { OfferInteraction } from 'engine/modules/offer';
@@ -14,7 +15,7 @@ describe('Talk narration provider', () => {
   let character: Character;
 
   beforeEach(() => {
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build()
     character = Character.create(engine);
   });
 

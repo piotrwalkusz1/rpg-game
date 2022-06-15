@@ -16,7 +16,7 @@ describe('Movement', () => {
   let store: GameStore;
 
   beforeEach(() => {
-    engine = new GameBuilder().playerPosition([2, 1]).build();
+    engine = CDIContainer.create().get(GameBuilder).playerPosition([2, 1]).build();
     world = rootField(engine);
     player = getPlayer(engine);
     store = CDIContainer.create().get(GameStoreService).createStore({ engine });

@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
 import { InteractionEvent } from 'engine/modules/interaction';
 import {
@@ -22,7 +23,7 @@ describe('Offer system', () => {
 
   beforeEach(() => {
     offerSystem = new OfferSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     offerParty = OfferParty.create(engine);
     offerParty2 = OfferParty.create(engine);
     offerParty3 = OfferParty.create(engine);

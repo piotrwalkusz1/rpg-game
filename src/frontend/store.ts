@@ -4,7 +4,8 @@ import { get } from 'svelte/store';
 import { MotionUtils, TimeUtils } from 'utils';
 import { GameStoreService } from './store/game-store-service';
 
-export const gameStore = CDIContainer.create().get(GameStoreService).createStore({ engine: initializeDemoGame() });
+const cdiContainer = CDIContainer.create();
+export const gameStore = cdiContainer.get(GameStoreService).createStore({ engine: initializeDemoGame(cdiContainer) });
 
 export const {
   engine,

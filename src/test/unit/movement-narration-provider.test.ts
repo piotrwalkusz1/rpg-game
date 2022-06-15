@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
 import { FieldNarrationContext } from 'frontend/narration/narration-contexts/field-narration-context';
 import { MovementNarrationProvider } from 'frontend/narration/narration-providers/movement-narration-provider';
@@ -10,7 +11,7 @@ describe('MovementNarrationProvider', () => {
 
   beforeEach(() => {
     movementNarrationProvider = new MovementNarrationProvider();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
   });
 
   describe('getNarrationOptions', () => {

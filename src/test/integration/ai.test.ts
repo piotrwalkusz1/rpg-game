@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { addSeconds } from 'date-fns';
 import { BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
 import { CommandEndedEvent } from 'engine/core/command';
@@ -15,7 +16,7 @@ describe('AI', () => {
   let character: Character;
 
   beforeEach(() => {
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     character = GameBuilder.createCharacter(engine);
   });
 

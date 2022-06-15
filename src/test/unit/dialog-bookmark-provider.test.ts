@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { Character } from 'engine/modules/character';
 import { SpeakJournalEntry } from 'engine/modules/journal-extensions/journal-speaking';
 import { DialogBookmarkProvider } from 'frontend/bookmark/bookmark-providers/dialog-bookmark-provider';
@@ -13,7 +14,7 @@ describe('DialogBookmarkProvider', () => {
 
   describe('getBookmarks', () => {
     it('should return SpeechBookmark for each character with unread SpeakJournalEntry', () => {
-      const engine = new GameBuilder().build();
+      const engine = CDIContainer.create().get(GameBuilder).build();
       const character = Character.create(engine);
       const character2 = Character.create(engine);
       const journalEntry = new SpeakJournalEntry({

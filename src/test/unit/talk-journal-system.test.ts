@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { EndActivityEvent } from 'engine/core/activity/activity-event';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
@@ -15,7 +16,7 @@ describe('TalkJournalSystem', () => {
 
   beforeEach(() => {
     talkJournalSystem = new TalkJournalSystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     player = getPlayer(engine);
     character = Character.create(engine);
     character2 = Character.create(engine);

@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
 import { Interaction, InteractionEvent } from 'engine/modules/interaction';
 import { InteractionNarrationOption } from 'frontend/narration/narration-options/interaction-narration-option';
@@ -9,7 +10,7 @@ describe('InteractionNarrationOption', () => {
   let engine: GameEngine;
 
   beforeEach(() => {
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
   });
 
   describe('onClick method', () => {

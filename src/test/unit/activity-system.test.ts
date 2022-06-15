@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import { Activity, ActivityParticipant } from 'engine/core/activity';
 import { EndActivityEvent } from 'engine/core/activity/activity-event';
 import { ActivitySystem } from 'engine/core/activity/activity-system';
@@ -14,7 +15,7 @@ describe('Activity system', () => {
 
   beforeEach(() => {
     activitySystem = new ActivitySystem();
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     time = engine.time;
   });
 

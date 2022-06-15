@@ -1,17 +1,10 @@
-import { ActionSystem } from 'engine/core/action';
-import { AI, AISystem } from 'engine/core/ai';
-import { CommandSystem } from 'engine/core/command';
+import { AI } from 'engine/core/ai';
 import { Entity } from 'engine/core/ecs';
 import { Field, RectFieldPosition, rootField, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
-import { GameEngine } from 'engine/core/game';
+import { GameEngine, GameSystem } from 'engine/core/game';
 import type { Image } from 'engine/core/resources';
 import { Character } from 'engine/modules/character';
-import { JournalSpeakingSystem } from 'engine/modules/journal-extensions/journal-speaking';
-import { TalkJournalSystem } from 'engine/modules/journal-extensions/journal-talk';
-import { MovementSystem } from 'engine/modules/movement';
-import { OfferSystem } from 'engine/modules/offer';
-import { TalkSystem } from 'engine/modules/talk';
 import { Player } from './player';
 
 interface CharacterData {
@@ -25,6 +18,8 @@ export class GameBuilder {
   private _worldSize: [number, number] = [5, 5];
   private _playerPosition: [number, number] = [0, 0];
   private _characters: CharacterData[] = [];
+
+  constructor(private systems: GameSystem[]) {}
 
   static createCharacter(engine: GameEngine, characterData?: CharacterData): Character {
     const character = Character.create(engine);
@@ -57,16 +52,7 @@ export class GameBuilder {
     engine.addEntity(this.createWorld());
     this.createPlayer(engine);
     this.createCharacters(engine);
-    engine.addSystems([
-      new ActionSystem(),
-      new CommandSystem(),
-      new MovementSystem(),
-      new JournalSpeakingSystem(),
-      new TalkJournalSystem(),
-      new TalkSystem(),
-      new OfferSystem(),
-      new AISystem()
-    ]);
+    engine.addSystems(this.systems);
     return engine;
   }
 

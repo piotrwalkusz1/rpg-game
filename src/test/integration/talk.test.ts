@@ -1,3 +1,4 @@
+import { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
 import { OfferService } from 'engine/modules/offer';
 import { TalkActivity } from 'engine/modules/talk';
@@ -12,7 +13,7 @@ describe('Talk', () => {
   let talker2: Talker;
 
   beforeEach(() => {
-    engine = new GameBuilder().build();
+    engine = CDIContainer.create().get(GameBuilder).build();
     talker = Talker.create(engine);
     talker2 = Talker.create(engine);
   });

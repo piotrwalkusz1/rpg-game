@@ -12,7 +12,7 @@ import { ArrayUtils } from 'utils';
 
 describe('Character narration', () => {
   test('Display character narration option', () => {
-    const engine = new GameBuilder().build();
+    const engine = CDIContainer.create().get(GameBuilder).build();
     const field = mockField();
     const character = Character.create(engine);
     getPlayer(engine).field = field;
@@ -24,7 +24,7 @@ describe('Character narration', () => {
   });
 
   test('Do not display character narration option for player character', () => {
-    const engine = new GameBuilder().build();
+    const engine = CDIContainer.create().get(GameBuilder).build();
     const field = mockField();
     getPlayer(engine).field = field;
 
@@ -34,7 +34,7 @@ describe('Character narration', () => {
   });
 
   test('Set character narration context after clicking on character narration option', async () => {
-    const engine = new GameBuilder().build();
+    const engine = CDIContainer.create().get(GameBuilder).build();
     const store = CDIContainer.create().get(GameStoreService).createStore({ engine });
     const field = mockField();
     const character = Character.create(engine);
@@ -53,7 +53,7 @@ describe('Character narration', () => {
   });
 
   test('Display character narration', () => {
-    const engine = new GameBuilder().build();
+    const engine = CDIContainer.create().get(GameBuilder).build();
     const character = Character.create(engine);
     character.presentation.name = { literal: 'Sestia' };
     character.presentation.avatar = '/images/characters/002_Sestia.png';
