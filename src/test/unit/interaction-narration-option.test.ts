@@ -10,7 +10,7 @@ describe('InteractionNarrationOption', () => {
   let engine: GameEngine;
 
   beforeEach(() => {
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
   });
 
   describe('onClick method', () => {

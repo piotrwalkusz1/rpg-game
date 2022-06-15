@@ -18,7 +18,7 @@ describe('Journal speaking system', () => {
 
   beforeEach(() => {
     journalSpeakingSystem = new JournalSpeakingSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     speaker = Character.create(engine);
     journalOwner = engine.addEntityWithComponent(new JournalOwner());
     time = engine.time;

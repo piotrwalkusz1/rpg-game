@@ -11,54 +11,62 @@ import { mockField } from 'test/mock/mock-field';
 import { ArrayUtils } from 'utils';
 
 describe('Character narration', () => {
+  let cdiContainer: CDIContainer;
+  let narrationService: NarrationService;
+
+  beforeEach(() => {
+    cdiContainer = CDIContainer.default();
+    narrationService = cdiContainer.get(NarrationService);
+  });
+
   test('Display character narration option', () => {
-    const engine = CDIContainer.create().get(GameBuilder).build();
+    const engine = CDIContainer.default().get(GameBuilder).build();
     const field = mockField();
     const character = Character.create(engine);
     getPlayer(engine).field = field;
     character.field = field;
 
-    const narrationOptions = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options;
+    const narrationOptions = narrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options;
 
     expect(narrationOptions).toContainEqual(new CharacterNarrationOption({ character }));
   });
 
   test('Do not display character narration option for player character', () => {
-    const engine = CDIContainer.create().get(GameBuilder).build();
+    const engine = CDIContainer.default().get(GameBuilder).build();
     const field = mockField();
     getPlayer(engine).field = field;
 
-    const narrationOptions = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options || [];
+    const narrationOptions = narrationService.getNarration({ context: new FieldNarrationContext(field), engine })?.options || [];
 
     expect(ArrayUtils.filterInstanceOf(narrationOptions, CharacterNarrationOption)).toEqual([]);
   });
 
   test('Set character narration context after clicking on character narration option', async () => {
-    const engine = CDIContainer.create().get(GameBuilder).build();
-    const store = CDIContainer.create().get(GameStoreService).createStore({ engine });
+    const engine = CDIContainer.default().get(GameBuilder).build();
+    const store = CDIContainer.default().get(GameStoreService).createStore({ engine });
     const field = mockField();
     const character = Character.create(engine);
     character.name = { literal: 'Eladin' };
     character.field = field;
 
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(field), engine }).options.find(
-      (option) => option instanceof CharacterNarrationOption
-    );
+    const narrationOption = narrationService
+      .getNarration({ context: new FieldNarrationContext(field), engine })
+      .options.find((option) => option instanceof CharacterNarrationOption);
     if (narrationOption === undefined) {
       throw new Error('Expected narrationOption to be defined');
     }
-    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(get(store.narrationContext)).toEqual(new CharacterNarrationContext(character));
   });
 
   test('Display character narration', () => {
-    const engine = CDIContainer.create().get(GameBuilder).build();
+    const engine = CDIContainer.default().get(GameBuilder).build();
     const character = Character.create(engine);
     character.presentation.name = { literal: 'Sestia' };
     character.presentation.avatar = '/images/characters/002_Sestia.png';
 
-    const narration = NarrationService.getNarration({ context: new CharacterNarrationContext(character), engine });
+    const narration = narrationService.getNarration({ context: new CharacterNarrationContext(character), engine });
 
     expect(narration?.title).toEqual({ literal: 'Sestia' });
     expect(narration?.image).toEqual('/images/characters/002_Sestia.png');

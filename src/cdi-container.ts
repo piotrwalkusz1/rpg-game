@@ -8,6 +8,13 @@ import { MovementSystem } from 'engine/modules/movement';
 import { OfferSystem } from 'engine/modules/offer';
 import { TalkSystem } from 'engine/modules/talk';
 import { BookmarkProvider, BookmarkService, DialogBookmarkProvider } from 'frontend/bookmark';
+import {
+  CharacterNarrationProvider,
+  MovementNarrationProvider,
+  NarrationProvider,
+  NarrationService,
+  TalkNarrationProvider
+} from 'frontend/narration';
 import { GameStoreService } from 'frontend/store/game-store-service';
 import { GameBuilder } from 'game';
 import { isAssignableTo, Type } from 'utils';
@@ -31,23 +38,25 @@ class Instance<T> {
 export class CDIContainer {
   private _instances: Instance<unknown>[] = [];
 
-  private constructor() {
-    this.singleton(DialogBookmarkProvider, () => new DialogBookmarkProvider());
-    this.singleton(BookmarkService, (cdi) => new BookmarkService(cdi.getAll(BookmarkProvider)));
-    this.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService)));
-    this.singleton(ActionSystem, () => new ActionSystem());
-    this.singleton(CommandSystem, () => new CommandSystem());
-    this.singleton(MovementSystem, () => new MovementSystem());
-    this.singleton(JournalSpeakingSystem, () => new JournalSpeakingSystem());
-    this.singleton(TalkJournalSystem, () => new TalkJournalSystem());
-    this.singleton(TalkSystem, () => new TalkSystem());
-    this.singleton(OfferSystem, () => new OfferSystem());
-    this.singleton(AISystem, () => new AISystem());
-    this.dependent(GameBuilder, (cdi) => new GameBuilder(cdi.getAll(GameSystem)));
-  }
-
-  static create(): CDIContainer {
-    return new CDIContainer();
+  static default(): CDIContainer {
+    const container = new CDIContainer();
+    container.singleton(DialogBookmarkProvider, () => new DialogBookmarkProvider());
+    container.singleton(BookmarkService, (cdi) => new BookmarkService(cdi.getAll(BookmarkProvider)));
+    container.singleton(TalkNarrationProvider, () => new TalkNarrationProvider());
+    container.singleton(MovementNarrationProvider, () => new MovementNarrationProvider());
+    container.singleton(CharacterNarrationProvider, () => new CharacterNarrationProvider());
+    container.singleton(NarrationService, (cdi) => new NarrationService(cdi.getAll(NarrationProvider)));
+    container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
+    container.singleton(ActionSystem, () => new ActionSystem());
+    container.singleton(CommandSystem, () => new CommandSystem());
+    container.singleton(MovementSystem, () => new MovementSystem());
+    container.singleton(JournalSpeakingSystem, () => new JournalSpeakingSystem());
+    container.singleton(TalkJournalSystem, () => new TalkJournalSystem());
+    container.singleton(TalkSystem, () => new TalkSystem());
+    container.singleton(OfferSystem, () => new OfferSystem());
+    container.singleton(AISystem, () => new AISystem());
+    container.dependent(GameBuilder, (cdi) => new GameBuilder(cdi.getAll(GameSystem)));
+    return container;
   }
 
   get<T>(type: Type<T>): T {

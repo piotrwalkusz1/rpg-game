@@ -7,40 +7,33 @@ import { CharacterNarrationContext } from './narration-contexts/character-narrat
 import { FieldNarrationContext } from './narration-contexts/field-narration-context';
 import type { NarrationOption } from './narration-option';
 import type { NarrationProvider, NarrationProviderParams } from './narration-provider';
-import { CharacterNarrationProvider } from './narration-providers/character-narration-provider';
-import { MovementNarrationProvider } from './narration-providers/movement-narration-provider';
-import { TalkNarrationProvider } from './narration-providers/talk-narration-provider';
 
-export namespace NarrationService {
-  const narrationProviders: NarrationProvider[] = [
-    new MovementNarrationProvider(),
-    new CharacterNarrationProvider(),
-    new TalkNarrationProvider()
-  ];
+export class NarrationService {
+  constructor(private narrationProviders: NarrationProvider[]) {}
 
-  export const getNarration = (params: NarrationProviderParams): Narration => {
+  getNarration = (params: NarrationProviderParams): Narration => {
     if (params.context instanceof FieldNarrationContext) {
       return new Narration({
         title: params.context.field.name,
         description: params.context.field.description,
         image: params.context.field.image,
-        options: getNarrationOptions(params)
+        options: this.getNarrationOptions(params)
       });
     } else if (params.context instanceof CharacterNarrationContext) {
       return new Narration({
         title: params.context.character.name,
         image: params.context.character.avatar,
-        options: getNarrationOptions(params)
+        options: this.getNarrationOptions(params)
       });
     }
     throw new Error('Unsupported narrationContext: ' + params.context.constructor.name);
   };
 
-  const getNarrationOptions = (params: NarrationProviderParams): NarrationOption[] => {
-    return narrationProviders.flatMap((narrationProvider) => narrationProvider.getNarrationOptions(params));
+  getNarrationOptions = (params: NarrationProviderParams): NarrationOption[] => {
+    return this.narrationProviders.flatMap((narrationProvider) => narrationProvider.getNarrationOptions(params));
   };
 
-  export const executeOnNarrationOptionClick = (narrationOption: NarrationOption, store: GameStore): Promise<void> => {
+  executeOnNarrationOptionClick = (narrationOption: NarrationOption, store: GameStore): Promise<void> => {
     return narrationOption.onClick({
       engine: get(store.engine),
       processEvents: () => GameService.processEvents(get(store.engine), () => refreshEngine(store)),

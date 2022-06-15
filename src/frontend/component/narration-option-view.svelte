@@ -1,6 +1,6 @@
 <script lang="ts">
   import { NarrationOption, NarrationService } from 'frontend/narration';
-  import { gameStore } from 'frontend/store';
+  import { cdiContainer, gameStore } from 'frontend/store';
   import TranslatableTextView from 'i18n/translatable-text-view.svelte';
 
   export let narrationOption: NarrationOption;
@@ -9,7 +9,7 @@
 </script>
 
 <div
-  on:click={() => NarrationService.executeOnNarrationOptionClick(narrationOption, gameStore)}
+  on:click={() => cdiContainer.get(NarrationService).executeOnNarrationOptionClick(narrationOption, gameStore)}
   class="flex items-center bg-[#FAFFC3] border-[2px] border-[#A19B00] p-[3px] cursor-pointer"
 >
   <div class="image" class:large-image={largeImage} style="background-image: url({narrationOption.image});" />

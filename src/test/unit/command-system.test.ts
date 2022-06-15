@@ -22,7 +22,7 @@ describe('Command system', () => {
 
   beforeEach(() => {
     commandSystem = new CommandSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     commandExecutor = CommandExecutor.create(engine);
     command = mockCommand();
   });

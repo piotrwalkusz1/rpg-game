@@ -15,7 +15,7 @@ describe('Activity system', () => {
 
   beforeEach(() => {
     activitySystem = new ActivitySystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     time = engine.time;
   });
 

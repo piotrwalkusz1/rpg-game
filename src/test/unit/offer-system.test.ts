@@ -23,7 +23,7 @@ describe('Offer system', () => {
 
   beforeEach(() => {
     offerSystem = new OfferSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     offerParty = OfferParty.create(engine);
     offerParty2 = OfferParty.create(engine);
     offerParty3 = OfferParty.create(engine);

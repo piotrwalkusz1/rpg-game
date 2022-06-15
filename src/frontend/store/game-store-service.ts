@@ -1,12 +1,12 @@
 import type { GameEngine } from 'engine/core/game';
 import type { BookmarkService } from 'frontend/bookmark';
-import { NarrationService } from 'frontend/narration';
+import type { NarrationService } from 'frontend/narration';
 import { getPlayer } from 'game';
 import { derived, get, writable } from 'svelte/store';
 import type { GameStore } from './game-store';
 
 export class GameStoreService {
-  constructor(private bookmarkService: BookmarkService) {}
+  constructor(private bookmarkService: BookmarkService, private narrationService: NarrationService) {}
 
   createStore(params: { engine: GameEngine }): GameStore {
     const engine = writable(params.engine);
@@ -16,7 +16,7 @@ export class GameStoreService {
     const narrationContext = writable(undefined);
     const activatedBookmarkContext = writable(undefined);
     const narration = derived([narrationContext, engine], ([$narrationContext, $engine]) =>
-      $narrationContext ? NarrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
+      $narrationContext ? this.narrationService.getNarration({ context: $narrationContext, engine: $engine }) : undefined
     );
     const bookmarks = derived(engine, ($engine) => this.bookmarkService.getBookmarks({ engine: $engine }));
     const activatedBookmark = derived([bookmarks, activatedBookmarkContext], ([$bookmarks, $activatedBookmarkContext]) =>

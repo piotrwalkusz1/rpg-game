@@ -22,7 +22,7 @@ describe('Command system', () => {
 
   beforeEach(() => {
     actionSystem = new ActionSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
     action = new MockAction();
     time = engine.time;

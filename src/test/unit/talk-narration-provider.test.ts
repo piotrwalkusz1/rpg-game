@@ -15,7 +15,7 @@ describe('Talk narration provider', () => {
   let character: Character;
 
   beforeEach(() => {
-    engine = CDIContainer.create().get(GameBuilder).build()
+    engine = CDIContainer.default().get(GameBuilder).build()
     character = Character.create(engine);
   });
 

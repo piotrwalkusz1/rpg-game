@@ -14,7 +14,7 @@ describe('DialogBookmarkProvider', () => {
 
   describe('getBookmarks', () => {
     it('should return SpeechBookmark for each character with unread SpeakJournalEntry', () => {
-      const engine = CDIContainer.create().get(GameBuilder).build();
+      const engine = CDIContainer.default().get(GameBuilder).build();
       const character = Character.create(engine);
       const character2 = Character.create(engine);
       const journalEntry = new SpeakJournalEntry({

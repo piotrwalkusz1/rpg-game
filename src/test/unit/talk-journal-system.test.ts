@@ -16,7 +16,7 @@ describe('TalkJournalSystem', () => {
 
   beforeEach(() => {
     talkJournalSystem = new TalkJournalSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     player = getPlayer(engine);
     character = Character.create(engine);
     character2 = Character.create(engine);

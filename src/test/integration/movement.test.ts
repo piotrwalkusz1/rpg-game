@@ -10,22 +10,27 @@ import { GameBuilder, getPlayer, Player } from 'game';
 describe('Movement', () => {
   class MockEvent extends GameEvent {}
 
+  let cdiContainer: CDIContainer;
   let engine: GameEngine;
   let player: Player;
   let world: Field;
   let store: GameStore;
+  let narrationService: NarrationService;
 
   beforeEach(() => {
-    engine = CDIContainer.create().get(GameBuilder).playerPosition([2, 1]).build();
+    cdiContainer = CDIContainer.default();
+    engine = cdiContainer.get(GameBuilder).playerPosition([2, 1]).build();
     world = rootField(engine);
     player = getPlayer(engine);
-    store = CDIContainer.create().get(GameStoreService).createStore({ engine });
+    store = cdiContainer.get(GameStoreService).createStore({ engine });
+    narrationService = cdiContainer.get(NarrationService);
   });
 
   test('Move to adjoin field', async () => {
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
+    const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];
-    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
+
+    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(3);
@@ -33,9 +38,9 @@ describe('Movement', () => {
   });
 
   test('Move to distant field', async () => {
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [4, 3])), engine })
+    const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [4, 3])), engine })
       .options[0];
-    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(4);
@@ -45,9 +50,9 @@ describe('Movement', () => {
   test('Move when events queue is not empty', async () => {
     engine.addEvent(new MockEvent({ time: new Date(engine.time) }));
 
-    const narrationOption = NarrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
+    const narrationOption = narrationService.getNarration({ context: new FieldNarrationContext(subFieldAt(world, [3, 1])), engine })
       .options[0];
-    await NarrationService.executeOnNarrationOptionClick(narrationOption, store);
+    await narrationService.executeOnNarrationOptionClick(narrationOption, store);
 
     expect(getParentField(player)).toBe(world);
     expect(getX(player)).toEqual(3);

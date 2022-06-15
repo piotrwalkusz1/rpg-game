@@ -16,7 +16,7 @@ describe('AI', () => {
   let character: Character;
 
   beforeEach(() => {
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     character = GameBuilder.createCharacter(engine);
   });
 

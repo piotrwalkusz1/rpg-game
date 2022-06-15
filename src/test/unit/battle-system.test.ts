@@ -14,7 +14,7 @@ describe('BattleSystem', () => {
 
   beforeEach(() => {
     battleSystem = new BattleSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     attacker = Character.create(engine);
     target = Character.create(engine);
   });

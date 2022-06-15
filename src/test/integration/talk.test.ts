@@ -13,7 +13,7 @@ describe('Talk', () => {
   let talker2: Talker;
 
   beforeEach(() => {
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     talker = Talker.create(engine);
     talker2 = Talker.create(engine);
   });

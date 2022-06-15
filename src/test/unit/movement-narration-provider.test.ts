@@ -11,7 +11,7 @@ describe('MovementNarrationProvider', () => {
 
   beforeEach(() => {
     movementNarrationProvider = new MovementNarrationProvider();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
   });
 
   describe('getNarrationOptions', () => {

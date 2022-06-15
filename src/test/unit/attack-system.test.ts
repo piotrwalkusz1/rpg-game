@@ -13,7 +13,7 @@ describe('AttackSystem', () => {
 
   beforeEach(() => {
     attackSystem = new AttackSystem();
-    engine = CDIContainer.create().get(GameBuilder).build();
+    engine = CDIContainer.default().get(GameBuilder).build();
     attacker = Character.create(engine);
     target = Character.create(engine);
   });

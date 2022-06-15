@@ -6,7 +6,9 @@ describe('NarrationService', () => {
 
   describe('getNarration', () => {
     it('should throw error if narration context is not supported', () => {
-      expect(() => NarrationService.getNarration({ context: new UnsupportedNarrationContext(), engine: new GameEngine() })).toThrow(
+      const narrationService = new NarrationService([]);
+
+      expect(() => narrationService.getNarration({ context: new UnsupportedNarrationContext(), engine: new GameEngine() })).toThrow(
         'Unsupported narrationContext: UnsupportedNarrationContext'
       );
     });
