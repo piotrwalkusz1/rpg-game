@@ -1,6 +1,6 @@
 import type { CDIContainer } from 'cdi-container';
 import type { GameEngine } from 'engine/core/game';
-import { GameBuilder } from './game-builder';
+import { GameBuilder } from '../game/game-builder';
 
 export const initializeDemoGame = (container: CDIContainer): GameEngine => {
   const engine: GameEngine = container

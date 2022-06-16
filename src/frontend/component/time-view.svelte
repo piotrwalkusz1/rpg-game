@@ -1,11 +1,11 @@
 <script lang="ts">
   import { startOfDay } from 'date-fns';
   import { differenceInSeconds } from 'date-fns/esm';
-  import { time } from 'frontend/store';
+  import { engine } from 'frontend/store';
 
   const SECONDS_IN_DAY = 24 * 60 * 60;
 
-  $: partOfDay = differenceInSeconds($time, startOfDay($time)) / SECONDS_IN_DAY;
+  $: partOfDay = differenceInSeconds($engine.time, startOfDay($engine.time)) / SECONDS_IN_DAY;
 </script>
 
 <div class="relative">

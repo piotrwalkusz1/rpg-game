@@ -1,10 +1,10 @@
 <script lang="ts">
   import { millisecondsToHours } from 'date-fns/esm';
   import type { Time } from 'engine/core/time';
-  import { time } from 'frontend/store';
+  import { engine } from 'frontend/store';
   import { lerp } from 'utils';
 
-  $: angle = calculateAngle($time);
+  $: angle = calculateAngle($engine.time);
 
   function calculateAngle(time: Time) {
     return lerp(-46, 46, partOfDay(time));

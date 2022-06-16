@@ -57,7 +57,7 @@ describe('Character narration', () => {
     }
     await narrationService.executeNarrationOption(narrationOption, store);
 
-    expect(get(store.props.narrationContext)).toEqual(new CharacterNarrationContext(character));
+    expect(get(store.narrationContext)).toEqual(new CharacterNarrationContext(character));
   });
 
   test('Display character narration', () => {

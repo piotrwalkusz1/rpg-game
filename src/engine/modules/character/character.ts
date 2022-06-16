@@ -83,10 +83,6 @@ export class Character extends Component {
     return this.talker.activityParticipant;
   }
 
-  get offerParty(): OfferParty {
-    return this.talker.offerParty;
-  }
-
   get name(): TranslatableText {
     return this.presentation.name;
   }

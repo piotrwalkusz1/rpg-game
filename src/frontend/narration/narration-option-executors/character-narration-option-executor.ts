@@ -10,6 +10,6 @@ export class CharacterNarrationOptionExecutor extends NarrationOptionExecutor<Ch
   }
 
   override async execute(narrationOption: CharacterNarrationOption, store: GameStore): Promise<void> {
-    store.props.narrationContext.set(new CharacterNarrationContext(narrationOption.character));
+    store.narrationContext.set(new CharacterNarrationContext(narrationOption.character));
   }
 }

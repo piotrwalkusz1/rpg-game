@@ -9,25 +9,25 @@ import { getPlayer } from 'game';
 export namespace GameService {
   export const processEvents = async (store: GameStore): Promise<void> => {
     store.refreshEngine();
-    while (store.engine.nextEvent) {
+    while (store.getEngine().nextEvent) {
       await processEventsUntilTimeChange(store);
-      if (isPlayerActionRequired(store.engine)) {
+      if (isPlayerActionRequired(store.getEngine())) {
         break;
       }
     }
   };
 
   const processEventsUntilTimeChange = async (store: GameStore): Promise<void> => {
-    if (differentTime(store.engine.nextEventTime, store.engine.time)) {
+    if (differentTime(store.getEngine().nextEventTime, store.getTime())) {
       await processNextEvent(store);
     }
-    while (sameTime(store.engine.nextEventTime, store.engine.time)) {
+    while (sameTime(store.getEngine().nextEventTime, store.getTime())) {
       await processNextEvent(store);
     }
   };
 
   const processNextEvent = async (store: GameStore): Promise<void> => {
-    await GameLoopService.processNextEvent(store.engine);
+    await GameLoopService.processNextEvent(store.getEngine());
     store.refreshEngine();
   };
 

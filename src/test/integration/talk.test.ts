@@ -57,7 +57,7 @@ describe('Talk', () => {
     await narrationService.executeNarrationOption(talkNarrationOption, store);
     await GameService.processEvents(store);
 
-    const bookmarks = get(store.props.bookmarks);
+    const bookmarks = get(store.bookmarks);
 
     expect(bookmarks).toEqual([
       new DialogBookmark({

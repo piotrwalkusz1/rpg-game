@@ -1,5 +1,5 @@
 import { CDIContainer } from 'cdi-container';
-import { initializeDemoGame } from 'game';
+import { initializeDemoGame } from 'demo';
 import { MotionUtils, TimeUtils } from 'utils';
 import { GameStoreService } from './store/game-store-service';
 
@@ -16,9 +16,7 @@ export const {
   narration,
   bookmarks,
   activatedBookmark,
-  time,
-  player,
-  journal
-} = gameStore.props;
+  player
+} = gameStore;
 
-export const animatedCurrentTime = MotionUtils.interpolate(gameStore.engine.time, TimeUtils.interpolate);
+export const animatedCurrentTime = MotionUtils.interpolate(gameStore.getEngine().time, TimeUtils.interpolate);
