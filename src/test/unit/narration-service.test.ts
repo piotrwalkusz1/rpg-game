@@ -1,7 +1,7 @@
 import { GameEngine } from 'engine/core/game';
 import { NarrationContext, NarrationOption, NarrationService } from 'frontend/narration';
 import type { GameStore } from 'frontend/store/game-store';
-import { Mock } from 'moq.ts';
+import { Mock } from 'typemoq';
 
 describe('NarrationService', () => {
   class UnsupportedNarrationContext extends NarrationContext {}
@@ -26,7 +26,7 @@ describe('NarrationService', () => {
     it('should throw error if executor for narration option not found', async () => {
       const narrationService = new NarrationService([], []);
 
-      expect(() => narrationService.executeNarrationOption(new UnsupportedNarrationOption(), new Mock<GameStore>().object())).toThrow(
+      expect(() => narrationService.executeNarrationOption(new UnsupportedNarrationOption(), Mock.ofType<GameStore>().object)).toThrow(
         new Error('NarrationOptionExecutor for type UnsupportedNarrationOption not found')
       );
     });

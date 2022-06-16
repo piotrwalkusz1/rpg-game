@@ -1,10 +1,10 @@
 import { GameEngine } from 'engine/core/game';
-import { Bookmark, BookmarkContext, BookmarkProviderParams, BookmarkService } from 'frontend/bookmark';
-import type { Narration, NarrationContext, NarrationProviderParams, NarrationService } from 'frontend/narration';
+import { Bookmark, BookmarkContext, BookmarkService } from 'frontend/bookmark';
+import type { Narration, NarrationContext, NarrationService } from 'frontend/narration';
 import { GameStore } from 'frontend/store/game-store';
 import { getPlayer, Player } from 'game';
-import { It, Mock, Times } from 'moq.ts';
 import { get } from 'svelte/store';
+import { IMock, It, Mock, Times } from 'typemoq';
 
 describe('GameStore', () => {
   class MockBookmarkContext extends BookmarkContext {
@@ -17,17 +17,17 @@ describe('GameStore', () => {
     }
   }
 
-  let bookmarkServiceMock: Mock<BookmarkService>;
-  let narrationServiceMock: Mock<NarrationService>;
+  let bookmarkServiceMock: IMock<BookmarkService>;
+  let narrationServiceMock: IMock<NarrationService>;
   let engine: GameEngine;
   let store: GameStore;
 
   beforeEach(() => {
-    bookmarkServiceMock = new Mock<BookmarkService>();
-    narrationServiceMock = new Mock<NarrationService>();
+    bookmarkServiceMock = Mock.ofType<BookmarkService>();
+    narrationServiceMock = Mock.ofType<NarrationService>();
     engine = new GameEngine();
     Player.create(engine);
-    store = new GameStore(bookmarkServiceMock.object(), narrationServiceMock.object(), engine);
+    store = new GameStore(bookmarkServiceMock.object, narrationServiceMock.object, engine);
   });
 
   describe('narration', () => {
@@ -36,63 +36,53 @@ describe('GameStore', () => {
     });
 
     it('should return narration if narrationContext is set', () => {
-      const narrationContext = new Mock<NarrationContext>().object();
-      const narration = new Mock<Narration>().object();
-      narrationServiceMock.setup((instance) => instance.getNarration(It.IsAny())).returns(narration);
+      const narrationContext = Mock.ofType<NarrationContext>().object;
+      const narration = Mock.ofType<Narration>().object;
+      narrationServiceMock.setup((instance) => instance.getNarration(It.isAny())).returns(() => narration);
       store.narrationContext.set(narrationContext);
 
       const result = get(store.narration);
 
       expect(result).toBe(narration);
-      narrationServiceMock.verify(
-        (instance) =>
-          instance.getNarration(
-            It.Is((params: NarrationProviderParams) => params.engine === engine && params.context === narrationContext)
-          ),
-        Times.Once()
-      );
+      narrationServiceMock.verify((instance) => instance.getNarration({ context: narrationContext, engine }), Times.once());
     });
   });
 
   describe('activatedBookmark', () => {
     it('should return undefined if activatedBookmarkContext is undefined', () => {
-      bookmarkServiceMock.setup((instance) => instance.getBookmarks(It.IsAny())).returns([]);
+      bookmarkServiceMock.setup((instance) => instance.getBookmarks(It.isAny())).returns(() => []);
 
       expect(get(store.activatedBookmark)).toBeUndefined();
     });
 
     it('should return undefined if activatedBookmarkContext is set but matching bookmark not found', () => {
-      const bookmark = new Mock<Bookmark>()
-        .setup((instance) => instance.context)
-        .returns(new MockBookmarkContext(1))
-        .object();
-      bookmarkServiceMock.setup((instance) => instance.getBookmarks(It.IsAny())).returns([bookmark]);
+      const bookmarkMock = Mock.ofType<Bookmark>();
+      bookmarkMock.setup((instance) => instance.context).returns(() => new MockBookmarkContext(1));
+      bookmarkServiceMock
+        .setup((instance) => instance.getBookmarks({ engine }))
+        .returns(() => [bookmarkMock.object])
+        .verifiable(Times.once());
       store.activatedBookmarkContext.set(new MockBookmarkContext(2));
 
       const result = get(store.activatedBookmark);
 
       expect(result).toBeUndefined();
-      bookmarkServiceMock.verify(
-        (instance) => instance.getBookmarks(It.Is((params: BookmarkProviderParams) => params.engine === engine)),
-        Times.Once()
-      );
+      bookmarkServiceMock.verifyAll();
     });
 
     it('should return bookmark if activatedBookmarkContext is set and matching bookmark is found', () => {
-      const bookmark = new Mock<Bookmark>()
-        .setup((instance) => instance.context)
-        .returns(new MockBookmarkContext(1))
-        .object();
-      bookmarkServiceMock.setup((instance) => instance.getBookmarks(It.IsAny())).returns([bookmark]);
+      const bookmarkMock = Mock.ofType<Bookmark>();
+      bookmarkMock.setup((instance) => instance.context).returns(() => new MockBookmarkContext(1));
+      bookmarkServiceMock
+        .setup((instance) => instance.getBookmarks({ engine }))
+        .returns(() => [bookmarkMock.object])
+        .verifiable(Times.once());
       store.activatedBookmarkContext.set(new MockBookmarkContext(1));
 
       const result = get(store.activatedBookmark);
 
-      expect(result).toBe(bookmark);
-      bookmarkServiceMock.verify(
-        (instance) => instance.getBookmarks(It.Is((params: BookmarkProviderParams) => params.engine === engine)),
-        Times.Once()
-      );
+      expect(result).toBe(bookmarkMock.object);
+      bookmarkServiceMock.verifyAll();
     });
   });
 
