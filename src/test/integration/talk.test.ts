@@ -1,4 +1,5 @@
 import { CDIContainer } from 'cdi-container';
+import { rootField, subFieldAt } from 'engine/core/field';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
 import { CharacterJournalEntry } from 'engine/modules/journal-extensions/journal-character';
@@ -33,7 +34,9 @@ describe('Talk', () => {
 
   test('Create talk activity after talk offer is accepted', async () => {
     const talker = Talker.create(engine);
+    talker.fieldObject.field = subFieldAt(rootField(engine), [0, 0]);
     const talker2 = Talker.create(engine);
+    talker2.fieldObject.field = subFieldAt(rootField(engine), [0, 0]);
 
     talkService.offerTalk(talker, talker2, engine);
     await GameService.processEvents(store);
@@ -49,7 +52,7 @@ describe('Talk', () => {
   });
 
   test('Display dialog bookmark after end of talk', async () => {
-    const character = Character.create(engine, { withAI: true });
+    const character = Character.create(engine, { withAI: true, field: subFieldAt(rootField(engine), [0, 0]) });
 
     const talkNarrationOption = narrationService
       .getNarrationOptions({ context: new CharacterNarrationContext(character), engine })

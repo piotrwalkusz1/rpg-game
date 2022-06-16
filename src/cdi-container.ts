@@ -47,7 +47,7 @@ export class CDIContainer {
     const container = new CDIContainer();
     container.singleton(DialogBookmarkProvider, () => new DialogBookmarkProvider());
     container.singleton(BookmarkService, (cdi) => new BookmarkService(cdi.getAll(BookmarkProvider)));
-    container.singleton(TalkNarrationProvider, () => new TalkNarrationProvider());
+    container.singleton(TalkNarrationProvider, (cdi) => new TalkNarrationProvider(cdi.get(TalkService)));
     container.singleton(MovementNarrationProvider, () => new MovementNarrationProvider());
     container.singleton(CharacterNarrationProvider, () => new CharacterNarrationProvider());
     container.singleton(TalkNarrationOptionExecutor, (cdi) => new TalkNarrationOptionExecutor(cdi.get(TalkService)));

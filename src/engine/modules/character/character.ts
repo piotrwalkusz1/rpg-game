@@ -44,16 +44,16 @@ export class Character extends Component {
     this.attacker = attacker;
   }
 
-  static create(engine: Engine, params?: { withAI?: boolean }): Character {
+  static create(engine: Engine, params?: { withAI?: boolean; field?: Field }): Character {
     const offerParty = new OfferParty();
     const activityParticipant = new ActivityParticipant();
-    const fieldObject = new FieldObject();
+    const fieldObject = new FieldObject({ field: params?.field });
     const health = new Health();
     const attacker = new Attacker();
     const actionExecutor = new ActionExecutor();
     const commandExecutor = new CommandExecutor({ actionExecutor });
     const presentation = new Presentation({ name: { literal: '' }, avatar: '/images/characters/001_Eladin.png' });
-    const talker = new Talker({ offerParty, activityParticipant });
+    const talker = new Talker({ offerParty, activityParticipant, fieldObject });
     const character = new Character({ talker, fieldObject, presentation, commandExecutor, health, attacker });
     engine.addEntity(
       new Entity().addComponents([
