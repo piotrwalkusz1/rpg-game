@@ -1,13 +1,19 @@
 import { add } from 'date-fns';
 import { ActionExecutor, ActionService, ActionStartedEvent, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
+import type { ConditionService } from 'engine/core/condition';
 import { GameEngine } from 'engine/core/game';
 import { MockAction } from 'test/mock/mock-action';
+import { IMock, It, Mock } from 'typemoq';
 
 describe('ActionService', () => {
+  let conditionServiceMock: IMock<ConditionService>;
+  let actionService: ActionService;
   let engine: GameEngine;
   let actionExecutor: ActionExecutor;
 
   beforeEach(() => {
+    conditionServiceMock = Mock.ofType<ConditionService>();
+    actionService = new ActionService(conditionServiceMock.object);
     engine = new GameEngine();
     actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
   });
@@ -16,8 +22,9 @@ describe('ActionService', () => {
     it('should set pending action and create events', () => {
       const duration: Duration = { seconds: 10 };
       const action = new MockAction({ duration });
+      conditionServiceMock.setup((instance) => instance.checkConditions(It.isAny(), It.isAny())).returns(() => true);
 
-      const scheduled = ActionService.scheduleAction(action, actionExecutor, engine);
+      const scheduled = actionService.startAction(action, actionExecutor, engine);
 
       expect(scheduled).toEqual(true);
       expect(actionExecutor.pendingAction).toEqual(
@@ -37,7 +44,7 @@ describe('ActionService', () => {
       const alreadyPendingAction = mockPendingAction();
       actionExecutor.pendingAction = alreadyPendingAction;
 
-      const scheduled = ActionService.scheduleAction(new MockAction(), actionExecutor, engine);
+      const scheduled = actionService.startAction(new MockAction(), actionExecutor, engine);
 
       expect(scheduled).toEqual(false);
       expect(actionExecutor.pendingAction).toBe(alreadyPendingAction);
@@ -46,8 +53,9 @@ describe('ActionService', () => {
 
     it('should do nothing if cannot execute action', () => {
       const action = new MockAction({ condition: { check: () => false } });
+      conditionServiceMock.setup((instance) => instance.checkConditions(It.isAny(), It.isAny())).returns(() => false);
 
-      const scheduled = ActionService.scheduleAction(action, actionExecutor, engine);
+      const scheduled = actionService.startAction(action, actionExecutor, engine);
 
       expect(scheduled).toEqual(false);
       expect(actionExecutor.pendingAction).toEqual(undefined);

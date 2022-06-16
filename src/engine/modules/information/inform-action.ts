@@ -1,12 +1,12 @@
 import { Action, ActionExecutor } from 'engine/core/action';
-import type { Condition, Entity } from 'engine/core/ecs';
+import type { Condition } from 'engine/core/condition';
 import { IsAlive } from 'engine/modules/health';
-import { HasInformation, Information } from 'engine/modules/information';
+import { HasInformation, Information, InformationOwner } from 'engine/modules/information';
 export class InformAction extends Action {
-  readonly informationReceiver: Entity;
+  readonly informationReceiver: InformationOwner;
   readonly information: Information;
 
-  constructor({ informationReceiver, information }: { informationReceiver: Entity; information: Information }) {
+  constructor({ informationReceiver, information }: { informationReceiver: InformationOwner; information: Information }) {
     super();
     this.informationReceiver = informationReceiver;
     this.information = information;

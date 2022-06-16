@@ -13,8 +13,6 @@ export class CommandEvent extends GameEvent {
   }
 }
 
-export class CommandScheduledEvent extends CommandEvent {}
-
 export class CommandStartedEvent extends CommandEvent {}
 
 export class CommandEndedEvent extends CommandEvent {}

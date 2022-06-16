@@ -1,5 +1,5 @@
 import { Action } from 'engine/core/action';
-import type { Condition } from 'engine/core/ecs';
+import type { Condition } from 'engine/core/condition';
 
 export class MockAction extends Action {
   static readonly DEFAULT_DURATION = { seconds: 1 };

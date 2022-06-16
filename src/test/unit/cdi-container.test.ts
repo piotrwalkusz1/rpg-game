@@ -53,7 +53,7 @@ describe('CDIContainer', () => {
     it('should throw error if no instances', () => {
       const container = new CDIContainer();
 
-      expect(() => container.get(FirstChildClass)).toThrow(new Error('Expected 1 instance but was 0'));
+      expect(() => container.get(FirstChildClass)).toThrow(new Error('Expected 1 instance of FirstChildClass but was 0'));
     });
 
     it('should throw error if more than one instance', () => {
@@ -61,7 +61,7 @@ describe('CDIContainer', () => {
       container.singleton(FirstChildClass, () => new FirstChildClass());
       container.singleton(FirstChildClass, () => new FirstChildClass());
 
-      expect(() => container.get(FirstChildClass)).toThrow(new Error('Expected 1 instance but was 2'));
+      expect(() => container.get(FirstChildClass)).toThrow(new Error('Expected 1 instance of FirstChildClass but was 2'));
     });
   });
 

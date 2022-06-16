@@ -1,78 +1,85 @@
-import { CDIContainer } from 'cdi-container';
-import {
-  Action,
-  ActionExecutedEvent,
-  ActionExecutingEvent,
-  ActionExecutor,
-  ActionSystem,
-  BeforeActionExecutingEvent,
-  PendingAction
-} from 'engine/core/action';
-import type { GameEngine } from 'engine/core/game';
-import type { Time } from 'engine/core/time';
-import { GameBuilder } from 'game';
-import { MockAction } from 'test/mock/mock-action';
+import { Action, ActionExecutor, ActionService, ActionSystem, BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
+import { GameEngine } from 'engine/core/game';
+import { IMock, It, Mock, Times } from 'typemoq';
 
-describe('Command system', () => {
+describe('ActionSystem', () => {
+  let actionServiceMock: IMock<ActionService>;
   let actionSystem: ActionSystem;
   let engine: GameEngine;
-  let actionExecutor: ActionExecutor;
-  let action: Action;
-  let time: Time;
 
   beforeEach(() => {
-    actionSystem = new ActionSystem();
-    engine = CDIContainer.default().get(GameBuilder).build();
-    actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
-    action = new MockAction();
-    time = engine.time;
+    actionServiceMock = Mock.ofType<ActionService>();
+    actionSystem = new ActionSystem(actionServiceMock.object);
+    engine = new GameEngine();
   });
 
-  describe('BeforeActionExecutingEvent', () => {
-    it('should create events and reset pending action', async () => {
-      actionExecutor.pendingAction = mockPendingAction();
+  describe('processEvent', () => {
+    it('should set pendingAction to undefined', async () => {
+      const actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
+      const action = Mock.ofType<Action>().object;
+      const event = new BeforeActionExecutingEvent({ time: engine.time, action, executor: actionExecutor });
+      actionExecutor.pendingAction = new PendingAction({ action, executionEvent: event, scheduleTime: engine.time });
 
-      await actionSystem.processEvent(mockBeforeActionExecutingEvent(), engine);
+      await actionSystem.processEvent(event, engine);
 
-      expect(engine.events).toEqual([mockActionExecutingEvent(), mockActionExecutedEvent()]);
       expect(actionExecutor.pendingAction).toBeUndefined();
     });
 
-    it('should do nothing if action is not pendig any more', async () => {
-      await actionSystem.processEvent(mockBeforeActionExecutingEvent(), engine);
+    it('should add events if can execute action', async () => {
+      const actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
+      const action = Mock.ofType<Action>().object;
+      const event = new BeforeActionExecutingEvent({ time: engine.time, action, executor: actionExecutor });
+      actionExecutor.pendingAction = new PendingAction({ action, executionEvent: event, scheduleTime: engine.time });
+      actionServiceMock
+        .setup((instance) => instance.canExecuteAction(action, It.isAny(), It.isAny()))
+        .returns(() => true)
+        .verifiable(Times.once());
 
-      expect(engine.events).toEqual([]);
-      expect(actionExecutor.pendingAction).toBeUndefined();
+      await actionSystem.processEvent(event, engine);
+
+      // expect(engine.events).toEqual([
+      //   new ActionExecutingEvent({ time: engine.time, action, executor: actionExecutor }),
+      //   new ActionExecutedEvent({ time: engine.time, action, executor: actionExecutor })
+      // ]);
+      actionServiceMock.verifyAll();
     });
 
-    it('should reset pending action if cannot execute action', async () => {
-      action = mockActionThatCannotBeExecuted();
-      actionExecutor.pendingAction = mockPendingAction();
+    it('should not add events if cannot execute action', async () => {
+      const actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
+      const action = Mock.ofType<Action>().object;
+      const event = new BeforeActionExecutingEvent({ time: engine.time, action, executor: actionExecutor });
+      actionExecutor.pendingAction = new PendingAction({ action, executionEvent: event, scheduleTime: engine.time });
+      actionServiceMock
+        .setup((instance) => instance.canExecuteAction(action, It.isAny(), It.isAny()))
+        .returns(() => false)
+        .verifiable(Times.once());
 
-      await actionSystem.processEvent(mockBeforeActionExecutingEvent(), engine);
+      await actionSystem.processEvent(event, engine);
 
       expect(engine.events).toEqual([]);
-      expect(actionExecutor.pendingAction).toBeUndefined();
+      actionServiceMock.verifyAll();
+    });
+
+    it('should do nothing if current pending action is not equal to action from event', async () => {
+      const actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
+      const event = new BeforeActionExecutingEvent({ time: engine.time, action: Mock.ofType<Action>().object, executor: actionExecutor });
+      const pendingAction = new PendingAction({ action: Mock.ofType<Action>().object, executionEvent: event, scheduleTime: engine.time });
+      actionExecutor.pendingAction = pendingAction;
+
+      await actionSystem.processEvent(event, engine);
+
+      expect(actionExecutor.pendingAction).toBe(pendingAction);
+    });
+
+    it('should do nothing if action executor has no pending action', async () => {
+      const actionExecutor = engine.addEntityWithComponent(new ActionExecutor());
+      const event = new BeforeActionExecutingEvent({ time: engine.time, action: Mock.ofType<Action>().object, executor: actionExecutor });
+      actionServiceMock.setup((instance) => instance.canExecuteAction(It.isAny(), It.isAny(), It.isAny())).verifiable(Times.never());
+
+      await actionSystem.processEvent(event, engine);
+
+      expect(actionExecutor.pendingAction).toBe(undefined);
+      actionServiceMock.verifyAll();
     });
   });
-
-  function mockActionThatCannotBeExecuted(): Action {
-    return new MockAction({ condition: { check: () => false } });
-  }
-
-  function mockPendingAction(): PendingAction {
-    return new PendingAction({ action, scheduleTime: time, executionEvent: mockBeforeActionExecutingEvent() });
-  }
-
-  function mockBeforeActionExecutingEvent(): BeforeActionExecutingEvent {
-    return new BeforeActionExecutingEvent({ time, action, executor: actionExecutor });
-  }
-
-  function mockActionExecutingEvent(): ActionExecutingEvent {
-    return new ActionExecutingEvent({ time, action, executor: actionExecutor });
-  }
-
-  function mockActionExecutedEvent(): ActionExecutedEvent {
-    return new ActionExecutedEvent({ time, action, executor: actionExecutor });
-  }
 });

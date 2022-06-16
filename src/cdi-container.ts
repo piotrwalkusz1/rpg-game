@@ -1,7 +1,11 @@
-import { ActionSystem } from 'engine/core/action';
-import { AISystem } from 'engine/core/ai';
-import { CommandSystem } from 'engine/core/command';
+import { ActionService, ActionSystem } from 'engine/core/action';
+import { AIService, AISystem } from 'engine/core/ai';
+import { CommandService, CommandSystem } from 'engine/core/command';
+import { ConditionChecker, ConditionService } from 'engine/core/condition';
+import { AreFieldsConnectedChecker } from 'engine/core/field/are-fields-connected-checker';
 import { GameSystem } from 'engine/core/game';
+import { IsAliveChecker } from 'engine/modules/health/is-alive-checker';
+import { HasInformationChecker } from 'engine/modules/information/has-information-checker';
 import { JournalSpeakingSystem } from 'engine/modules/journal-extensions/journal-speaking';
 import { TalkJournalSystem } from 'engine/modules/journal-extensions/journal-talk';
 import { MovementSystem } from 'engine/modules/movement';
@@ -48,26 +52,32 @@ export class CDIContainer {
     container.singleton(DialogBookmarkProvider, () => new DialogBookmarkProvider());
     container.singleton(BookmarkService, (cdi) => new BookmarkService(cdi.getAll(BookmarkProvider)));
     container.singleton(TalkNarrationProvider, (cdi) => new TalkNarrationProvider(cdi.get(TalkService)));
-    container.singleton(MovementNarrationProvider, () => new MovementNarrationProvider());
+    container.singleton(MovementNarrationProvider, (cdi) => new MovementNarrationProvider(cdi.get(ActionService)));
     container.singleton(CharacterNarrationProvider, () => new CharacterNarrationProvider());
     container.singleton(TalkNarrationOptionExecutor, (cdi) => new TalkNarrationOptionExecutor(cdi.get(TalkService)));
-    container.singleton(CommandNarrationOptionExecutor, () => new CommandNarrationOptionExecutor());
+    container.singleton(CommandNarrationOptionExecutor, (cdi) => new CommandNarrationOptionExecutor(cdi.get(CommandService)));
     container.singleton(CharacterNarrationOptionExecutor, () => new CharacterNarrationOptionExecutor());
     container.singleton(
       NarrationService,
       (cdi) => new NarrationService(cdi.getAll(NarrationProvider), cdi.getAll(NarrationOptionExecutor))
     );
-    container.singleton(ActionSystem, () => new ActionSystem());
+    container.singleton(IsAliveChecker, () => new IsAliveChecker());
+    container.singleton(HasInformationChecker, () => new HasInformationChecker());
+    container.singleton(AreFieldsConnectedChecker, () => new AreFieldsConnectedChecker());
+    container.singleton(ConditionService, (cdi) => new ConditionService(cdi.getAll(ConditionChecker)));
+    container.singleton(ActionService, (cdi) => new ActionService(cdi.get(ConditionService)));
+    container.singleton(ActionSystem, (cdi) => new ActionSystem(cdi.get(ActionService)));
+    container.singleton(AIService, (cdi) => new AIService(cdi.get(ActionService)));
     container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
     container.singleton(OfferService, () => new OfferService());
     container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService)));
-    container.singleton(ActionSystem, () => new ActionSystem());
-    container.singleton(CommandSystem, () => new CommandSystem());
+    container.singleton(CommandService, (cdi) => new CommandService(cdi.get(ActionService)));
+    container.singleton(CommandSystem, (cdi) => new CommandSystem(cdi.get(CommandService)));
     container.singleton(MovementSystem, () => new MovementSystem());
     container.singleton(JournalSpeakingSystem, () => new JournalSpeakingSystem());
     container.singleton(TalkJournalSystem, () => new TalkJournalSystem());
     container.singleton(TalkSystem, () => new TalkSystem());
-    container.singleton(AISystem, (cdi) => new AISystem(cdi.get(OfferService)));
+    container.singleton(AISystem, (cdi) => new AISystem(cdi.get(AIService), cdi.get(OfferService)));
     container.dependent(GameBuilder, (cdi) => new GameBuilder(cdi.getAll(GameSystem)));
     return container;
   }
@@ -77,7 +87,7 @@ export class CDIContainer {
     if (instances.length === 1) {
       return instances[0];
     }
-    throw new Error('Expected 1 instance but was ' + instances.length);
+    throw new Error('Expected 1 instance of ' + type.name + ' but was ' + instances.length);
   }
 
   getAll<T>(type: Type<T>): T[] {

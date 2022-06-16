@@ -26,6 +26,7 @@
         "/src/frontend/narration/narration-contexts",
         "/src/frontend/narration",
         "/src/frontend/narration/narration-option-executors",
-        "/src/demo"
+        "/src/demo",
+        "/src/engine/core/condition"
     ]
 }

@@ -1,12 +1,14 @@
-import { ActionService } from 'engine/core/action';
+import type { ActionService } from 'engine/core/action';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
 import type { ActivityParticipant } from '../activity';
 import type { GameEngine } from '../game';
 import type { AI } from './ai';
 
-export namespace AIService {
-  export const executeTurn = (ai: AI, engine: GameEngine): void => {
+export class AIService {
+  constructor(private actionService: ActionService) {}
+
+  executeTurn(ai: AI, engine: GameEngine): void {
     if (ai.character.pendingAction || ai.character.pendingCommand) {
       return;
     }
@@ -19,9 +21,9 @@ export namespace AIService {
     const enemy: ActivityParticipant | undefined = battle.getParticipantsOtherThan(ai.activityParticipant)[0];
     if (enemy) {
       const action = new AttackAction({ target: enemy });
-      ActionService.scheduleAction(action, ai.character.actionExecutor, engine);
+      this.actionService.startAction(action, ai.character.actionExecutor, engine);
     } else {
       ai.activityParticipant.removeActivity(battle);
     }
-  };
+  }
 }

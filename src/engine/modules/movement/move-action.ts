@@ -1,5 +1,5 @@
 import { Action, ActionExecutor } from 'engine/core/action';
-import type { Condition } from 'engine/core/ecs';
+import type { Condition } from 'engine/core/condition';
 import type { FieldObjectPosition } from 'engine/core/field';
 import { AreFieldsConnected } from 'engine/core/field/are-fields-connected';
 import { IsAlive } from 'engine/modules/health';

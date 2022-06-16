@@ -1,9 +1,13 @@
 import type { ECSEvent } from 'engine/core/ecs';
 import { GameEngine, GameSystem } from 'engine/core/game';
 import { ActionExecutedEvent, ActionExecutingEvent, BeforeActionExecutingEvent } from './action-event';
-import { ActionService } from './action-service';
+import type { ActionService } from './action-service';
 
 export class ActionSystem extends GameSystem {
+  constructor(private actionService: ActionService) {
+    super();
+  }
+
   async processEvent(event: ECSEvent, engine: GameEngine): Promise<void> {
     if (event instanceof BeforeActionExecutingEvent) {
       this.handleBeforeActionExecutingEvent(event, engine);
@@ -15,7 +19,7 @@ export class ActionSystem extends GameSystem {
       return;
     }
     executor.pendingAction = undefined;
-    if (ActionService.canExecuteAction(action, executor, engine)) {
+    if (this.actionService.canExecuteAction(action, executor, engine)) {
       engine.addEvent(new ActionExecutingEvent({ time, action, executor }));
       engine.addEvent(new ActionExecutedEvent({ time, action, executor }));
     }

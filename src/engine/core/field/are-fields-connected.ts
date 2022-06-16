@@ -1,13 +1,11 @@
-import type { Condition } from 'engine/core/ecs';
-import { FieldService } from './field-service';
+import type { Condition } from '../condition';
+import type { Field } from './field';
 import { FieldProvider, tryGetField } from './field-utils';
 
 export class AreFieldsConnected implements Condition {
-  constructor(private readonly fieldsProviders: [FieldProvider, FieldProvider]) {}
+  readonly fields: [Field | undefined, Field | undefined];
 
-  check(): boolean {
-    const firstField = tryGetField(this.fieldsProviders[0]);
-    const secondField = tryGetField(this.fieldsProviders[1]);
-    return firstField && secondField ? FieldService.getConnectedFields(firstField).includes(secondField) : false;
+  constructor(fieldsProviders: [FieldProvider, FieldProvider]) {
+    this.fields = [tryGetField(fieldsProviders[0]), tryGetField(fieldsProviders[1])];
   }
 }

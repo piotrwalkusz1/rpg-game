@@ -1,11 +1,11 @@
-import { Condition, EntityProvider } from 'engine/core/ecs';
+import type { Condition } from 'engine/core/condition';
+import { EntityProvider } from 'engine/core/ecs';
 import { Health } from './health';
 
 export class IsAlive implements Condition {
-  constructor(private readonly entityProvider: EntityProvider) {}
+  readonly health: Health | undefined;
 
-  check(): boolean {
-    const healthPoints: number | undefined = EntityProvider.getComponent(this.entityProvider, Health)?.healthPoints;
-    return healthPoints ? healthPoints > 0 : false;
+  constructor(entityProvider: EntityProvider) {
+    this.health = EntityProvider.getComponent(entityProvider, Health);
   }
 }

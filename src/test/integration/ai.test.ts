@@ -1,7 +1,7 @@
 import { CDIContainer } from 'cdi-container';
 import { addSeconds } from 'date-fns';
 import { BeforeActionExecutingEvent, PendingAction } from 'engine/core/action';
-import { CommandEndedEvent } from 'engine/core/command';
+import { Command, CommandEndedEvent } from 'engine/core/command';
 import type { GameEngine } from 'engine/core/game';
 import { AttackAction } from 'engine/modules/attack';
 import { BattleActivity } from 'engine/modules/battle';
@@ -11,25 +11,27 @@ import type { GameStore } from 'frontend/store/game-store';
 import { GameStoreService } from 'frontend/store/game-store-service';
 import { GameBuilder, getPlayer } from 'game';
 import { MockAction } from 'test/mock/mock-action';
-import { MockCommand } from 'test/mock/mock-command';
+import { Mock } from 'typemoq';
 
 describe('AI', () => {
   let cdiContainer: CDIContainer;
   let engine: GameEngine;
   let character: Character;
   let store: GameStore;
+  let command: Command;
 
   beforeEach(() => {
     cdiContainer = CDIContainer.default();
     engine = CDIContainer.default().get(GameBuilder).build();
     character = GameBuilder.createCharacter(engine);
     store = cdiContainer.get(GameStoreService).createStore({ engine });
+    command = Mock.ofType<Command>().object;
   });
 
   describe('Battle', () => {
     test('Attack if during battle', async () => {
       new BattleActivity({ participants: [getPlayer(engine).activityParticipant, character.activityParticipant] });
-      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command, executor: character.commandExecutor }));
 
       await GameService.processEvents(store);
 
@@ -49,7 +51,7 @@ describe('AI', () => {
     });
 
     test('Do not attack if there is no battle', async () => {
-      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command, executor: character.commandExecutor }));
 
       await GameService.processEvents(store);
 
@@ -68,7 +70,7 @@ describe('AI', () => {
         })
       });
       new BattleActivity({ participants: [getPlayer(engine).activityParticipant, character.activityParticipant] });
-      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command, executor: character.commandExecutor }));
       character.pendingAction = pendingAction;
 
       await GameService.processEvents(store);
@@ -79,19 +81,19 @@ describe('AI', () => {
 
     test('Do not attack if pending command', async () => {
       new BattleActivity({ participants: [getPlayer(engine).activityParticipant, character.activityParticipant] });
-      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
-      character.pendingCommand = new MockCommand();
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command, executor: character.commandExecutor }));
+      character.pendingCommand = command;
 
       await GameService.processEvents(store);
 
       expect(character.pendingAction).toEqual(undefined);
-      expect(character.pendingCommand).toEqual(new MockCommand());
+      expect(character.pendingCommand).toEqual(command);
       expect(engine.events).toEqual([]);
     });
 
     test('Stop battle if there is no enemy', async () => {
       new BattleActivity({ participants: [character.activityParticipant] });
-      engine.addEvent(new CommandEndedEvent({ time: engine.time, command: new MockCommand(), executor: character.commandExecutor }));
+      engine.addEvent(new CommandEndedEvent({ time: engine.time, command, executor: character.commandExecutor }));
 
       await GameService.processEvents(store);
 

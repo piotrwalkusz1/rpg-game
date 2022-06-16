@@ -1,4 +1,4 @@
-import { ActionService } from 'engine/core/action';
+import type { ActionService } from 'engine/core/action';
 import { Command, SimpleCommand } from 'engine/core/command';
 import { FieldObjectPosition, getField, hasField } from 'engine/core/field';
 import { FieldService } from 'engine/core/field/field-service';
@@ -11,13 +11,17 @@ import { CommandNarrationOption } from '../narration-options/command-narration-o
 import { NarrationProvider, NarrationProviderParams } from '../narration-provider';
 
 export class MovementNarrationProvider extends NarrationProvider {
+  constructor(private actionService: ActionService) {
+    super();
+  }
+
   override getNarrationOptions({ context, engine }: NarrationProviderParams): NarrationOption[] {
     if (!(context instanceof FieldNarrationContext)) {
       return [];
     }
     const player = getPlayer(engine);
     const action = new MoveAction({ position: new FieldObjectPosition(context.field) });
-    if (ActionService.canExecuteAction(action, player.actionExecutor, engine)) {
+    if (this.actionService.canExecuteAction(action, player.actionExecutor, engine)) {
       return this.prepareNarrationOptions(new SimpleCommand(action));
     }
     const path = hasField(player) ? FieldService.getPathBetweenRectFields(getField(player), context.field)?.slice(1) : undefined;

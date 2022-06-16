@@ -1,4 +1,4 @@
-import type { Condition } from 'engine/core/ecs';
+import type { Condition } from '../condition';
 import type { ActionExecutor } from './action-executor';
 
 export abstract class Action {

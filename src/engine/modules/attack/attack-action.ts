@@ -1,5 +1,6 @@
 import { Action, type ActionExecutor } from 'engine/core/action';
-import { Condition, Entity, EntityProvider } from 'engine/core/ecs';
+import type { Condition } from 'engine/core/condition';
+import { Entity, EntityProvider } from 'engine/core/ecs';
 import { IsAlive } from 'engine/modules/health';
 
 export class AttackAction extends Action {
