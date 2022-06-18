@@ -2,10 +2,12 @@ import { CDIContainer } from 'cdi-container';
 import { rootField, subFieldAt } from 'engine/core/field';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
+import { CharacterJournalEntry } from 'engine/modules/journal-extensions/journal-character';
 import { OfferService } from 'engine/modules/offer';
 import { TalkActivity } from 'engine/modules/talk';
 import { TalkService } from 'engine/modules/talk/talk-service';
 import { Talker } from 'engine/modules/talk/talker';
+import { DialogBookmark } from 'frontend/bookmark';
 import { GameService } from 'frontend/game';
 import { CharacterNarrationContext, NarrationService, TalkNarrationOption } from 'frontend/narration';
 import type { GameStore } from 'frontend/store/game-store';
@@ -54,17 +56,14 @@ describe('Talk', () => {
       .getNarrationOptions({ context: new CharacterNarrationContext(character), engine })
       .filter((option) => option instanceof TalkNarrationOption)[0];
     await narrationService.executeNarrationOption(talkNarrationOption, store);
-    await GameService.processEvents(store);
 
     const bookmarks = get(store.bookmarks);
 
-    // expect(bookmarks).toEqual([
-    //   new DialogBookmark({
-    //     character,
-    //     journalEntries: [new CharacterJournalEntry({ character, text: 'JOURNAL.ENTRY.TALK_END', time: engine.time })]
-    //   })
-    // ]);
-
-    expect(bookmarks.length).toEqual(1);
+    expect(bookmarks).toEqual([
+      new DialogBookmark({
+        character,
+        journalEntries: [new CharacterJournalEntry({ character, text: 'JOURNAL.ENTRY.TALK_END', time: engine.time })]
+      })
+    ]);
   });
 });
