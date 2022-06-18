@@ -1,5 +1,5 @@
 import type { ActivityParticipant } from 'engine/core/activity';
-import { EndActivityEvent } from 'engine/core/activity/activity-event';
+import { ActivityEndedEvent } from 'engine/core/activity/activity-event';
 import type { ECSEvent } from 'engine/core/ecs';
 import { GameEngine, GameSystem } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
@@ -10,13 +10,13 @@ import { CharacterJournalEntry } from '../journal-character';
 
 export class TalkJournalSystem extends GameSystem {
   override async processEvent(event: ECSEvent, engine: GameEngine): Promise<void> {
-    if (event instanceof EndActivityEvent && event.activity instanceof TalkActivity) {
+    if (event instanceof ActivityEndedEvent && event.activity instanceof TalkActivity) {
       this.handleEndTalkEvent(event.activity, engine.time);
     }
   }
 
   private handleEndTalkEvent(talk: TalkActivity, time: Time): void {
-    const participants = talk.participants.getArray();
+    const participants = talk.participants;
     if (participants.length !== 2) {
       return;
     }

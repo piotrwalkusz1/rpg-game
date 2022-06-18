@@ -1,5 +1,6 @@
 import { ActionService, ActionSystem } from 'engine/core/action';
-import { AIService, AISystem } from 'engine/core/ai';
+import { ActivityService, ActivitySystem } from 'engine/core/activity';
+import { AISystem } from 'engine/core/ai';
 import { CommandService, CommandSystem } from 'engine/core/command';
 import { ConditionChecker, ConditionService } from 'engine/core/condition';
 import { AreFieldsConnectedChecker } from 'engine/core/field/are-fields-connected-checker';
@@ -67,17 +68,18 @@ export class CDIContainer {
     container.singleton(ConditionService, (cdi) => new ConditionService(cdi.getAll(ConditionChecker)));
     container.singleton(ActionService, (cdi) => new ActionService(cdi.get(ConditionService)));
     container.singleton(ActionSystem, (cdi) => new ActionSystem(cdi.get(ActionService)));
-    container.singleton(AIService, (cdi) => new AIService(cdi.get(ActionService)));
     container.singleton(GameStoreService, (cdi) => new GameStoreService(cdi.get(BookmarkService), cdi.get(NarrationService)));
     container.singleton(OfferService, () => new OfferService());
-    container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService)));
+    container.singleton(ActivityService, () => new ActivityService());
+    container.singleton(TalkService, (cdi) => new TalkService(cdi.get(OfferService), cdi.get(ActivityService)));
     container.singleton(CommandService, (cdi) => new CommandService(cdi.get(ActionService)));
+    container.singleton(ActivitySystem, (cdi) => new ActivitySystem(cdi.get(ActivityService)));
     container.singleton(CommandSystem, (cdi) => new CommandSystem(cdi.get(CommandService)));
     container.singleton(MovementSystem, () => new MovementSystem());
     container.singleton(JournalSpeakingSystem, () => new JournalSpeakingSystem());
     container.singleton(TalkJournalSystem, () => new TalkJournalSystem());
-    container.singleton(TalkSystem, () => new TalkSystem());
-    container.singleton(AISystem, (cdi) => new AISystem(cdi.get(AIService), cdi.get(OfferService)));
+    container.singleton(TalkSystem, (cdi) => new TalkSystem(cdi.get(TalkService)));
+    container.singleton(AISystem, (cdi) => new AISystem(cdi.get(OfferService)));
     container.dependent(GameBuilder, (cdi) => new GameBuilder(cdi.getAll(GameSystem)));
     return container;
   }

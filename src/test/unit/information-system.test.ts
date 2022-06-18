@@ -22,7 +22,7 @@ describe('InformationSystem', () => {
       const event = new ActionExecutingEvent({
         time: engine.time,
         action: new InformAction({ informationReceiver: informationReceiver.informationOwner, information }),
-        executor: informationOwner
+        executor: informationOwner.actionExecutor
       });
 
       await informationSystem.processEvent(event, engine);

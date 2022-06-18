@@ -21,8 +21,4 @@ export class CommandExecutor extends Component {
   get pendingAction(): PendingAction | undefined {
     return this.actionExecutor.pendingAction;
   }
-
-  set pendingAction(pendingAction: PendingAction | undefined) {
-    this.actionExecutor.pendingAction = pendingAction;
-  }
 }

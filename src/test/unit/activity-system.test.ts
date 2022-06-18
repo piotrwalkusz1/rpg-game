@@ -1,35 +1,32 @@
 import { CDIContainer } from 'cdi-container';
-import { Activity, ActivityParticipant } from 'engine/core/activity';
-import { EndActivityEvent } from 'engine/core/activity/activity-event';
+import type { Activity, ActivityService } from 'engine/core/activity';
+import { ActivityEndScheduledEvent } from 'engine/core/activity/activity-event';
 import { ActivitySystem } from 'engine/core/activity/activity-system';
 import type { GameEngine } from 'engine/core/game';
 import type { Time } from 'engine/core/time';
 import { GameBuilder } from 'game';
+import { IMock, Mock, Times } from 'typemoq';
 
 describe('Activity system', () => {
-  class MockActivity extends Activity {}
-
+  let activityServiceMock: IMock<ActivityService>;
   let activitySystem: ActivitySystem;
   let engine: GameEngine;
   let time: Time;
 
   beforeEach(() => {
-    activitySystem = new ActivitySystem();
+    activityServiceMock = Mock.ofType<ActivityService>();
+    activitySystem = new ActivitySystem(activityServiceMock.object);
     engine = CDIContainer.default().get(GameBuilder).build();
     time = engine.time;
   });
 
-  describe('EndActivityEvent', () => {
-    it('should remove all participants from activity', async () => {
-      const activityParticipant = engine.addEntityWithComponent(new ActivityParticipant());
-      const activityParticipant2 = engine.addEntityWithComponent(new ActivityParticipant());
-      const activity = new MockActivity({ participants: [activityParticipant, activityParticipant2] });
+  describe('processEvent', () => {
+    it('should end activity', async () => {
+      const activity = Mock.ofType<Activity>().object;
 
-      await activitySystem.processEvent(new EndActivityEvent({ time, activity }), engine);
+      await activitySystem.processEvent(new ActivityEndScheduledEvent({ time, activity }), engine);
 
-      expect(activity.participants.getArray()).toEqual([]);
-      expect(activityParticipant.activities.getArray()).toEqual([]);
-      expect(activityParticipant2.activities.getArray()).toEqual([]);
+      activityServiceMock.verify((instance) => instance.endActivity(activity, engine), Times.once());
     });
   });
 });

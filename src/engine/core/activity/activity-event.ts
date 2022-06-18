@@ -10,4 +10,8 @@ export class ActivityEvent extends GameEvent {
   }
 }
 
-export class EndActivityEvent extends ActivityEvent {}
+export class ActivityStartedEvent extends ActivityEvent {}
+
+export class ActivityEndScheduledEvent extends ActivityEvent {}
+
+export class ActivityEndedEvent extends ActivityEvent {}

@@ -62,7 +62,7 @@ describe('Character narration', () => {
 
   test('Display character narration', () => {
     const engine = CDIContainer.default().get(GameBuilder).build();
-    const character = Character.create(engine);
+    const character = GameBuilder.createCharacter(engine);
     character.presentation.name = { literal: 'Sestia' };
     character.presentation.avatar = '/images/characters/002_Sestia.png';
 

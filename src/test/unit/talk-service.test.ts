@@ -1,3 +1,4 @@
+import type { ActivityService } from 'engine/core/activity';
 import { rootField, subFieldAt } from 'engine/core/field';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
@@ -9,12 +10,14 @@ import { IMock, It, Mock, Times } from 'typemoq';
 
 describe('TalkService', () => {
   let offerServiceMock: IMock<OfferService>;
+  let activityServiceMock: IMock<ActivityService>;
   let talkService: TalkService;
   let engine: GameEngine;
 
   beforeEach(() => {
+    activityServiceMock = Mock.ofType<ActivityService>();
     offerServiceMock = Mock.ofType<OfferService>();
-    talkService = new TalkService(offerServiceMock.object);
+    talkService = new TalkService(offerServiceMock.object, activityServiceMock.object);
     engine = new GameBuilder([]).build();
   });
 

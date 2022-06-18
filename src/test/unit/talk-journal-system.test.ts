@@ -1,5 +1,5 @@
 import { CDIContainer } from 'cdi-container';
-import { EndActivityEvent } from 'engine/core/activity/activity-event';
+import { ActivityEndedEvent } from 'engine/core/activity/activity-event';
 import type { GameEngine } from 'engine/core/game';
 import { Character } from 'engine/modules/character';
 import { CharacterJournalEntry } from 'engine/modules/journal-extensions/journal-character';
@@ -24,7 +24,7 @@ describe('TalkJournalSystem', () => {
 
   describe('EndTalkActivityEvent', () => {
     it('should add entry to journal', async () => {
-      const endTalkEvent = new EndActivityEvent({
+      const endTalkEvent = new ActivityEndedEvent({
         time: engine.time,
         activity: new TalkActivity({ participants: [character.activityParticipant, player.activityParticipant] })
       });
@@ -35,7 +35,7 @@ describe('TalkJournalSystem', () => {
     });
 
     it('should do nothing if talk has more than 2 participants', async () => {
-      const endTalkEvent = new EndActivityEvent({
+      const endTalkEvent = new ActivityEndedEvent({
         time: engine.time,
         activity: new TalkActivity({
           participants: [character.activityParticipant, player.activityParticipant, character2.activityParticipant]
@@ -48,7 +48,7 @@ describe('TalkJournalSystem', () => {
     });
 
     it('should do nothing if talk has 1 participant', async () => {
-      const endTalkEvent = new EndActivityEvent({
+      const endTalkEvent = new ActivityEndedEvent({
         time: engine.time,
         activity: new TalkActivity({
           participants: [player.activityParticipant]
