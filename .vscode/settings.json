@@ -28,6 +28,7 @@
         "/src/frontend/narration/narration-option-executors",
         "/src/demo",
         "/src/engine/core/condition",
-        "/src/engine/core/activity"
+        "/src/engine/core/activity",
+        "/src/engine/core/script"
     ]
 }

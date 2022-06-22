@@ -4,6 +4,7 @@ import type { Command, CommandExecutor } from 'engine/core/command';
 import { Component, Engine } from 'engine/core/ecs';
 import type { Field } from 'engine/core/field';
 import { Character } from 'engine/modules/character';
+import type { InformationOwner } from 'engine/modules/information';
 import { Journal, JournalOwner } from 'engine/modules/journal';
 import type { Talker } from 'engine/modules/talk/talker';
 
@@ -39,6 +40,10 @@ export class Player extends Component {
 
   get actionExecutor(): ActionExecutor {
     return this.commandExecutor.actionExecutor;
+  }
+
+  get informationOwner(): InformationOwner {
+    return this.character.informationOwner;
   }
 
   get field(): Field | undefined {

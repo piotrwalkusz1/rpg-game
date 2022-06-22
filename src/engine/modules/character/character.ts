@@ -60,7 +60,15 @@ export class Character extends Component {
     const presentation = new Presentation({ name: { literal: '' }, avatar: '/images/characters/001_Eladin.png' });
     const talker = new Talker({ offerParty, activityParticipant, fieldObject });
     const informationOwner = new InformationOwner();
-    const character = new Character({ talker, fieldObject, presentation, commandExecutor, health, attacker, informationOwner });
+    const character = new Character({
+      talker,
+      fieldObject,
+      presentation,
+      commandExecutor,
+      health,
+      attacker,
+      informationOwner
+    });
     engine.addEntity(
       new Entity().addComponents([
         attacker,

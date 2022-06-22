@@ -27,6 +27,8 @@ const defaultTranslations = {
   'COMMAND.MOVE.NAME': 'Move',
   'INTERACTION.TALK.NAME': 'Talk',
   'JOURNAL.ENTRY.TALK_END': 'The talk ended.',
+  'DIALOGUE.00001_WHERE_IS_BURIED_TREASURE': '"Where is buried treasure?"',
+  'DIALOGUE.00002_I_WILL_TELL_YOU_WHERE_TREASURE_IS_BURIED': "I'll tell you where the treasure is buried.",
   // Translations below are to remove
   'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.WAITING_FOR_END_OF_ACTION': 'Waiting for the end of the action...',
@@ -82,6 +84,8 @@ const plTranslations: Translations = {
   'COMMAND.MOVE.NAME': 'Idź',
   'INTERACTION.TALK.NAME': 'Rozmawiaj',
   'JOURNAL.ENTRY.TALK_END': 'Rozmowa się zakończyła.',
+  'DIALOGUE.00001_WHERE_IS_BURIED_TREASURE': '"Gdzie jest zakopany skarb?"',
+  'DIALOGUE.00002_I_WILL_TELL_YOU_WHERE_TREASURE_IS_BURIED': 'Powiem ci, gdzie jest zakopany skarb.',
   // Translations below are to remove
   'NARRATION.COMMON.OK': 'Ok',
   'NARRATION.WAITING_FOR_END_OF_ACTION': 'Oczekiwanie na zakończenie akcji...',

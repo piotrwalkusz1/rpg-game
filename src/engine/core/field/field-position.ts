@@ -19,7 +19,7 @@ export abstract class FieldPosition {
 
 export class SimpleFieldPosition extends FieldPosition {
   override equals(position: FieldPosition): boolean {
-    return position instanceof SimpleFieldPosition && this.parentField === position.parentField;
+    return position === this;
   }
 }
 

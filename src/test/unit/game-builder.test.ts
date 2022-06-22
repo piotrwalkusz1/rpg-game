@@ -7,7 +7,7 @@ import { isLiteral } from 'i18n/translatable-text';
 describe('GameBuilder', () => {
   describe('addCharacter', () => {
     it('should add character', () => {
-      const gameBuilder = new GameBuilder([]);
+      const gameBuilder = new GameBuilder([], []);
 
       gameBuilder.addCharacter({ name: 'Wolf', avatar: 'wolf.png' as ImageUrl, position: [2, 3] });
 

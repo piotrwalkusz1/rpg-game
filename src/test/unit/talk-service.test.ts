@@ -18,7 +18,7 @@ describe('TalkService', () => {
     activityServiceMock = Mock.ofType<ActivityService>();
     offerServiceMock = Mock.ofType<OfferService>();
     talkService = new TalkService(offerServiceMock.object, activityServiceMock.object);
-    engine = new GameBuilder([]).build();
+    engine = new GameBuilder([], []).build();
   });
 
   describe('offerTalk', () => {

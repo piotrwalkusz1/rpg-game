@@ -1,9 +1,10 @@
-import type { ECSEvent } from 'engine/core/ecs';
+import { ECSEvent } from 'engine/core/ecs';
 
-export abstract class TimeEvent implements ECSEvent {
+export abstract class TimeEvent extends ECSEvent {
   readonly time: Date;
 
   constructor({ time }: { time: Date }) {
+    super();
     this.time = time;
   }
 }

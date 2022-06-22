@@ -1,5 +1,6 @@
 import type { Type } from 'utils';
 import type { Entity } from './entity';
+import type { EntityEventListener } from './entity-event-listener';
 
 export abstract class Component {
   private _entity: Entity | undefined;
@@ -29,5 +30,9 @@ export abstract class Component {
       throw new Error('Component ' + componentType.name + ' is required');
     }
     return component;
+  }
+
+  addEventListener(eventListener: EntityEventListener): void {
+    this.entity.addEventListener(eventListener);
   }
 }

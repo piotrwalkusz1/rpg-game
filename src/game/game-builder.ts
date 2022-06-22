@@ -1,4 +1,4 @@
-import { Entity } from 'engine/core/ecs';
+import { Entity, EntityEventListener, EntityEventListenerExecutor } from 'engine/core/ecs';
 import { Field, RectFieldPosition, rootField, subFieldAt } from 'engine/core/field';
 import { FieldDefinition } from 'engine/core/field/field-definition';
 import { GameEngine, GameSystem } from 'engine/core/game';
@@ -17,7 +17,7 @@ export class GameBuilder {
   private _playerPosition: [number, number] = [0, 0];
   private _characters: CharacterData[] = [];
 
-  constructor(private systems: GameSystem[]) {}
+  constructor(private systems: GameSystem[], private entityEventListenerExecutors: EntityEventListenerExecutor<EntityEventListener>[]) {}
 
   static createCharacter(engine: GameEngine, characterData?: CharacterData): Character {
     const character = Character.create(engine, { withAI: true });
@@ -48,6 +48,7 @@ export class GameBuilder {
     this.createPlayer(engine);
     this.createCharacters(engine);
     engine.addSystems(this.systems);
+    engine.addEntityEventListenerExecutors(this.entityEventListenerExecutors);
     return engine;
   }
 

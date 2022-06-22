@@ -1,8 +1,10 @@
 import { Component } from 'engine/core/ecs/component';
 import { ArrayUtils, Type } from 'utils';
+import type { EntityEventListener } from './entity-event-listener';
 
 export class Entity {
   private readonly _components: Component[] = [];
+  private readonly _eventListeners: EntityEventListener[] = [];
 
   get components(): readonly Component[] {
     return this._components;
@@ -10,6 +12,16 @@ export class Entity {
 
   getComponent<T extends Component>(componentType: Type<T>): T | undefined {
     return ArrayUtils.findFirstInstanceOf(this._components, componentType);
+  }
+
+  getOrAddComponent<T extends Component>(componentType: Type<T>, componentConstructor: () => T): T {
+    let component = this.getComponent(componentType);
+    if (component) {
+      return component;
+    }
+    component = componentConstructor();
+    this.addComponent(component);
+    return component;
   }
 
   requireComponent<T extends Component>(componentType: Type<T>): T {
@@ -38,5 +50,17 @@ export class Entity {
       ArrayUtils.removeFirst(this._components, component);
       component.entity = undefined;
     }
+  }
+
+  get eventListeners(): readonly EntityEventListener[] {
+    return this._eventListeners;
+  }
+
+  addEventListener(eventListener: EntityEventListener): void {
+    this._eventListeners.push(eventListener);
+  }
+
+  removeEventListener(eventListener: EventListener): void {
+    ArrayUtils.removeFirst(this._eventListeners, eventListener);
   }
 }
