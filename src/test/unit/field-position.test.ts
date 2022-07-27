@@ -25,17 +25,17 @@ describe('FieldPosition', () => {
       expect(FieldPosition.areEqual(position, undefined)).toBe(false);
     });
 
-    it('should return true if both positions are SimplePosition with same parent field', () => {
-      const field = mockField();
-      const firstPosition = new SimpleFieldPosition(field);
-      const secondPosition = new SimpleFieldPosition(field);
-
-      expect(FieldPosition.areEqual(firstPosition, secondPosition)).toBe(true);
-    });
-
     it('should return false if both positions are SimplePosition but with different parent field', () => {
       const firstPosition = new SimpleFieldPosition(mockField());
       const secondPosition = new SimpleFieldPosition(mockField());
+
+      expect(FieldPosition.areEqual(firstPosition, secondPosition)).toBe(false);
+    });
+
+    it('should return false if both positions are SimplePosition with same parent field but are different objects', () => {
+      const field = mockField();
+      const firstPosition = new SimpleFieldPosition(field);
+      const secondPosition = new SimpleFieldPosition(field);
 
       expect(FieldPosition.areEqual(firstPosition, secondPosition)).toBe(false);
     });
